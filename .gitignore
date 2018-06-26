@@ -34,3 +34,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+/Assets/External Assets/
