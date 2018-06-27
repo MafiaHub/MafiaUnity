@@ -579,6 +579,7 @@ PlayerSettings:
     27: UNITY_POST_PROCESSING_STACK_V2
   platformArchitecture: {}
   scriptingBackend:
+    Metro: 2
     Standalone: 0
   il2cppCompilerConfiguration: {}
   incrementalIl2cppBuild: {}
@@ -662,6 +663,7 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Build: 0
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 3

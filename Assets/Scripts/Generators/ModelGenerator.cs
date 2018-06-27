@@ -98,6 +98,9 @@ namespace OpenMafia
                         }
 
                         mesh.SetTriangles(unityIndices.ToArray(), faceGroupId);
+
+                        mesh.RecalculateNormals();
+                        mesh.RecalculateTangents();
                         
                         var matId = (int)Mathf.Max(0, Mathf.Min(model.materials.Count - 1, faceGroup.materialID - 1));
                         var mafiaMat = model.materials[matId];
@@ -105,11 +108,25 @@ namespace OpenMafia
                         Material mat;
 
                         if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
-                            mat = new Material(Shader.Find("Transparent/Cutout/Diffuse"));
+                        {
+                            mat = new Material(Shader.Find("Standard"));
+                            mat.SetFloat("_Mode", 1f); // Set rendering mode to Cutout
+                            mat.SetFloat("_Glossiness", 0f);
+                            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                            mat.SetInt("_ZWrite", 0);
+                            mat.DisableKeyword("_ALPHATEST_ON");
+                            mat.EnableKeyword("_ALPHABLEND_ON");
+                            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                            mat.renderQueue = 3000;
+                        }
                         else if (mafiaMat.transparency < 1)
                             mat = new Material(Shader.Find("Transparent/Diffuse"));
                         else
-                            mat = new Material(Shader.Find("Diffuse"));
+                        {
+                            mat = new Material(Shader.Find("Standard"));
+                            mat.SetFloat("_Glossiness", 0f);
+                        }
                         
                         //if (matId > 0)
                         {
