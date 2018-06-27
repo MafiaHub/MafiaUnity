@@ -285,49 +285,8 @@ namespace OpenMafia
             public bool use5DS;
         }
 
-        public class Reader4DS
+        public class Reader4DS : BaseLoader
         {
-            Quaternion readQuat(BinaryReader reader)
-            {
-                float x = reader.ReadSingle();
-                float y = reader.ReadSingle();
-                float z = reader.ReadSingle();
-                float w = reader.ReadSingle();
-                return new Quaternion(x, y, z, w);
-            }
-
-            Vector3 readVector3(BinaryReader reader)
-            {
-                float x = reader.ReadSingle();
-                float y = reader.ReadSingle();
-                float z = reader.ReadSingle();
-                return new Vector3(x, y, z);
-            }
-
-            Vector2 readVector2(BinaryReader reader)
-            {
-                float x = reader.ReadSingle();
-                float y = reader.ReadSingle();
-                return new Vector2(x, y);
-            }
-
-            Matrix4x4 readMatrix(BinaryReader reader)
-            {
-                Matrix4x4 returnMatrix = new Matrix4x4();
-                for (var y = 0; y < 4; y++)
-                    for (var x = 0; x < 4; x++)
-                        returnMatrix[x, y] = reader.ReadSingle();
-
-                return returnMatrix;
-            }
-
-            string readString(BinaryReader reader)
-            {
-                var length = reader.ReadByte();
-                return new string(reader.ReadChars(length));
-            }
-
-
             void readMaterial(ref Model model, BinaryReader reader)
             {
                 var matCount = reader.ReadUInt16();
@@ -337,23 +296,23 @@ namespace OpenMafia
                 {
                     Material mat = new Material();
                     mat.flags = (MaterialFlag)reader.ReadUInt32();
-                    mat.ambient = readVector3(reader);
-                    mat.diffuse = readVector3(reader);
-                    mat.emission = readVector3(reader);
+                    mat.ambient = ReadVector3(reader);
+                    mat.diffuse = ReadVector3(reader);
+                    mat.emission = ReadVector3(reader);
                     mat.transparency = reader.ReadSingle();
 
 
                     if ((mat.flags & MaterialFlag.MATERIALFLAG_ENVIRONMENTMAP) != 0)
                     {
                         mat.envRatio = reader.ReadSingle();
-                        mat.envMapName = readString(reader);
+                        mat.envMapName = ReadString(reader);
                     }
 
-                    mat.diffuseMapName = readString(reader);
+                    mat.diffuseMapName = ReadString(reader);
 
                     if ((mat.flags & MaterialFlag.MATERIALFLAG_ALPHATEXTURE) != 0)
                     {
-                        mat.alphaMapName = readString(reader);
+                        mat.alphaMapName = ReadString(reader);
                     }
 
                     if ((mat.flags & MaterialFlag.MATERIALFLAG_ANIMATEDTEXTUREDIFFUSE) != 0)
@@ -379,9 +338,9 @@ namespace OpenMafia
                 for (var i = 0; i < vertexCount; i++)
                 {
                     Vertex newVertex = new Vertex();
-                    newVertex.pos = readVector3(reader);
-                    newVertex.normal = readVector3(reader);
-                    newVertex.uv = readVector2(reader);
+                    newVertex.pos = ReadVector3(reader);
+                    newVertex.normal = ReadVector3(reader);
+                    newVertex.uv = ReadVector2(reader);
 
                     newLOD.vertices.Add(newVertex);
                 }
@@ -434,8 +393,8 @@ namespace OpenMafia
             Mirror readMirror(BinaryReader reader)
             {
                 Mirror newMirror = new Mirror();
-                newMirror.minBox = readVector3(reader);
-                newMirror.maxBox = readVector3(reader);
+                newMirror.minBox = ReadVector3(reader);
+                newMirror.maxBox = ReadVector3(reader);
 
                 newMirror.unk0 = new float[4];
 
@@ -449,9 +408,9 @@ namespace OpenMafia
                     for (var x = 0; x < 4; x++)
                         newMirror.reflectionMatrix[x, y] = reader.ReadSingle();
                  * */
-                newMirror.reflectionMatrix = readMatrix(reader);
+                newMirror.reflectionMatrix = ReadMatrix(reader);
 
-                newMirror.backgroundColor = readVector3(reader);
+                newMirror.backgroundColor = ReadVector3(reader);
                 newMirror.viewDistance = reader.ReadSingle();
 
                 var vertexCount = reader.ReadUInt32();
@@ -462,7 +421,7 @@ namespace OpenMafia
 
                 for (var i = 0; i < vertexCount; i++)
                 {
-                    newMirror.vertices.Add(readVector3(reader));
+                    newMirror.vertices.Add(ReadVector3(reader));
                 }
 
                 for (var i = 0; i < faceCount; i++)
@@ -511,7 +470,7 @@ namespace OpenMafia
 
                 for (var i = 0; i < vertexCount; i++)
                 {
-                    newPortal.vertices.Add(readVector3(reader));
+                    newPortal.vertices.Add(ReadVector3(reader));
                 }
 
                 return newPortal;
@@ -530,7 +489,7 @@ namespace OpenMafia
 
                 for (var i = 0; i < vertexCount; i++)
                 {
-                    newSector.vertices.Add(readVector3(reader));
+                    newSector.vertices.Add(ReadVector3(reader));
                 }
 
                 newSector.faces = new List<Face>();
@@ -544,8 +503,8 @@ namespace OpenMafia
                     newSector.faces.Add(newFace);
                 }
 
-                newSector.minBox = readVector3(reader);
-                newSector.maxBox = readVector3(reader);
+                newSector.minBox = ReadVector3(reader);
+                newSector.maxBox = ReadVector3(reader);
 
                 var portalCount = reader.ReadByte();
                 newSector.portals = new List<Portal>();
@@ -600,8 +559,8 @@ namespace OpenMafia
                         for (var j = 0; j < newMorph.frameCount * vertexCount; j++)
                         {
                             MorphLODVertex newVertex = new MorphLODVertex();
-                            newVertex.normals = readVector3(reader);
-                            newVertex.position = readVector3(reader);
+                            newVertex.normals = ReadVector3(reader);
+                            newVertex.position = ReadVector3(reader);
 
                             newMorphLOD.vertices.Add(newVertex);
                         }
@@ -617,8 +576,8 @@ namespace OpenMafia
                         newMorph.LODs.Add(newMorphLOD);
                     }
 
-                    newMorph.minBox = readVector3(reader);
-                    newMorph.maxBox = readVector3(reader);
+                    newMorph.minBox = ReadVector3(reader);
+                    newMorph.maxBox = ReadVector3(reader);
 
                     newMorph.unk1 = new float[4];
                     for (var i = 0; i < 4; i++)
@@ -631,12 +590,12 @@ namespace OpenMafia
             SingleMeshLODJoint readSingleMeshLodJoint(BinaryReader reader)
             {
                 SingleMeshLODJoint newSingleMeshJoint = new SingleMeshLODJoint();
-                newSingleMeshJoint.transform = readMatrix(reader);
+                newSingleMeshJoint.transform = ReadMatrix(reader);
                 newSingleMeshJoint.oneWeightedVertCount = reader.ReadUInt32();
                 var weightCount = reader.ReadUInt32();
                 newSingleMeshJoint.boneID = reader.ReadUInt32();
-                newSingleMeshJoint.minBox = readVector3(reader);
-                newSingleMeshJoint.maxBox = readVector3(reader);
+                newSingleMeshJoint.minBox = ReadVector3(reader);
+                newSingleMeshJoint.maxBox = ReadVector3(reader);
 
                 newSingleMeshJoint.weights = new List<float>();
 
@@ -659,8 +618,8 @@ namespace OpenMafia
                 // and so on
                 var jointCount = reader.ReadByte();
                 newLOD.nonWeightedVertCount = reader.ReadUInt32();
-                newLOD.minBox = readVector3(reader);
-                newLOD.maxBox = readVector3(reader);
+                newLOD.minBox = ReadVector3(reader);
+                newLOD.maxBox = ReadVector3(reader);
 
                 newLOD.joints = new List<SingleMeshLODJoint>();
 
@@ -708,9 +667,9 @@ namespace OpenMafia
                     }
 
                     newMesh.parentID = reader.ReadUInt16();
-                    newMesh.pos = readVector3(reader);
-                    newMesh.scale = readVector3(reader);
-                    newMesh.rot = readQuat(reader);
+                    newMesh.pos = ReadVector3(reader);
+                    newMesh.scale = ReadVector3(reader);
+                    newMesh.rot = ReadQuat(reader);
 
                     var rot = newMesh.rot;
                     var tmpRot = new Quaternion(rot.y, rot.z, rot.w, -1 * rot.x);
@@ -718,8 +677,8 @@ namespace OpenMafia
 
                     newMesh.cullingFlags = (MeshOccludingFlag)reader.ReadByte();
 
-                    newMesh.meshName = readString(reader);
-                    newMesh.meshParams = readString(reader);
+                    newMesh.meshName = ReadString(reader);
+                    newMesh.meshParams = ReadString(reader);
 
                     switch (newMesh.meshType)
                     {
@@ -784,8 +743,8 @@ namespace OpenMafia
                         case MeshType.MESHTYPE_DUMMY:
                             {
                                 Dummy newDummy = new Dummy();
-                                newDummy.minBox = readVector3(reader);
-                                newDummy.maxBox = readVector3(reader);
+                                newDummy.minBox = ReadVector3(reader);
+                                newDummy.maxBox = ReadVector3(reader);
                                 newMesh.dummy = newDummy;
                             }
                             break;
@@ -805,7 +764,7 @@ namespace OpenMafia
                         case MeshType.MESHTYPE_BONE:
                             {
                                 Bone newBone = new Bone();
-                                newBone.transform = readMatrix(reader);
+                                newBone.transform = ReadMatrix(reader);
                                 newBone.boneID = reader.ReadUInt32();
                                 newMesh.bone = newBone;
                             }

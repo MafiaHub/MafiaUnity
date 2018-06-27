@@ -5,6 +5,7 @@ using UnityEditor;
 
 namespace OpenMafia
 {
+#if UNITY_EDITOR
     public class MafiaUtils : ScriptableWizard
     {
 
@@ -16,4 +17,5 @@ namespace OpenMafia
             dev.AddComponent<MafiaPanel>();
         }
     }
+#endif
 }

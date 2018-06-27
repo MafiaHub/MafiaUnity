@@ -327,8 +327,8 @@ namespace B83.Image.BMP
                     int v = (int)bitReader.ReadBits(bitCount);
                     if (v >= bmp.palette.Count)
                     {
-                        Debug.LogError("Indexed bitmap has indices greater than it's color palette");
-                        return;
+                        //Debug.LogError("Indexed bitmap has indices greater than it's color palette");
+                        continue;
                     }
                     data[x + y * w] = bmp.palette[v];
                 }

@@ -663,7 +663,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: d5c315c6-3ddd-4273-9331-caebe961010e
   projectName: OpenLS3D
   organizationId: zaklaus

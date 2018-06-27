@@ -1,4 +1,5 @@
 ﻿using B83.Image.BMP;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,67 +7,29 @@ using UnityEngine;
 
 namespace OpenMafia
 {
-    public class GameLoader
+    public class ModelGenerator : BaseGenerator
     {
-
-        #region Singleton
-        static GameLoader instanceObject;
-        public static GameLoader instance { get { if (instanceObject == null) instanceObject = new GameLoader(); return instanceObject; } }
-        #endregion
-        
-        public string gamePath { get; private set; }
-
-        public ModelLoader modelLoader = new ModelLoader();
-            
-        public bool SetGamePath(string path)
+        public override GameObject LoadObject(string path)
         {
-            if (ValidateGamePath(path))
-            {
-                gamePath = path;
-                return true;
-            }
+            GameObject rootObject = LoadCachedObject(path);
 
-            return false;
-        }
-
-        bool ValidateGamePath(string path)
-        {
-            // TODO: Validate if game files are present there.
-            return true;
-        }
-    }
-
-    public class ModelLoader
-    {
-        public Dictionary<string, GameObject> models = new Dictionary<string, GameObject>();
-
-        private GameObject rootCachedStorage = new GameObject("Cached Models");
-
-        public GameObject LoadModel(string path)
-        {
-            GameObject rootObject;
-            if (models.ContainsKey(path) && models[path] != null)
-            {
-                rootObject = GameObject.Instantiate(models[path], Vector3.zero, Quaternion.identity);
-                rootObject.SetActive(true);
-                rootObject.name = path;
-                rootObject.transform.parent = null;
-                return rootObject;
-            }
-            else
+            if (rootObject == null)
                 rootObject = new GameObject(path);
-
+            else
+                return rootObject;
+            
             FileStream fs;
 
             try
             {
-                fs = new FileStream(GameLoader.instance.gamePath + path, FileMode.Open);
+                fs = new FileStream(GameManager.instance.gamePath + path, FileMode.Open);
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.LogWarning(ex.ToString());
                 return null;
             }
-            
+
             using (BinaryReader reader = new BinaryReader(fs))
             {
                 var modelLoader = new MafiaFormats.Reader4DS();
@@ -84,6 +47,8 @@ namespace OpenMafia
                     var meshRenderer = child.GetComponent<MeshRenderer>();
 
                     children.Add(new KeyValuePair<int, Transform>(mafiaMesh.parentID, child.transform));
+
+                    // TODO handle more visual types
 
                     if (mafiaMesh.meshType != MafiaFormats.MeshType.MESHTYPE_STANDARD ||
                         mafiaMesh.visualMeshType != MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD)
@@ -142,7 +107,7 @@ namespace OpenMafia
 
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_TEXTUREDIFFUSE) != 0)
                             {
-                                var image = bmp.LoadBMP(GameLoader.instance.gamePath + "maps/" + mafiaMat.diffuseMapName);
+                                var image = bmp.LoadBMP(GameManager.instance.gamePath + "maps/" + mafiaMat.diffuseMapName);
                                 Texture2D tex = image.ToTexture2D();
                                 mat.SetTexture("_MainTex", tex);
                             }
@@ -151,12 +116,12 @@ namespace OpenMafia
                         mats.Add(mat);
                         faceGroupId++;
                     }
-                    
+
                     meshRenderer.materials = mats.ToArray();
 
                     meshId++;
                 }
-                
+
                 for (int i = 0; i < children.Count; i++)
                 {
                     var parentId = children[i].Key;
@@ -174,16 +139,11 @@ namespace OpenMafia
 
                 children.Clear();
             }
+            
+            rootObject.isStatic = true;
 
-            var clonedObject = GameObject.Instantiate(rootObject, Vector3.zero, Quaternion.identity);
-            clonedObject.name = "[CACHED] " + path;
-            clonedObject.SetActive(false);
-
-            if (rootCachedStorage == null)
-                rootCachedStorage = new GameObject("Cached Models");
-
-            clonedObject.transform.parent = rootCachedStorage.transform;
-            models.Add(path, clonedObject);
+            StoreChachedObject(path, rootObject);
+            
 
             fs.Close();
 

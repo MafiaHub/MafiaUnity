@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 namespace OpenMafia
 {
@@ -10,20 +11,32 @@ namespace OpenMafia
         
     }
 
+#if UNITY_EDITOR
     [CustomEditor(typeof(MafiaPanel))]
     public class MafiaPanelEditor : Editor
     {
-        public string gamePath = "D:/Mafia 1.2/";
-        public string modelPath = "missions/freekrajina/scene.4ds";
+        public string gamePath = "F:/Games/Mafia/";
+        public string modelPath = "missions/freeride/scene.4ds";
+        public string cityPath = "missions/freeride/cache.bin";
+        public string missionName = "freeride";
+
+        bool isInitialized = false;
+
 
         public override void OnInspectorGUI()
         {
+            if (!isInitialized && GameManager.instance.cvarManager.values != null)
+            {
+                gamePath = GameManager.instance.cvarManager.Get("gamePath", gamePath);
+                isInitialized = true;
+            }
+
             EditorGUILayout.PrefixLabel("Game Path");
             gamePath = EditorGUILayout.TextField(gamePath);
 
             if (GUILayout.Button("Set Path"))
             {
-                GameLoader.instance.SetGamePath(gamePath);
+                GameManager.instance.SetGamePath(gamePath);
             }
 
             GUILayout.Space(15);
@@ -32,8 +45,47 @@ namespace OpenMafia
 
             if (GUILayout.Button("Spawn Object"))
             {
-                if (GameLoader.instance.modelLoader.LoadModel(modelPath) == null)
-                    Debug.LogWarning("Model couldn't be spawned! My path is " + GameLoader.instance.gamePath);
+                if (GameManager.instance.modelGenerator.LoadObject(modelPath) == null)
+                    Debug.LogWarning("Model couldn't be spawned! My path is " + GameManager.instance.gamePath);
+            }
+
+            cityPath = EditorGUILayout.TextField(cityPath);
+
+            if (GUILayout.Button("Spawn City"))
+            {
+                if (GameManager.instance.cityGenerator.LoadObject(cityPath) == null)
+                    Debug.LogWarning("City couldn't be spawned! My path is " + GameManager.instance.gamePath);
+            }
+
+            missionName = EditorGUILayout.TextField(missionName);
+
+            if (GUILayout.Button("Spawn Mission"))
+            {
+                // TODO(zaklaus): Spawn scene2.bin
+                var missionPath = "missions/" + missionName + "/";
+
+                var missionObject = new GameObject(missionName);
+
+                GameManager.instance.modelGenerator.LoadObject(missionPath + "scene.4ds").transform.parent = missionObject.transform;
+
+                if (File.Exists(GameManager.instance.gamePath + missionPath + "cache.bin"))
+                    GameManager.instance.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
+
+            }
+
+
+            GUILayout.Space(15);
+
+            if (GUILayout.Button("Save Config"))
+            {
+                var cvars = GameManager.instance.cvarManager;
+                cvars.ForceSet("gamePath", gamePath, CvarManager.CvarMode.Archived);
+                cvars.SaveMainConfig();
+            }
+
+            if (GUILayout.Button("Fix Scene View Distance"))
+            {
+                SceneView.lastActiveSceneView.camera.farClipPlane = 50;
             }
         }
     }
@@ -42,4 +94,6 @@ namespace OpenMafia
     {
 
     }
+
+#endif
 }
