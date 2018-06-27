@@ -98,22 +98,32 @@ namespace OpenMafia
                         }
 
                         mesh.SetTriangles(unityIndices.ToArray(), faceGroupId);
-
-                        var mat = new Material(Shader.Find("Diffuse"));
-
+                        
                         var matId = (int)Mathf.Max(0, Mathf.Min(model.materials.Count - 1, faceGroup.materialID - 1));
+                        var mafiaMat = model.materials[matId];
 
-                        if (matId > 0)
+                        Material mat;
+
+                        if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
+                             mat = new Material(Shader.Find("Transparent/Cutout/Diffuse"));
+                        else
+                            mat = new Material(Shader.Find("Diffuse"));
+
+                        //if (matId > 0)
                         {
-                            var mafiaMat = model.materials[matId];
-
+                            
                             // TODO support more types as well as transparency
 
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_TEXTUREDIFFUSE) != 0)
                             {
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
+                                    BMPLoader.useTransparencyKey = true;
+
                                 var image = bmp.LoadBMP(GameManager.instance.gamePath + "maps/" + mafiaMat.diffuseMapName);
                                 Texture2D tex = image.ToTexture2D();
                                 mat.SetTexture("_MainTex", tex);
+
+                                BMPLoader.useTransparencyKey = false;
                             }
                         }
 

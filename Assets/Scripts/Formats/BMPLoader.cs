@@ -121,6 +121,9 @@ namespace B83.Image.BMP
         public bool ReadPaletteAlpha = false;
         public bool ForceAlphaReadWhenPossible = false;
 
+        // TODO(zaklaus): This is unsafe, refactor it
+        public static bool useTransparencyKey = false;
+
         public BMPImage LoadBMP(string aFileName)
         {
             using (var file = File.OpenRead(aFileName))
@@ -263,7 +266,11 @@ namespace B83.Image.BMP
                     byte r = (byte)((v & bmp.rMask) >> shiftR);
                     byte g = (byte)((v & bmp.gMask) >> shiftG);
                     byte b = (byte)((v & bmp.bMask) >> shiftB);
-                    data[x + y * w] = new Color32(r, g, b, 255);
+
+                    if (useTransparencyKey)
+                        data[x + y * w] = new Color32(r, g, b, 0);
+                    else
+                        data[x + y * w] = new Color32(r, g, b, 255);
                 }
                 for (int i = 0; i < pad; i++)
                     aReader.ReadByte();
@@ -313,6 +320,10 @@ namespace B83.Image.BMP
             int rowLength = ((bitCount * w + 31) / 32) * 4;
             int count = rowLength * h;
             int pad = rowLength - (w * bitCount + 7) / 8;
+
+            if (BMPLoader.useTransparencyKey)
+                bmp.palette[0] = new Color32(0, 0, 0, 0);
+
             Color32[] data = bmp.imageData = new Color32[w * h];
             if (aReader.BaseStream.Position + count > aReader.BaseStream.Length)
             {
@@ -326,7 +337,7 @@ namespace B83.Image.BMP
                 {
                     int v = (int)bitReader.ReadBits(bitCount);
 
-                    if (v == 255)
+                    if (v >= bmp.palette.Count)
                         v = 0;
 
                     if (v >= bmp.palette.Count)
