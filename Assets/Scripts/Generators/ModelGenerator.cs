@@ -105,10 +105,12 @@ namespace OpenMafia
                         Material mat;
 
                         if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
-                             mat = new Material(Shader.Find("Transparent/Cutout/Diffuse"));
+                            mat = new Material(Shader.Find("Transparent/Cutout/Diffuse"));
+                        else if (mafiaMat.transparency < 1)
+                            mat = new Material(Shader.Find("Transparent/Diffuse"));
                         else
                             mat = new Material(Shader.Find("Diffuse"));
-
+                        
                         //if (matId > 0)
                         {
                             
@@ -122,6 +124,9 @@ namespace OpenMafia
                                 var image = bmp.LoadBMP(GameManager.instance.gamePath + "maps/" + mafiaMat.diffuseMapName);
                                 Texture2D tex = image.ToTexture2D();
                                 mat.SetTexture("_MainTex", tex);
+
+                                if (mafiaMat.transparency < 1)
+                                    mat.SetColor("_Color", new Color32(255, 255, 255, (byte)(mafiaMat.transparency * 255)));
 
                                 BMPLoader.useTransparencyKey = false;
                             }

@@ -267,7 +267,7 @@ namespace B83.Image.BMP
                     byte g = (byte)((v & bmp.gMask) >> shiftG);
                     byte b = (byte)((v & bmp.bMask) >> shiftB);
 
-                    if (useTransparencyKey)
+                    if (useTransparencyKey && r == 0 && g == 0 && b == 0)
                         data[x + y * w] = new Color32(r, g, b, 0);
                     else
                         data[x + y * w] = new Color32(r, g, b, 255);
@@ -345,6 +345,7 @@ namespace B83.Image.BMP
                         //Debug.LogError("Indexed bitmap has indices greater than it's color palette");
                         continue;
                     }
+
                     data[x + y * w] = bmp.palette[v];
                 }
                 bitReader.Flush();
