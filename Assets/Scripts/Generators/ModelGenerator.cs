@@ -26,6 +26,7 @@ namespace OpenMafia
             }
             catch (Exception ex)
             {
+                GameObject.DestroyImmediate(rootObject);
                 Debug.LogWarning(ex.ToString());
                 return null;
             }
@@ -55,6 +56,9 @@ namespace OpenMafia
                         continue;
 
                     if (mafiaMesh.standard.instanced != 0)
+                        continue;
+
+                    if (mafiaMesh.standard.lods == null || mafiaMesh.standard.lods.Count == 0)
                         continue;
 
                     var firstMafiaLOD = mafiaMesh.standard.lods[0];
@@ -140,8 +144,6 @@ namespace OpenMafia
                 children.Clear();
             }
             
-            rootObject.isStatic = true;
-
             StoreChachedObject(path, rootObject);
             
 

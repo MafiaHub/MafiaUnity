@@ -680,6 +680,8 @@ namespace OpenMafia
                     newMesh.meshName = ReadString(reader);
                     newMesh.meshParams = ReadString(reader);
 
+                    
+
                     switch (newMesh.meshType)
                     {
                         case MeshType.MESHTYPE_STANDARD:
@@ -716,18 +718,22 @@ namespace OpenMafia
 
                                     case VisualMeshType.VISUALMESHTYPE_MORPH:
                                         {
+                                            return;
                                             newMesh.morph = readMorph(reader, false);
                                         }
                                         break;
 
                                     case VisualMeshType.VISUALMESHTYPE_SINGLEMESH:
                                         {
+                                            // TODO(zaklaus): Fix other types
+                                            return;
                                             newMesh.singleMesh = readSingleMesh(reader);
                                         }
                                         break;
 
                                     case VisualMeshType.VISUALMESHTYPE_SINGLEMORPH:
                                         {
+                                            return;
                                             newMesh.singleMorph = readSingleMorph(reader);
                                         }
                                         break;
@@ -798,7 +804,7 @@ namespace OpenMafia
                 string sig = new string(newModel.signature);
                 if (!sig.Contains("4DS"))
                 {
-                    Debug.Log("Fuck man, this is not proper 4DS file!");
+                    Debug.Log("Not a valid 4DS model!");
                     return newModel;
                 }
 

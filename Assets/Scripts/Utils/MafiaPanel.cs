@@ -28,6 +28,7 @@ namespace OpenMafia
             if (!isInitialized && GameManager.instance.cvarManager.values != null)
             {
                 gamePath = GameManager.instance.cvarManager.Get("gamePath", gamePath);
+                missionName = GameManager.instance.cvarManager.Get("editorMissionName", missionName);
                 isInitialized = true;
             }
 
@@ -66,11 +67,18 @@ namespace OpenMafia
 
                 var missionObject = new GameObject(missionName);
 
+                GameManager.instance.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;
+
                 GameManager.instance.modelGenerator.LoadObject(missionPath + "scene.4ds").transform.parent = missionObject.transform;
 
                 if (File.Exists(GameManager.instance.gamePath + missionPath + "cache.bin"))
                     GameManager.instance.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
 
+            }
+
+            if (GUILayout.Button("Spawn Scene Only"))
+            {
+                GameManager.instance.sceneGenerator.LoadObject("missions/" + missionName + "/scene2.bin");
             }
 
 
@@ -80,6 +88,7 @@ namespace OpenMafia
             {
                 var cvars = GameManager.instance.cvarManager;
                 cvars.ForceSet("gamePath", gamePath, CvarManager.CvarMode.Archived);
+                cvars.ForceSet("editorMissionName", missionName, CvarManager.CvarMode.Archived);
                 cvars.SaveMainConfig();
             }
 

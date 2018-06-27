@@ -325,6 +325,10 @@ namespace B83.Image.BMP
                 for (int x = 0; x < w; x++)
                 {
                     int v = (int)bitReader.ReadBits(bitCount);
+
+                    if (v == 255)
+                        v = 0;
+
                     if (v >= bmp.palette.Count)
                     {
                         //Debug.LogError("Indexed bitmap has indices greater than it's color palette");

@@ -22,7 +22,8 @@ namespace OpenMafia
 
         public ModelGenerator modelGenerator = new ModelGenerator();
         public CityGenerator cityGenerator = new CityGenerator();
-            
+        public SceneGenerator sceneGenerator = new SceneGenerator();
+
         public bool SetGamePath(string path)
         {
             path = FixGamePath(path);

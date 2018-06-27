@@ -53,8 +53,6 @@ namespace OpenMafia
                 }
             }
 
-            rootObject.isStatic = true;
-
             StoreChachedObject(path, rootObject);
 
             return rootObject;

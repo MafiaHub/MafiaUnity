@@ -44,7 +44,7 @@ namespace OpenMafia
         public static string ReadString(BinaryReader reader)
         {
             var length = reader.ReadByte();
-            return new string(reader.ReadChars(length));
+            return System.Text.Encoding.ASCII.GetString(reader.ReadBytes(length));
         }
     }
 }
