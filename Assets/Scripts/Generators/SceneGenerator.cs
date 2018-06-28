@@ -7,6 +7,8 @@ namespace OpenMafia
 {
     public class SceneGenerator : BaseGenerator
     {
+        public MafiaFormats.Scene2BINLoader lastLoader;
+
         public override GameObject LoadObject(string path)
         {
             GameObject rootObject = LoadCachedObject(path);
@@ -30,6 +32,7 @@ namespace OpenMafia
             using (var reader = new BinaryReader(fs))
             {
                 var sceneLoader = new MafiaFormats.Scene2BINLoader();
+                lastLoader = sceneLoader;
 
                 sceneLoader.Load(reader);
 

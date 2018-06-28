@@ -62,18 +62,12 @@ namespace OpenMafia
 
             if (GUILayout.Button("Spawn Mission"))
             {
-                // TODO(zaklaus): Spawn scene2.bin
-                var missionPath = "missions/" + missionName + "/";
+                GameManager.instance.missionManager.LoadMission(missionName);
+            }
 
-                var missionObject = new GameObject(missionName);
-
-                GameManager.instance.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;
-
-                GameManager.instance.modelGenerator.LoadObject(missionPath + "scene.4ds").transform.parent = missionObject.transform;
-
-                if (File.Exists(GameManager.instance.gamePath + missionPath + "cache.bin"))
-                    GameManager.instance.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
-
+            if (GUILayout.Button("Destroy Mission"))
+            {
+                GameManager.instance.missionManager.DestroyMission();
             }
 
             if (GUILayout.Button("Spawn Scene Only"))

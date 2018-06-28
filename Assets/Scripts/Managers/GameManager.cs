@@ -19,6 +19,7 @@ namespace OpenMafia
         public string gamePath { get; private set; }
 
         public CvarManager cvarManager = new CvarManager();
+        public MissionManager missionManager = new MissionManager();
 
         public ModelGenerator modelGenerator = new ModelGenerator();
         public CityGenerator cityGenerator = new CityGenerator();
