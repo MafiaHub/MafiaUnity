@@ -1,17 +1,30 @@
 ﻿using B83.Image.BMP;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace OpenMafia
 {
+
+    [Serializable]
     public class GameManager
     {
 
         #region Singleton
         static GameManager instanceObject;
-        public static GameManager instance { get { if (instanceObject == null) instanceObject = new GameManager(); return instanceObject; } }
+        public static GameManager instance
+        {
+            get
+            {
+                if (instanceObject == null)
+                    instanceObject = new GameManager();
+                
+                return instanceObject;
+            }
+        }
         #endregion
 
         public const int GAME_VERSION = 1;
@@ -40,7 +53,7 @@ namespace OpenMafia
 
             return false;
         }
-
+        
         string FixGamePath(string path)
         {
             if (!path.EndsWith("/"))

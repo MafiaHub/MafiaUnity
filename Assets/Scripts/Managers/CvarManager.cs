@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace OpenMafia
 {
+    [Serializable]
     public class CvarManager
     {
         const int CONFIG_VERSION = 1;

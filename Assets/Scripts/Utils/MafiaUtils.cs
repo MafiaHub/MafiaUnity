@@ -9,12 +9,10 @@ namespace OpenMafia
     public class MafiaUtils : ScriptableWizard
     {
 
-        [MenuItem("MafiaUtils/Spawn Development Suite")]
+        [MenuItem("Mafia SDK/Open Editor")]
         static void SpawnDevObject()
         {
-            var dev = new GameObject("DEVEL");
-
-            dev.AddComponent<MafiaPanel>();
+            MafiaEditor.Init();
         }
     }
 #endif

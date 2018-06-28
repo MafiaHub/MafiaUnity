@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 namespace OpenMafia
 {
+    [Serializable]
     public class MissionManager
     {
 
+        [Serializable]
         public class Mission
         {
             public string missionName;
@@ -15,7 +18,7 @@ namespace OpenMafia
             public MafiaFormats.Scene2BINLoader missionData;
         }
 
-        public Mission mission { get; private set; }
+        [SerializeField] public Mission mission { get; private set; }
         
         public delegate void OnMissionLoading(string missionName);
         public OnMissionLoading onMissionLoading;
