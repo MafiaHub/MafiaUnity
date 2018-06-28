@@ -15,8 +15,7 @@
 
 <div align="center">
   <sub>
-    Brought to you by <a href="https://github.com/drummyfish">@drummyfish</a>,
-    <a href="https://github.com/zaklaus">@zaklaus</a>,
+    Brought to you by <a href="https://github.com/zaklaus">@zaklaus</a>,
     <a href="https://github.com/DavoSK">@DavoSK</a>,
     <a href="https://github.com/romop5">@Romop5</a>,
     and other contributors!
@@ -42,11 +41,10 @@ The project is in very early stage and at the moment can offer libraries for loa
 
 ## Contributing
 
-If you'd like to join us and contribute, see [development.md](https://github.com/OpenMafia/OpenMF/tree/master/docs/development.md).
+If you'd like to join us and contribute, see **development.md** (WIP)
 
-## Demonstration
-<a href="https://www.youtube.com/watch?v=gneJTc8AixI">![OpenMF Physics fun](https://cdn.discordapp.com/attachments/232829242541473793/405718157005946882/Artboard.png)</a>
-
-## Screenshots    
-![](https://github.com/OpenMafia/openmf/blob/master/resources/screens.jpg?raw=true)
-![](https://i.imgur.com/41q3JQe.gif)
+## Media
+![](https://i.imgur.com/doGSydE.jpg)
+![](https://i.imgur.com/A92V7mh.jpg)
+![](https://i.imgur.com/oqmPtde.jpg)
+![](https://i.imgur.com/3Yk6eq3.jpg)
