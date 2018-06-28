@@ -34,4 +34,5 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-/Assets/External Assets/
+/Assets/External Assets/*
+!/Assets/External Assets/.gitkeep
