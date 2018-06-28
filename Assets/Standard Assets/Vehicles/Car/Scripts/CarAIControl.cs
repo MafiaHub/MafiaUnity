@@ -24,7 +24,7 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField] [Range(0, 1)] private float m_CautiousSpeedFactor = 0.05f;               // percentage of max speed to use when being maximally cautious
         [SerializeField] [Range(0, 180)] private float m_CautiousMaxAngle = 50f;                  // angle of approaching corner to treat as warranting maximum caution
         [SerializeField] private float m_CautiousMaxDistance = 100f;                              // distance at which distance-based cautiousness begins
-        [SerializeField] private float m_CautiousAngularVelocityFactor = 30f;                     // how cautious the AI should be when considering its own current angular velocity (i.e. easing off acceleration if spinning!)
+        [SerializeField] private float m_CautiousAngularVelocityFactor = 2f;                     // how cautious the AI should be when considering its own current angular velocity (i.e. easing off acceleration if spinning!)
         [SerializeField] private float m_SteerSensitivity = 0.05f;                                // how sensitively the AI uses steering input to turn to the desired direction
         [SerializeField] private float m_AccelSensitivity = 0.04f;                                // How sensitively the AI uses the accelerator to reach the current desired speed
         [SerializeField] private float m_BrakeSensitivity = 1f;                                   // How sensitively the AI uses the brake to reach the current desired speed
@@ -87,7 +87,7 @@ namespace UnityStandardAssets.Vehicles.Car
                             float approachingCornerAngle = Vector3.Angle(m_Target.forward, fwd);
 
                             // also consider the current amount we're turning, multiplied up and then compared in the same way as an upcoming corner angle
-                            float spinningAngle = m_Rigidbody.angularVelocity.magnitude*m_CautiousAngularVelocityFactor;
+                            float spinningAngle = (m_Rigidbody.angularVelocity.magnitude * Mathf.Rad2Deg)*m_CautiousAngularVelocityFactor;
 
                             // if it's different to our current angle, we need to be cautious (i.e. slow down) a certain amount
                             float cautiousnessRequired = Mathf.InverseLerp(0, m_CautiousMaxAngle,
