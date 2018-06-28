@@ -190,6 +190,11 @@ namespace OpenMafia
                 {
                     injectors.Add(new ObjectInjector(missionName));
                 }
+
+                if (GUILayout.Button("Add Current Mission"))
+                {
+                    injectors.Add(new ObjectInjector(GameManager.instance.missionManager.mission.missionName));
+                }
             }
             EditorGUILayout.EndHorizontal();
 
