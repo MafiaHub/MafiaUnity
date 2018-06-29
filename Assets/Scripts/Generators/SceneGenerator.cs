@@ -62,7 +62,7 @@ namespace OpenMafia
 
                     if (obj.Value.parentName != null)
                     {
-                        var parentObject = GameObject.Find(obj.Value.parentName.ToUpper());
+                        var parentObject = GameObject.Find(obj.Value.parentName);
                         
                         if (parentObject != null)
                             newObject.transform.parent = parentObject.transform;

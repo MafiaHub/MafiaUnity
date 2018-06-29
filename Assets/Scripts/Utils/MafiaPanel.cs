@@ -172,14 +172,16 @@ namespace OpenMafia
         const string EDITOR_CFG = "Assets/External Assets/editor.json";
     }
     
-
+    [Serializable]
     public class MafiaObjectInjector : EditorWindow
     {
+        const string INJECTOR_CFG = "Assets/External Assets/injector.json";
+
         public List<ObjectInjector> injectors = new List<ObjectInjector>();
 
-        private int selectedInjector;
-        private string missionName;
-        private string objectName;
+        [SerializeField] private int selectedInjector;
+        [SerializeField] private string missionName;
+        [SerializeField] private string objectName;
 
         public static void Init()
         {
@@ -190,6 +192,26 @@ namespace OpenMafia
 
         private void OnGUI()
         {
+            GUILayout.Space(15);
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                if (GUILayout.Button("Save Profile"))
+                {
+                    var jsonContent = JsonUtility.ToJson(this);
+
+                    File.WriteAllText(INJECTOR_CFG, jsonContent);
+                }
+
+                if (GUILayout.Button("Load Profile"))
+                {
+                    var jsonContent = File.ReadAllText(INJECTOR_CFG);
+
+                    JsonUtility.FromJsonOverwrite(jsonContent, this);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
             if (injectors.Count == 0)
             {
                 GUILayout.Label("No injectors available");
@@ -254,6 +276,15 @@ namespace OpenMafia
             {
                 var editorTask = task as EditorObjectTask;
 
+                if (editorTask == null)
+                {
+                    // Editor has been reloaded, reset it
+                    Debug.Log("Even after shit?");
+
+                    injectors.Clear();
+                    return;
+                }
+
                 EditorGUILayout.BeginHorizontal();
                 {
                     if (GUILayout.Button("-", GUILayout.Width(20)))
@@ -266,7 +297,7 @@ namespace OpenMafia
                     task.findMode = (ObjectInjector.ObjectFindMode)EditorGUILayout.Popup((int)task.findMode, new string[] { "Equals", "Contains", "StartsWith", "EndsWith" });
 
                     editorTask.popupSelection = EditorGUILayout.Popup(editorTask.popupSelection, new string[] { "None", "Destroy", "Custom..." });
-
+                    
                     if (GUILayout.Button("Apply Modifier"))
                     {
                         if (editorTask.popupSelection == 0)
@@ -298,6 +329,7 @@ namespace OpenMafia
 
             objectsToRemove.ForEach(x => injector.tasks.Remove(x));
         }
+
     }
 
     public class EditorObjectTask : ObjectInjector.ObjectTask

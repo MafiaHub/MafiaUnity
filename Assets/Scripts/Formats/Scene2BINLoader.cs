@@ -250,7 +250,7 @@ namespace OpenMafia
                     {
                             var charName = reader.ReadBytes((int)header.size-7);
                             
-                            newObject.name = System.Text.Encoding.ASCII.GetString(charName).ToUpper();
+                            newObject.name = System.Text.Encoding.ASCII.GetString(charName);
                     }
                     break;
 
