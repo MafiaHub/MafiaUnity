@@ -48,9 +48,7 @@ namespace OpenMafia
                     var meshRenderer = child.GetComponent<MeshRenderer>();
 
                     children.Add(new KeyValuePair<int, Transform>(mafiaMesh.parentID, child.transform));
-
-                    // TODO handle more visual types
-
+                    
                     if (mafiaMesh.meshType != MafiaFormats.MeshType.MESHTYPE_STANDARD)
                         continue;
 
@@ -59,13 +57,28 @@ namespace OpenMafia
 
                     MafiaFormats.LOD firstMafiaLOD;
 
-                    if (mafiaMesh.visualMeshType == MafiaFormats.VisualMeshType.VISUALMESHTYPE_SINGLEMORPH)
-                        firstMafiaLOD = mafiaMesh.singleMorph.singleMesh.standard.lods[0];
-                    else if (mafiaMesh.visualMeshType == MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD && mafiaMesh.standard.lods.Count > 0)
-                        firstMafiaLOD = mafiaMesh.standard.lods[0];
-                    else // TODO
-                        continue;
+                    switch (mafiaMesh.visualMeshType)
+                    {
+                        case MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD:
+                        {
+                            // TODO build up more lods
+                            if (mafiaMesh.standard.lods.Count > 0)
+                                firstMafiaLOD = mafiaMesh.standard.lods[0];
+                            else
+                                continue;
+                        }break;
 
+                        case MafiaFormats.VisualMeshType.VISUALMESHTYPE_SINGLEMORPH:
+                        {
+                            firstMafiaLOD = mafiaMesh.singleMorph.singleMesh.standard.lods[0];
+                        }
+                        break;
+
+                        // TODO add more visual types
+
+                        default: continue;
+                    }
+                    
                     List<Material> mats = new List<Material>();
 
                     List<Vector3> unityVerts = new List<Vector3>();
