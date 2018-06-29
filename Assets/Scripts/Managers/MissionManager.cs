@@ -41,12 +41,14 @@ namespace OpenMafia
             var gameManager = GameManager.instance;
 
             var missionPath = "missions/" + missionName + "/";
-            
-            gameManager.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;
+
             gameManager.modelGenerator.LoadObject(missionPath + "scene.4ds").transform.parent = missionObject.transform;
 
             if (File.Exists(gameManager.gamePath + missionPath + "cache.bin"))
                 gameManager.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
+
+            gameManager.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;
+            
 
             mission = new Mission
             {

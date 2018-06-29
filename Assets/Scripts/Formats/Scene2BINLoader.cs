@@ -211,7 +211,7 @@ namespace OpenMafia
                             }
 
                             //TODO SEction 
-                            if (header.type == HeaderType.HEADER_OBJECT)
+                            if (header.type == HeaderType.HEADER_OBJECT && !objects.ContainsKey(newObject.name))
                             {
                                 objects.Add(newObject.name, newObject);
                             }
@@ -228,7 +228,7 @@ namespace OpenMafia
                         break;
                 }
             }
-
+            
             private void ReadObject(BinaryReader reader, ref Header header, ref Object newObject, uint offset)
             {
                 switch ((ObjectProperty)header.type)
@@ -248,7 +248,9 @@ namespace OpenMafia
                     case ObjectProperty.OBJECT_NAME:
                     case ObjectProperty.OBJECT_NAME_SPECIAL:
                     {
-                        newObject.name = System.Text.Encoding.ASCII.GetString(reader.ReadBytes((int)header.size-1)).Split('\0')[0];
+                            var charName = reader.ReadChars((int)header.size-7);
+                            
+                            newObject.name = new string(charName).ToUpper();
                     }
                     break;
 
@@ -277,7 +279,7 @@ namespace OpenMafia
 
                     case ObjectProperty.OBJECT_MODEL:
                         {
-                            var charName = reader.ReadBytes((int)header.size - 7);
+                            var charName = reader.ReadBytes((int)header.size - 6);
                             
                             newObject.modelName = System.Text.Encoding.ASCII.GetString(charName).Replace(".I3D", ".4ds");
                             newObject.modelName = newObject.modelName.Replace(".i3d", ".4ds");

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace OpenMafia
@@ -36,23 +37,49 @@ namespace OpenMafia
 
                 sceneLoader.Load(reader);
 
+                var objects = new List<KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>>();
+
                 foreach (var obj in sceneLoader.objects)
                 {
                     if (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.OBJECT_TYPE_MODEL)
                         continue;
 
+                    GameObject newObject;
+
                     if (obj.Value.modelName == null)
-                        continue;
+                        newObject = new GameObject();
+                    else
+                        newObject = GameManager.instance.modelGenerator.LoadObject("models/" + obj.Value.modelName);
 
-                    var model = GameManager.instance.modelGenerator.LoadObject("models/" + obj.Value.modelName);
+                    newObject.name = obj.Value.name;
+                    
+                    objects.Add(new KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>(newObject, obj.Value));
+                }
 
-                    if (model == null)
-                        continue;
+                foreach (var obj in objects)
+                {
+                    var newObject = obj.Key;
 
-                    model.transform.parent = rootObject.transform;
-                    model.transform.localPosition = obj.Value.pos;
-                    model.transform.localRotation = obj.Value.rot;
-                    model.transform.localScale = obj.Value.scale;
+                    if (obj.Value.parentName != null)
+                    {
+                        var parentObject = GameObject.Find(obj.Value.parentName.ToUpper());
+                        
+                        if (parentObject != null)
+                            newObject.transform.parent = parentObject.transform;
+                        else
+                            newObject.transform.parent = rootObject.transform;
+                    }
+                    else
+                        newObject.transform.parent = rootObject.transform;
+
+
+                    newObject.transform.localPosition = obj.Value.pos;
+                    newObject.transform.localRotation = obj.Value.rot;
+                    newObject.transform.localScale = obj.Value.scale;
+
+                    var specObject = newObject.AddComponent<ObjectDefinition>();
+                    specObject.data = obj.Value;
+                    specObject.Init();
                 }
             }
 

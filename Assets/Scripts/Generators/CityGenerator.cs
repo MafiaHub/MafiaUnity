@@ -45,6 +45,7 @@ namespace OpenMafia
                         if (model == null)
                             continue;
 
+                        model.name = obj.objectName;
                         model.transform.parent = parentObject.transform;
                         model.transform.localPosition = instance.pos;
                         model.transform.localRotation = instance.rot;

@@ -60,6 +60,8 @@ namespace OpenMafia
 
                 if (GUILayout.Button("Spawn Object"))
                 {
+                    GameManager.instance.SetGamePath(gamePath);
+
                     if (GameManager.instance.modelGenerator.LoadObject(modelPath) == null)
                         Debug.LogWarning("Model couldn't be spawned! My path is " + GameManager.instance.gamePath);
                 }
@@ -72,6 +74,8 @@ namespace OpenMafia
 
                 if (GUILayout.Button("Spawn City"))
                 {
+                    GameManager.instance.SetGamePath(gamePath);
+
                     if (GameManager.instance.cityGenerator.LoadObject(cityPath) == null)
                         Debug.LogWarning("City couldn't be spawned! My path is " + GameManager.instance.gamePath);
                 }
@@ -84,6 +88,7 @@ namespace OpenMafia
 
                 if (GUILayout.Button("Spawn Mission"))
                 {
+                    GameManager.instance.SetGamePath(gamePath);
                     GameManager.instance.missionManager.LoadMission(missionName);
                 }
 
