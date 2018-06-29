@@ -20,7 +20,7 @@ namespace OpenMafia
 
             try
             {
-                fs = new FileStream(GameManager.instance.gamePath + path, FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(path), FileMode.Open);
             }
             catch
             {
@@ -45,6 +45,7 @@ namespace OpenMafia
                         if (model == null)
                             continue;
 
+                        model.name = obj.objectName;
                         model.transform.parent = parentObject.transform;
                         model.transform.localPosition = instance.pos;
                         model.transform.localRotation = instance.rot;

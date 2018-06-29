@@ -267,7 +267,7 @@ namespace B83.Image.BMP
                     byte g = (byte)((v & bmp.gMask) >> shiftG);
                     byte b = (byte)((v & bmp.bMask) >> shiftB);
 
-                    if (useTransparencyKey && r == 0 && g == 0 && b == 0)
+                    if (useTransparencyKey && r == data[0].r && g == data[0].g && b == data[0].b)
                         data[x + y * w] = new Color32(r, g, b, 0);
                     else
                         data[x + y * w] = new Color32(r, g, b, 255);

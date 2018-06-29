@@ -636,7 +636,7 @@ namespace OpenMafia
 
                 newMesh.LODs = new List<SingleMeshLOD>();
 
-                for (var i = 0; i < newMesh.LODs.Count; i++)
+                for (var i = 0; i < newMesh.standard.lods.Count; i++)
                     newMesh.LODs.Add(readSingleMeshLOD(reader));
 
                 return newMesh;
@@ -718,22 +718,18 @@ namespace OpenMafia
 
                                     case VisualMeshType.VISUALMESHTYPE_MORPH:
                                         {
-                                            return;
                                             newMesh.morph = readMorph(reader, false);
                                         }
                                         break;
 
                                     case VisualMeshType.VISUALMESHTYPE_SINGLEMESH:
                                         {
-                                            // TODO(zaklaus): Fix other types
-                                            return;
                                             newMesh.singleMesh = readSingleMesh(reader);
                                         }
                                         break;
 
                                     case VisualMeshType.VISUALMESHTYPE_SINGLEMORPH:
                                         {
-                                            return;
                                             newMesh.singleMorph = readSingleMorph(reader);
                                         }
                                         break;
