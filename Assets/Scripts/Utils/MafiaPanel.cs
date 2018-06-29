@@ -66,10 +66,10 @@ namespace OpenMafia
                 }
             }
             EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
+            
+            foreach (var p in GameManager.instance.fileSystem.GetAllPaths())
             {
-                foreach (var p in GameManager.instance.fileSystem.GetAllPaths())
+                EditorGUILayout.BeginHorizontal();
                 {
                     if (GUILayout.Button("-", GUILayout.Width(20)))
                     {
@@ -78,8 +78,8 @@ namespace OpenMafia
 
                     GUILayout.Label(p);
                 }
-            }
-            EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndHorizontal();
+            }   
 
             EditorGUILayout.BeginHorizontal();
             {

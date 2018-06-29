@@ -50,7 +50,7 @@ namespace OpenMafia
                         newObject = new GameObject();
                     else
                         newObject = GameManager.instance.modelGenerator.LoadObject("models/" + obj.Value.modelName);
-
+                    
                     newObject.name = obj.Value.name;
                     
                     objects.Add(new KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>(newObject, obj.Value));

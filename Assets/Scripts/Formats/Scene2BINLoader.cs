@@ -248,9 +248,9 @@ namespace OpenMafia
                     case ObjectProperty.OBJECT_NAME:
                     case ObjectProperty.OBJECT_NAME_SPECIAL:
                     {
-                            var charName = reader.ReadChars((int)header.size-7);
+                            var charName = reader.ReadBytes((int)header.size-7);
                             
-                            newObject.name = new string(charName).ToUpper();
+                            newObject.name = System.Text.Encoding.ASCII.GetString(charName).ToUpper();
                     }
                     break;
 
