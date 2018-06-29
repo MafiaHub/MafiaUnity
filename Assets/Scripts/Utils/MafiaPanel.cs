@@ -18,6 +18,8 @@ namespace OpenMafia
         public string missionName = "freeride";
 
         bool isInitialized = false;
+        int modPathSel = 0;
+        string modPath = "";
 
         public static void Init()
         {
@@ -56,14 +58,38 @@ namespace OpenMafia
 
             EditorGUILayout.BeginHorizontal();
             {
+                modPath = EditorGUILayout.TextField(modPath);
+                
+                if (GUILayout.Button("+", GUILayout.Width(20)))
+                {
+                    GameManager.instance.fileSystem.AddOptionalPath(modPath);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                foreach (var p in GameManager.instance.fileSystem.GetAllPaths())
+                {
+                    if (GUILayout.Button("-", GUILayout.Width(20)))
+                    {
+                        GameManager.instance.fileSystem.RemoveOptionalPath(p);
+                    }
+
+                    GUILayout.Label(p);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            {
                 modelPath = EditorGUILayout.TextField(modelPath);
 
                 if (GUILayout.Button("Spawn Object"))
                 {
                     GameManager.instance.SetGamePath(gamePath);
 
-                    if (GameManager.instance.modelGenerator.LoadObject(modelPath) == null)
-                        Debug.LogWarning("Model couldn't be spawned! My path is " + GameManager.instance.gamePath);
+                    GameManager.instance.modelGenerator.LoadObject(modelPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -76,8 +102,7 @@ namespace OpenMafia
                 {
                     GameManager.instance.SetGamePath(gamePath);
 
-                    if (GameManager.instance.cityGenerator.LoadObject(cityPath) == null)
-                        Debug.LogWarning("City couldn't be spawned! My path is " + GameManager.instance.gamePath);
+                    GameManager.instance.cityGenerator.LoadObject(cityPath);
                 }
             }
             EditorGUILayout.EndHorizontal();

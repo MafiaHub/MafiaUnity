@@ -41,6 +41,9 @@ namespace OpenMafia
         public string configPath;
         private bool isInitialized = false;
         
+        /// <summary>
+        /// Initializes the manager from the disk.
+        /// </summary>
         public void Init()
         {
             if (isInitialized)
@@ -66,6 +69,10 @@ namespace OpenMafia
             SaveConfig("openmf.json");
         }
 
+        /// <summary>
+        /// Saves current config into an optional directory.
+        /// </summary>
+        /// <param name="path"></param>
         public void SaveConfig(string path)
         {
             var archivedVars = new CvarList();
@@ -91,6 +98,10 @@ namespace OpenMafia
             }
         }
 
+        /// <summary>
+        /// Loads config from a specified directory.
+        /// </summary>
+        /// <param name="path"></param>
         public void LoadConfig(string path)
         {
             try
@@ -118,6 +129,12 @@ namespace OpenMafia
             }
         }
 
+        /// <summary>
+        /// Getter method for retrieving a cvar value.
+        /// </summary>
+        /// <param name="key">Cvar name</param>
+        /// <param name="defaultValue">Fallback value if cvar wasn't present</param>
+        /// <returns></returns>
         public string Get(string key, string defaultValue)
         {
             if (!values.ContainsKey(key))
@@ -126,6 +143,14 @@ namespace OpenMafia
                 return values[key].value;
         }
 
+        /// <summary>
+        /// Setter method for assigning a value to a cvar.
+        /// NOTE: Use ForceSet if you want to overwrite archived cvar.
+        /// </summary>
+        /// <param name="key">Cvar name</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="mode">Cvar type (None, Archived)</param>
+        /// <returns></returns>
         public bool Set(string key, string value, CvarMode mode = CvarMode.None)
         {
             if (!values.ContainsKey(key))
@@ -142,6 +167,13 @@ namespace OpenMafia
             return false;
         }
 
+        /// <summary>
+        /// Setter method for assigning a value to a cvar. Regardless of its type.
+        /// </summary>
+        /// <param name="key">Cvar name</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="mode">Cvar type (None, Archived)</param>
+        /// <returns></returns>
         public void ForceSet(string key, string value, CvarMode mode = CvarMode.None)
         {
             if (!values.ContainsKey(key))

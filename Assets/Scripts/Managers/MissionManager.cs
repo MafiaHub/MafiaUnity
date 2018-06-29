@@ -44,7 +44,7 @@ namespace OpenMafia
 
             gameManager.modelGenerator.LoadObject(missionPath + "scene.4ds").transform.parent = missionObject.transform;
 
-            if (File.Exists(gameManager.gamePath + missionPath + "cache.bin"))
+            if (gameManager.fileSystem.Exists(missionPath + "cache.bin"))
                 gameManager.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
 
             gameManager.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;

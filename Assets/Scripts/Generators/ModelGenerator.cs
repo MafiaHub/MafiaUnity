@@ -22,7 +22,7 @@ namespace OpenMafia
 
             try
             {
-                fs = new FileStream(GameManager.instance.gamePath + path, FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(path), FileMode.Open);
             }
             catch (Exception ex)
             {
@@ -51,17 +51,21 @@ namespace OpenMafia
 
                     // TODO handle more visual types
 
-                    if (mafiaMesh.meshType != MafiaFormats.MeshType.MESHTYPE_STANDARD ||
-                        mafiaMesh.visualMeshType != MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD)
+                    if (mafiaMesh.meshType != MafiaFormats.MeshType.MESHTYPE_STANDARD)
                         continue;
 
                     if (mafiaMesh.standard.instanced != 0)
                         continue;
 
-                    if (mafiaMesh.standard.lods == null || mafiaMesh.standard.lods.Count == 0)
+                    MafiaFormats.LOD firstMafiaLOD;
+
+                    if (mafiaMesh.visualMeshType == MafiaFormats.VisualMeshType.VISUALMESHTYPE_SINGLEMORPH)
+                        firstMafiaLOD = mafiaMesh.singleMorph.singleMesh.standard.lods[0];
+                    else if (mafiaMesh.visualMeshType == MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD)
+                        firstMafiaLOD = mafiaMesh.standard.lods[0];
+                    else // TODO
                         continue;
 
-                    var firstMafiaLOD = mafiaMesh.standard.lods[0];
                     List<Material> mats = new List<Material>();
 
                     List<Vector3> unityVerts = new List<Vector3>();
@@ -153,9 +157,9 @@ namespace OpenMafia
                                     BMPImage image = null;
 
                                     if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_TEXTUREDIFFUSE) != 0)
-                                        image = bmp.LoadBMP(GameManager.instance.gamePath + "maps/" + mafiaMat.diffuseMapName);
+                                        image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.diffuseMapName));
                                     else if (mafiaMat.alphaMapName != null)
-                                        image = bmp.LoadBMP(GameManager.instance.gamePath + "maps/" + mafiaMat.alphaMapName);
+                                        image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.alphaMapName));
 
                                     BMPLoader.useTransparencyKey = false;
 

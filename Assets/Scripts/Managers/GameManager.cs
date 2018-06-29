@@ -27,45 +27,44 @@ namespace OpenMafia
         }
         #endregion
 
+        /// <summary>
+        /// This constant is bumped each time we ship new build.
+        /// </summary>
         public const int GAME_VERSION = 1;
-        
-        public string gamePath { get; private set; }
 
+        #region Public Fields
+        public FileSystem fileSystem = new FileSystem();
         public CvarManager cvarManager = new CvarManager();
         public MissionManager missionManager = new MissionManager();
 
         public ModelGenerator modelGenerator = new ModelGenerator();
         public CityGenerator cityGenerator = new CityGenerator();
         public SceneGenerator sceneGenerator = new SceneGenerator();
+        #endregion
 
+        private bool isInitialized = false;
+
+        /// <summary>
+        /// Wrapper method which sets the game path as well as initializes the CvarManager object.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public bool SetGamePath(string path)
         {
-            path = FixGamePath(path);
+            if (isInitialized)
+                return true;
 
-            if (ValidateGamePath(path))
+            if (fileSystem.SetGamePath(path))
             {
-                gamePath = path;
-                cvarManager.configPath = gamePath;
+                cvarManager.configPath = fileSystem.gamePath;
                 cvarManager.Init();
+
+                isInitialized = true;
 
                 return true;
             }
 
             return false;
-        }
-        
-        string FixGamePath(string path)
-        {
-            if (!path.EndsWith("/"))
-                return path + "/";
-
-            return path;
-        }
-
-        bool ValidateGamePath(string path)
-        {
-            // TODO: Validate if game files are present there.
-            return true;
         }
     }
 }
