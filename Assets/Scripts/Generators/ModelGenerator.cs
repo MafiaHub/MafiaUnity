@@ -43,7 +43,7 @@ namespace OpenMafia
 
                 foreach (var mafiaMesh in model.meshes)
                 {
-                    var child = new GameObject(mafiaMesh.meshName.ToUpper(), typeof(MeshRenderer), typeof(MeshFilter));
+                    var child = new GameObject(mafiaMesh.meshName, typeof(MeshRenderer), typeof(MeshFilter));
                     var meshFilter = child.GetComponent<MeshFilter>();
                     var meshRenderer = child.GetComponent<MeshRenderer>();
 
@@ -61,7 +61,7 @@ namespace OpenMafia
 
                     if (mafiaMesh.visualMeshType == MafiaFormats.VisualMeshType.VISUALMESHTYPE_SINGLEMORPH)
                         firstMafiaLOD = mafiaMesh.singleMorph.singleMesh.standard.lods[0];
-                    else if (mafiaMesh.visualMeshType == MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD)
+                    else if (mafiaMesh.visualMeshType == MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD && mafiaMesh.standard.lods.Count > 0)
                         firstMafiaLOD = mafiaMesh.standard.lods[0];
                     else // TODO
                         continue;
@@ -80,7 +80,7 @@ namespace OpenMafia
                     }
 
                     var mesh = new Mesh();
-                    mesh.name = mafiaMesh.meshName.ToUpper();
+                    mesh.name = mafiaMesh.meshName;
 
                     mesh.SetVertices(unityVerts);
                     mesh.SetUVs(0, unityUV);
