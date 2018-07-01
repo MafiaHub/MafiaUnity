@@ -222,6 +222,9 @@ namespace OpenMafia
                                     tex.name = mafiaMat.alphaMapName;
 
                                 mat.SetTexture("_MainTex", tex);
+
+                                if (GameManager.instance.cvarManager.Get("filterMode", "1") == "0")
+                                    tex.filterMode = FilterMode.Point;
                             }
 
                             if (mafiaMat.transparency < 1)
