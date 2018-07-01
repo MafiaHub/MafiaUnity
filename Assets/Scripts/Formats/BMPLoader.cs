@@ -322,7 +322,17 @@ namespace B83.Image.BMP
             int pad = rowLength - (w * bitCount + 7) / 8;
 
             if (BMPLoader.useTransparencyKey)
-                bmp.palette[0] = new Color32(0, 0, 0, 0);
+                //bmp.palette[0] = new Color32(0, 0, 0, 0);
+                for (int i = 0; i < bmp.palette.Count; i++)
+                {
+                    var col = bmp.palette[i];
+
+                    if (col.r == bmp.palette[0].r &&
+                        col.g == bmp.palette[0].g &&
+                        col.b == bmp.palette[0].b
+                        )
+                        bmp.palette[i] = new Color32(col.r, col.g, col.b, 0);
+                }
 
             Color32[] data = bmp.imageData = new Color32[w * h];
             if (aReader.BaseStream.Position + count > aReader.BaseStream.Length)
