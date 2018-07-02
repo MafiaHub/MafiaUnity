@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class TextureAnimationPlayer : MonoBehaviour {
@@ -21,10 +22,7 @@ public class TextureAnimationPlayer : MonoBehaviour {
         {
             ResetTime();
 
-            material.SetTexture("_MainTex", frames[frameIndex++]);
-
-            if (frameIndex >= frames.Count)
-                frameIndex = 0;
+            material.SetTexture("_MainTex", frames[frameIndex++ % frames.Count]);
         }
         else
             timeUntilNextFrame -= Time.deltaTime;
