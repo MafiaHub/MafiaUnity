@@ -39,7 +39,7 @@ We respect copyrights and intelectual property and you need to own the original 
 
 ## Contributing
 
-If you'd like to join us and contribute, see **development.md** (WIP)
+If you'd like to join us and contribute, feel free to connect to [our Discord server](https://discord.gg/eBQ4QHX).
 
 ## Media
 ![](https://i.imgur.com/doGSydE.jpg)
