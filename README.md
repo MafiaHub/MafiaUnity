@@ -33,6 +33,10 @@ As a tribute to our favorite game, we've decided to bring the soul a new skeleto
 
 We aim to create open-source tools for the game [Mafia](https://en.wikipedia.org/wiki/Mafia_(video_game)). The ultimate goal is to recreate the original game engine using Unity, to build up our framework thanks to which we can enjoy playing Mafia once more and also simplify modding process.
 
+## Progress so far
+
+We recommend to visit [our Discord server](https://discord.gg/eBQ4QHX) to be up-to-date about current status. We also host a document describing the current tasks as well as their status in [PROGRESS.md](PROGRESS.md)
+
 ## Disclaimer
 
 We respect copyrights and intelectual property and you need to own the original game with all the game data in order for our tools to be useful to you.
