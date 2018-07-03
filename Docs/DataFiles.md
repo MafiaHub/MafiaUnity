@@ -30,3 +30,8 @@ If you extract all DTA files, you realize each archive contains a specific data 
   * TODO `*.gmf` game fonts?
   * TODO `zidle01.tbl`? (zidle means chair in czech)
   * TODO `MENU` directory.
+* `SAVEGAME`
+* `RECORDS`
+* `SOUNDS` contains sound files in `*.wav` format.
+* `DIFF`
+* `MUSIC` contains music used in the game. Note that Steam and GOG versions have some music files replaced/removed.
