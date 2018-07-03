@@ -10,7 +10,7 @@
 
 <br />
 <div align="center">
-  Free and open-source Mafia game engine re-implementation
+  Open-source Mafia game engine re-implementation
 </div>
 
 <div align="center">
@@ -31,13 +31,11 @@ As a tribute to our favorite game, we've decided to bring the soul a new skeleto
 
 ## Description
 
-We aim to create free and open-source tools for the game [Mafia](https://en.wikipedia.org/wiki/Mafia_(video_game)). The ultimate goal is to recreate the original game engine using Unity, to build up our framework thanks to which we can enjoy playing Mafia once more and also simplify modding process.
+We aim to create open-source tools for the game [Mafia](https://en.wikipedia.org/wiki/Mafia_(video_game)). The ultimate goal is to recreate the original game engine using Unity, to build up our framework thanks to which we can enjoy playing Mafia once more and also simplify modding process.
 
 ## Disclaimer
 
 We respect copyrights and intelectual property and you need to own the original game with all the game data in order for our tools to be useful to you.
-
-The project is in very early stage and at the moment can offer libraries for loading some of the game files and a model/world viewer with already a pretty nice rendering and a basic physics simulation.
 
 ## Contributing
 
