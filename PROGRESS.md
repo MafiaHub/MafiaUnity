@@ -35,6 +35,8 @@ Our primary focus at this stage is to have the ability to load Mafia assets and 
 * [ ] Ability to load data from DTA archive files
 * [ ] Scene lighting support
 * [ ] Use of scene's native lightmaps (to be decided)
+* [ ] WIP Parse tree.klz, which defines static collision inside of scene.
+* [ ] Generate colliders based on data parsed from tree.klz
 
 ### Gameplay features
 
