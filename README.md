@@ -35,7 +35,7 @@ We aim to create open-source tools for the game [Mafia](https://en.wikipedia.org
 
 ## Progress so far
 
-We recommend to visit [our Discord server](https://discord.gg/eBQ4QHX) to be up-to-date about current status. We also host a document describing the current tasks as well as their status in [PROGRESS.md](PROGRESS.md)
+We recommend to visit [our Discord server](https://discord.gg/eBQ4QHX) to be up-to-date about current status. We also host a document describing the current tasks as well as their status in [this issue page](https://github.com/OpenMafia/OpenMF/issues/4)
 
 ## Disclaimer
 
