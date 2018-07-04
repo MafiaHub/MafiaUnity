@@ -26,19 +26,6 @@ namespace OpenMafia
             public string tempValue;
         }
 
-        [Serializable]
-        public class CvarList
-        {
-            [SerializeField] public List<string> keys;
-            [SerializeField] public List<string> values;
-
-            public CvarList()
-            {
-                keys = new List<string>();
-                values = new List<string>();
-            }
-        }
-        
         public Dictionary<string, Cvar> values;
 
         public string configPath;
@@ -90,8 +77,6 @@ namespace OpenMafia
                     data.AppendFormat("pset {0} to {1}\r\n", cvar.Key, cvar.Value.value);
                 }
             }
-
-            
 
             try
             {
