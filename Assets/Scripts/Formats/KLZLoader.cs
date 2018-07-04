@@ -357,14 +357,5 @@ namespace OpenMafia
 
             //TODO(DavoSK): GridLoading .. not needed for now
         }
-
-        public List<string> GetLinkStrings()
-        {
-            List<string> newStrings = new List<string>();
-            for(var i = 0; i < linkTables.Count; i++)
-                newStrings.Add(linkTables[i].name);
-            
-            return newStrings;
-        }
     }
 }
