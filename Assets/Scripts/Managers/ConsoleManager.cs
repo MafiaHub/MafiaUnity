@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace OpenMafia
@@ -12,7 +13,6 @@ namespace OpenMafia
 
         /// <summary>
         /// Executes console commands separated by newline.
-        /// NOTE command without an argument interrupts the execution and returns cvar's value abruptly.
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
@@ -20,6 +20,8 @@ namespace OpenMafia
         {
             // TODO improve the parser
             var cvarManager = GameManager.instance.cvarManager;
+
+            var output = new StringBuilder();
 
             var lines = buffer.Split('\n');
 
@@ -33,14 +35,14 @@ namespace OpenMafia
                     args = String.Join(" ", parts.GetRange(1, parts.Count - 1)).Trim();
 
                 if (commands.ContainsKey(cmd))
-                    return commands[cmd](args);
+                    output.AppendLine(commands[cmd](args));
                 else if (parts.Count == 1)
-                    return cvarManager.Get(cmd, "");
+                    output.AppendLine(cvarManager.Get(cmd, ""));
                 else
                     cvarManager.Set(cmd, args);
             }
 
-            return "ok";
+            return output.ToString();
         }
 
         /// <summary>
