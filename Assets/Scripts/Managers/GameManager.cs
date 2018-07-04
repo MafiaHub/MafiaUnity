@@ -26,7 +26,7 @@ namespace OpenMafia
             }
         }
         #endregion
-
+        
         /// <summary>
         /// This constant is bumped each time we ship new build.
         /// </summary>
@@ -35,6 +35,7 @@ namespace OpenMafia
         #region Public Fields
         public FileSystem fileSystem = new FileSystem();
         public CvarManager cvarManager = new CvarManager();
+        public ConsoleManager consoleManager = new ConsoleManager();
         public MissionManager missionManager = new MissionManager();
 
         public ModelGenerator modelGenerator = new ModelGenerator();
@@ -43,6 +44,15 @@ namespace OpenMafia
         #endregion
 
         private bool isInitialized = false;
+
+        /// <summary>
+        /// Returns whether the Game Manager was already initialized or not
+        /// </summary>
+        /// <returns></returns>
+        public bool GetInitialized()
+        {
+            return isInitialized;
+        }
 
         /// <summary>
         /// Wrapper method which sets the game path as well as initializes the CvarManager object.
