@@ -56,6 +56,9 @@ namespace OpenMafia
             LoadConfig("openmf.json");
             SaveConfig("openmf.json");
 
+            // execute config commands in openmf.cfg as well
+            GameManager.instance.consoleManager.ExecuteConfig("autoexec.cfg");
+
             isInitialized = true;
         }
 

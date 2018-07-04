@@ -8,7 +8,7 @@ namespace OpenMafia
 {
     public class ConsoleManager
     {
-        public Dictionary<string, Action<string>> commands = new Dictionary<string, Action<string>>();
+        public Dictionary<string, Func<string, string>> commands = new Dictionary<string, Func<string, string>>();
 
         /// <summary>
         /// Executes console commands separated by newline.
@@ -25,15 +25,15 @@ namespace OpenMafia
 
             foreach (var line in lines)
             {
-                var parts = new List<string>(line.Split('\n'));
+                var parts = new List<string>(line.Split(' '));
                 var cmd = parts[0];
                 string args = "";
 
                 if (parts.Count > 1)
-                    args = String.Join(" ", parts.GetRange(1, parts.Count - 1));
+                    args = String.Join(" ", parts.GetRange(1, parts.Count - 1)).Trim();
 
                 if (commands.ContainsKey(cmd))
-                    commands[cmd](args);
+                    return commands[cmd](args);
                 else if (parts.Count == 1)
                     return cvarManager.Get(cmd, "");
                 else
@@ -55,9 +55,21 @@ namespace OpenMafia
             if (fileSystem.Exists(fileName))
             {
                 var content = File.ReadAllText(fileSystem.GetCanonicalPath(fileName));
+
+                ExecuteString(content.Trim());
+
+                Debug.Log("Config file " + fileName + " has been executed!");
             }
 
             return "ok";
+        }
+
+        public ConsoleManager()
+        {
+            commands.Add("test", (string text) =>
+            {
+                return "Testing " + text;
+            });
         }
     }
 }
