@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace OpenMafia
@@ -21,6 +22,8 @@ namespace OpenMafia
         {
             public CvarMode mode;
             public string value;
+
+            public string tempValue;
         }
 
         [Serializable]
@@ -53,10 +56,10 @@ namespace OpenMafia
                 values = new Dictionary<string, Cvar>();
 
             InitDefaultValues();
-            LoadConfig("openmf.json");
-            SaveConfig("openmf.json");
+            LoadConfig("openmf.cfg");
+            SaveConfig("openmf.cfg");
 
-            // execute config commands in openmf.cfg as well
+            // execute config commands in autoexec.cfg as well
             GameManager.instance.consoleManager.ExecuteConfig("autoexec.cfg");
 
             isInitialized = true;
@@ -69,7 +72,7 @@ namespace OpenMafia
 
         public void SaveMainConfig()
         {
-            SaveConfig("openmf.json");
+            SaveConfig("openmf.cfg");
         }
 
         /// <summary>
@@ -78,22 +81,21 @@ namespace OpenMafia
         /// <param name="path"></param>
         public void SaveConfig(string path)
         {
-            var archivedVars = new CvarList();
+            var data = new StringBuilder();
 
             foreach (var cvar in values)
             {
                 if (cvar.Value.mode == CvarMode.Archived)
                 {
-                    archivedVars.keys.Add(cvar.Key);
-                    archivedVars.values.Add(cvar.Value.value);
+                    data.AppendFormat("pset {0} to {1}\r\n", cvar.Key, cvar.Value.value);
                 }
             }
 
-            var jsonContent = JsonUtility.ToJson(archivedVars);
+            
 
             try
             {
-                File.WriteAllText(configPath + path, jsonContent);
+                File.WriteAllText(configPath + path, data.ToString());
             }
             catch (Exception ex)
             {
@@ -109,24 +111,9 @@ namespace OpenMafia
         {
             try
             {
-                var jsonContent = File.ReadAllText(configPath + path);
-
-                try
-                {
-                    var data = JsonUtility.FromJson<CvarList>(jsonContent);
-
-                    for (int i = 0; i < data.keys.Count; i++)
-                    {
-                        ForceSet(data.keys[i], data.values[i], CvarMode.Archived);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError("Config file: " + path + " is not a valid JSON formatted file! " + ex.ToString());
-                    throw ex;
-                }
+                GameManager.instance.consoleManager.ExecuteConfig(path);
             }
-            catch (Exception ex)
+            catch (FileNotFoundException ex)
             {
                 Debug.LogWarning("Config file: " + path + " doesn't exist. " + ex.ToString());
             }
@@ -142,6 +129,8 @@ namespace OpenMafia
         {
             if (!values.ContainsKey(key))
                 return defaultValue;
+            else if (values[key].tempValue != null)
+                return values[key].tempValue;
             else
                 return values[key].value;
         }
@@ -166,6 +155,10 @@ namespace OpenMafia
                 values[key].value = value;
                 return true;
             }
+            else
+            {
+                values[key].tempValue = value;
+            }
 
             return false;
         }
@@ -182,7 +175,10 @@ namespace OpenMafia
             if (!values.ContainsKey(key))
                 values.Add(key, new Cvar { mode = mode, value = value });
             else
+            {
                 values[key].value = value;
+                values[key].tempValue = null;
+            }
         }
     }
 }

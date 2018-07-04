@@ -35,7 +35,7 @@ namespace OpenMafia
         private void Update()
         {
             if (GameManager.instance.GetInitialized())
-                if (Input.GetKeyDown(toggleKey) && GameManager.instance.cvarManager.Get("devMode", "0") == "1")
+                if (Input.GetKeyDown(toggleKey))
                     isVisible = !isVisible;
         }
         

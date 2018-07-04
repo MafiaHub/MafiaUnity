@@ -11,6 +11,8 @@ namespace OpenMafia
     {
         public Dictionary<string, Func<string, string>> commands = new Dictionary<string, Func<string, string>>();
 
+        private string[] toKeyword = new string[] { " to " };
+
         /// <summary>
         /// Executes console commands separated by newline.
         /// </summary>
@@ -36,10 +38,8 @@ namespace OpenMafia
 
                 if (commands.ContainsKey(cmd))
                     output.AppendLine(commands[cmd](args));
-                else if (parts.Count == 1)
-                    output.AppendLine(cvarManager.Get(cmd, ""));
                 else
-                    cvarManager.Set(cmd, args);
+                    output.AppendLine(cvarManager.Get(cmd, ""));
             }
 
             return output.ToString();
@@ -72,6 +72,40 @@ namespace OpenMafia
             {
                 return "Testing " + text;
             });
+
+            commands.Add("set", (string text) =>
+            {
+                return SetCvar(text, CvarManager.CvarMode.None);
+            });
+
+            commands.Add("pset", (string text) =>
+            {
+                return SetCvar(text, CvarManager.CvarMode.Archived);
+            });
+        }
+
+        string SetCvar(string text, CvarManager.CvarMode mode)
+        {
+            if (text == "")
+                return "Cvar name is missing.";
+
+            if (!text.Contains(" to "))
+                return "Wrong format: Use set <cvar> to <value>!";
+
+            var parts = text.Split(toKeyword, StringSplitOptions.None);
+
+            if (parts.Length < 2)
+                return "Wrong format: Use set <cvar> to <value>!";
+
+            var cvar = parts[0].Trim();
+            var value = parts[1].Trim();
+
+            if (mode == CvarManager.CvarMode.Archived)
+                GameManager.instance.cvarManager.ForceSet(cvar, value, mode);
+            else
+                GameManager.instance.cvarManager.Set(cvar, value);
+
+            return "Value set to" + " \"" + value + "\".";
         }
     }
 }
