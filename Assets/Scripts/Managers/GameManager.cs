@@ -35,6 +35,7 @@ namespace OpenMafia
         #region Public Fields
         public FileSystem fileSystem = new FileSystem();
         public CvarManager cvarManager = new CvarManager();
+        public ConsoleManager consoleManager = new ConsoleManager();
         public MissionManager missionManager = new MissionManager();
 
         public ModelGenerator modelGenerator = new ModelGenerator();
