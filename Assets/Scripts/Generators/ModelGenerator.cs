@@ -42,11 +42,16 @@ namespace OpenMafia
 
                 foreach (var mafiaMesh in model.meshes)
                 {
-                    var child = new GameObject(mafiaMesh.meshName, typeof(MeshRenderer), typeof(MeshFilter));
+                    var child = new GameObject(mafiaMesh.meshName, typeof(MeshFilter));
                     var meshFilter = child.GetComponent<MeshFilter>();
-                    var meshRenderer = child.GetComponent<MeshRenderer>();
-
+                    
                     children.Add(new KeyValuePair<int, Transform>(mafiaMesh.parentID, child.transform));
+
+                    if (mafiaMesh.meshType == MafiaFormats.MeshType.MESHTYPE_BONE)
+                    {
+                        var bone = child.AddComponent<Bone>();
+                        bone.data = mafiaMesh.bone;
+                    }
 
                     if (mafiaMesh.meshType != MafiaFormats.MeshType.MESHTYPE_STANDARD)
                         continue;
@@ -63,6 +68,7 @@ namespace OpenMafia
                             // TODO build up more lods
                             if (mafiaMesh.standard.lods.Count > 0)
                             {
+                                var meshRenderer = child.AddComponent<MeshRenderer>();
                                 meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.standard.lods[0], model, out materials);
                                 meshRenderer.materials = materials;
                             }
@@ -73,8 +79,13 @@ namespace OpenMafia
 
                         case MafiaFormats.VisualMeshType.VISUALMESHTYPE_SINGLEMORPH:
                         {
+                            var meshRenderer = child.AddComponent<SkinnedMeshRenderer>();
                             meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.singleMorph.singleMesh.standard.lods[0], model, out materials);
                             meshRenderer.materials = materials;
+                            meshRenderer.sharedMesh = meshFilter.sharedMesh;
+
+                            var data = child.AddComponent<SkinnedMeshData>();
+                            data.mesh = mafiaMesh.singleMorph;
                         }
                         break;
 
@@ -86,6 +97,7 @@ namespace OpenMafia
                     meshId++;
                 }
 
+               
                 for (int i = 0; i < children.Count; i++)
                 {
                     var parentId = children[i].Key;
@@ -100,6 +112,65 @@ namespace OpenMafia
                     children[i].Value.localRotation = mafiaMesh.rot;
                     children[i].Value.localScale = mafiaMesh.scale;
                 }
+
+                // NOTE(zaklaus): Do some extra work if this is a skinned mesh
+                var baseObject = rootObject.transform.Find("base");
+
+                if (baseObject != null)
+                {
+                    var skinnedMesh = baseObject.GetComponent<SkinnedMeshRenderer>();
+
+                    if (skinnedMesh != null)
+                    {
+                        var data = baseObject.GetComponent<SkinnedMeshData>();
+                        var boneData = data.mesh.singleMesh.LODs[0];
+                        var bones = new List<Bone>(skinnedMesh.GetComponentsInChildren<Bone>());
+                        var boneArray = new Transform[bones.Count];
+                        
+                        foreach (var b in bones)
+                        {
+                            boneArray[b.data.boneID] = b.transform;
+                        }
+                        
+                        var boneTransforms = new List<Transform>(boneArray);
+                        var bindPoses = new Matrix4x4[bones.Count];
+                        var boneWeights = new BoneWeight[skinnedMesh.sharedMesh.vertexCount];
+
+                        skinnedMesh.bones = boneArray;
+                        
+                        int skipVertices = (int)boneData.nonWeightedVertCount;
+                        
+                        for (int i = 0; i < boneData.joints.Count; i++)
+                        {
+                            bindPoses[i] = boneData.joints[i].transform;
+
+                            for (int j = 0; j < boneData.joints[i].oneWeightedVertCount; j++)
+                            {
+                                boneWeights[skipVertices + j].boneIndex0 = i;
+                                boneWeights[skipVertices + j].weight0 = 1f;
+                            }
+
+                            skipVertices += (int)boneData.joints[i].oneWeightedVertCount;
+
+                            for (int j = 0; j < boneData.joints[i].weights.Count; j++)
+                            {
+                                Debug.Log("Bone: " + i + "->" + (int)(boneData.joints[i].boneID+1));
+                                boneWeights[skipVertices + j].boneIndex0 = i;
+                                boneWeights[skipVertices + j].boneIndex1 = (int)Mathf.Clamp(boneData.joints[i].boneID, 0, boneData.joints.Count-1);
+
+                                boneWeights[skipVertices + j].weight0 = boneData.joints[i].weights[j];
+                                boneWeights[skipVertices + j].weight1 = 1f - boneData.joints[i].weights[j];
+                            }
+
+                            skipVertices += boneData.joints[i].weights.Count;
+
+                        }
+
+                        skinnedMesh.sharedMesh.bindposes = bindPoses;
+                        skinnedMesh.sharedMesh.boneWeights = boneWeights;
+                    }
+                }
+
 
                 children.Clear();
             }
