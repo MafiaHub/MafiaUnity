@@ -48,7 +48,9 @@ namespace OpenMafia
                 gameManager.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
 
             gameManager.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;
-            
+
+            if (gameManager.fileSystem.Exists(missionPath + "tree.klz"))
+                gameManager.cityGenerator.LoadCollisions(missionPath + "tree.klz").transform.parent = missionObject.transform;
 
             mission = new Mission
             {
