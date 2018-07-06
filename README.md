@@ -3,8 +3,7 @@
 </div>
 
 <div align="center">
-    <!--<a href="https://discord.gg/uXKnHEU"><img src="https://discordapp.com/api/guilds/402098213114347520/embed.png" alt="Discord server" /></a>-->
-    <a href="https://discord.gg/uXKnHEU"><img src="https://discordapp.com/api/guilds/354670964400848898/embed.png" alt="Discord server" /></a>
+    <a href="https://discord.gg/eBQ4QHX"><img src="https://img.shields.io/discord/402098213114347520.svg" alt="Discord server" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/github/license/openmafia/openmf.svg" alt="license" /></a>
 </div>
 
