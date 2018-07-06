@@ -154,9 +154,8 @@ namespace OpenMafia
 
                             for (int j = 0; j < boneData.joints[i].weights.Count; j++)
                             {
-                                Debug.Log("Bone: " + i + "->" + (int)(boneData.joints[i].boneID+1));
                                 boneWeights[skipVertices + j].boneIndex0 = i;
-                                boneWeights[skipVertices + j].boneIndex1 = (int)Mathf.Clamp(boneData.joints[i].boneID, 0, boneData.joints.Count-1);
+                                boneWeights[skipVertices + j].boneIndex1 = (int)boneData.joints[i].boneID;
 
                                 boneWeights[skipVertices + j].weight0 = boneData.joints[i].weights[j];
                                 boneWeights[skipVertices + j].weight1 = 1f - boneData.joints[i].weights[j];
