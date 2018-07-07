@@ -13,13 +13,13 @@ namespace OpenMafia
         {
             switch (data.type)
             {
-                case MafiaFormats.Scene2BINLoader.ObjectType.OBJECT_TYPE_MODEL:
+                case MafiaFormats.Scene2BINLoader.ObjectType.Model:
                 {
                     // TODO: Load model over here?
                 }
                 break;
 
-                case MafiaFormats.Scene2BINLoader.ObjectType.OBJECT_TYPE_LIGHT:
+                case MafiaFormats.Scene2BINLoader.ObjectType.Light:
                 {
                     var light = gameObject.AddComponent<Light>();
 

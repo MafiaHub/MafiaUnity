@@ -42,13 +42,18 @@ namespace OpenMafia
 
                 foreach (var mafiaMesh in model.meshes)
                 {
-                    var child = new GameObject(mafiaMesh.meshName, typeof(MeshRenderer), typeof(MeshFilter));
+                    var child = new GameObject(mafiaMesh.meshName, typeof(MeshFilter));
                     var meshFilter = child.GetComponent<MeshFilter>();
-                    var meshRenderer = child.GetComponent<MeshRenderer>();
-
+                    
                     children.Add(new KeyValuePair<int, Transform>(mafiaMesh.parentID, child.transform));
 
-                    if (mafiaMesh.meshType != MafiaFormats.MeshType.MESHTYPE_STANDARD)
+                    if (mafiaMesh.meshType == MafiaFormats.MeshType.Bone)
+                    {
+                        var bone = child.AddComponent<Bone>();
+                        bone.data = mafiaMesh.bone;
+                    }
+
+                    if (mafiaMesh.meshType != MafiaFormats.MeshType.Standard)
                         continue;
 
                     if (mafiaMesh.standard.instanced != 0)
@@ -58,11 +63,12 @@ namespace OpenMafia
 
                     switch (mafiaMesh.visualMeshType)
                     {
-                        case MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD:
+                        case MafiaFormats.VisualMeshType.Standard:
                         {
                             // TODO build up more lods
                             if (mafiaMesh.standard.lods.Count > 0)
                             {
+                                var meshRenderer = child.AddComponent<MeshRenderer>();
                                 meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.standard.lods[0], model, out materials);
                                 meshRenderer.materials = materials;
                             }
@@ -71,10 +77,15 @@ namespace OpenMafia
                         }
                         break;
 
-                        case MafiaFormats.VisualMeshType.VISUALMESHTYPE_SINGLEMORPH:
+                        case MafiaFormats.VisualMeshType.Single_Morph:
                         {
+                            var meshRenderer = child.AddComponent<SkinnedMeshRenderer>();
                             meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.singleMorph.singleMesh.standard.lods[0], model, out materials);
                             meshRenderer.materials = materials;
+                            meshRenderer.sharedMesh = meshFilter.sharedMesh;
+
+                            var data = child.AddComponent<SkinnedMeshData>();
+                            data.mesh = mafiaMesh.singleMorph;
                         }
                         break;
 
@@ -86,6 +97,7 @@ namespace OpenMafia
                     meshId++;
                 }
 
+               
                 for (int i = 0; i < children.Count; i++)
                 {
                     var parentId = children[i].Key;
@@ -100,6 +112,64 @@ namespace OpenMafia
                     children[i].Value.localRotation = mafiaMesh.rot;
                     children[i].Value.localScale = mafiaMesh.scale;
                 }
+
+                // NOTE(zaklaus): Do some extra work if this is a skinned mesh
+                var baseObject = rootObject.transform.Find("base");
+
+                if (baseObject != null)
+                {
+                    var skinnedMesh = baseObject.GetComponent<SkinnedMeshRenderer>();
+
+                    if (skinnedMesh != null)
+                    {
+                        var data = baseObject.GetComponent<SkinnedMeshData>();
+                        var boneData = data.mesh.singleMesh.LODs[0];
+                        var bones = new List<Bone>(skinnedMesh.GetComponentsInChildren<Bone>());
+                        var boneArray = new Transform[bones.Count];
+                        
+                        foreach (var b in bones)
+                        {
+                            boneArray[b.data.boneID] = b.transform;
+                        }
+                        
+                        var boneTransforms = new List<Transform>(boneArray);
+                        var bindPoses = new Matrix4x4[bones.Count];
+                        var boneWeights = new BoneWeight[skinnedMesh.sharedMesh.vertexCount];
+
+                        skinnedMesh.bones = boneArray;
+                        
+                        int skipVertices = (int)boneData.nonWeightedVertCount;
+                        
+                        for (int i = 0; i < boneData.joints.Count; i++)
+                        {
+                            bindPoses[i] = boneData.joints[i].transform;
+
+                            for (int j = 0; j < boneData.joints[i].oneWeightedVertCount; j++)
+                            {
+                                boneWeights[skipVertices + j].boneIndex0 = i;
+                                boneWeights[skipVertices + j].weight0 = 1f;
+                            }
+
+                            skipVertices += (int)boneData.joints[i].oneWeightedVertCount;
+
+                            for (int j = 0; j < boneData.joints[i].weights.Count; j++)
+                            {
+                                boneWeights[skipVertices + j].boneIndex0 = i;
+                                boneWeights[skipVertices + j].boneIndex1 = (int)boneData.joints[i].boneID;
+
+                                boneWeights[skipVertices + j].weight0 = boneData.joints[i].weights[j];
+                                boneWeights[skipVertices + j].weight1 = 1f - boneData.joints[i].weights[j];
+                            }
+
+                            skipVertices += boneData.joints[i].weights.Count;
+
+                        }
+
+                        skinnedMesh.sharedMesh.bindposes = bindPoses;
+                        skinnedMesh.sharedMesh.boneWeights = boneWeights;
+                    }
+                }
+
 
                 children.Clear();
             }
@@ -160,7 +230,7 @@ namespace OpenMafia
 
                     Material mat;
 
-                    if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
+                    if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                     {
                         mat = new Material(Shader.Find("Standard"));
                         mat.SetFloat("_Mode", 1f); // Set rendering mode to Cutout
@@ -200,12 +270,12 @@ namespace OpenMafia
                         if (mafiaMat.diffuseMapName != null ||
                             mafiaMat.alphaMapName != null)
                         {
-                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
+                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                                 BMPLoader.useTransparencyKey = true;
 
                             BMPImage image = null;
 
-                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_TEXTUREDIFFUSE) != 0)
+                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
                                 image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.diffuseMapName));
                             else if (mafiaMat.alphaMapName != null)
                                 image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.alphaMapName));
@@ -216,7 +286,7 @@ namespace OpenMafia
                             {
                                 Texture2D tex = image.ToTexture2D();
 
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_TEXTUREDIFFUSE) != 0)
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
                                     tex.name = mafiaMat.diffuseMapName;
                                 else if (mafiaMat.alphaMapName != null)
                                     tex.name = mafiaMat.alphaMapName;
@@ -230,18 +300,18 @@ namespace OpenMafia
                             if (mafiaMat.transparency < 1)
                                 mat.SetColor("_Color", new Color32(255, 255, 255, (byte)(mafiaMat.transparency * 255)));
 
-                            if ((mafiaMat.flags & (MafiaFormats.MaterialFlag.MATERIALFLAG_ANIMATEDTEXTUREDIFFUSE | MafiaFormats.MaterialFlag.MATERIALFLAG_ANIMATEXTEXTUREALPHA)) != 0)
+                            if ((mafiaMat.flags & (MafiaFormats.MaterialFlag.Animated_Texture_Diffuse | MafiaFormats.MaterialFlag.Animated_Texture_Alpha)) != 0)
                             {
                                 List<Texture2D> frames = new List<Texture2D>();
 
                                 string fileName = null;
 
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_ANIMATEDTEXTUREDIFFUSE) != 0)
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Animated_Texture_Diffuse) != 0)
                                     fileName = mafiaMat.diffuseMapName;
                                 else
                                     fileName = mafiaMat.alphaMapName;
 
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                                     BMPLoader.useTransparencyKey = true;
 
                                 if (fileName != null)

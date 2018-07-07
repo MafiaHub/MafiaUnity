@@ -11,64 +11,64 @@ namespace OpenMafia
         [Flags]
         public enum MaterialFlag : uint
         {
-            MATERIALFLAG_TEXTUREDIFFUSE = 0x00040000,          // whether diffuse texture is present
-            MATERIALFLAG_COLORED = 0x08000000,                 // whether to use diffuse color (only applies with diffuse texture)
-            MATERIALFLAG_MIPMAPPING = 0x00800000,
-            MATERIALFLAG_ANIMATEDTEXTUREDIFFUSE = 0x04000000,
-            MATERIALFLAG_ANIMATEXTEXTUREALPHA = 0x02000000,
-            MATERIALFLAG_DOUBLESIDEDMATERIAL = 0x10000000,     // whether backface culling should be off
-            MATERIALFLAG_ENVIRONMENTMAP = 0x00080000,          // simulates glossy material with environment texture
-            MATERIALFLAG_NORMALTEXTUREBLEND = 0x00000100,      // blend between diffuse and environment texture normally
-            MATERIALFLAG_MULTIPLYTEXTUREBLEND = 0x00000200,    // blend between diffuse and environment texture by multiplying
-            MATERIALFLAG_ADDITIVETEXTUREBLEND = 0x00000400,    // blend between diffuse and environment texture by addition
-            MATERIALFLAG_CALCREFLECTTEXTUREY = 0x00001000,
-            MATERIALFLAG_PROJECTREFLECTTEXTUREY = 0x00002000,
-            MATERIALFLAG_PROJECTREFLECTTEXTUREZ = 0x00004000,
-            MATERIALFLAG_ADDITIONALEFFECT = 0x00008000,        // should be ALPHATEXTURE | COLORKEY | ADDITIVEMIXING
-            MATERIALFLAG_ALPHATEXTURE = 0x40000000,
-            MATERIALFLAG_COLORKEY = 0x20000000,
-            MATERIALFLAG_ADDITIVEMIXING = 0x80000000           // the object is blended against the world by adding RGB (see street lamps etc.)
+            Textured_Diffuse = 0x00040000,          // whether diffuse texture is present
+            Colored = 0x08000000,                 // whether to use diffuse color (only applies with diffuse texture)
+            Mipmapping = 0x00800000,
+            Animated_Texture_Diffuse = 0x04000000,
+            Animated_Texture_Alpha = 0x02000000,
+            Doublesided_Material = 0x10000000,     // whether backface culling should be off
+            Environment_Map = 0x00080000,          // simulates glossy material with environment texture
+            Normal_TextureBlend = 0x00000100,      // blend between diffuse and environment texture normally
+            Multiply_TextureBlend = 0x00000200,    // blend between diffuse and environment texture by multiplying
+            Additive_TextureBlend = 0x00000400,    // blend between diffuse and environment texture by addition
+            Calculate_Reflect_TextureX = 0x00001000,
+            Calculate_Reflect_TextureY = 0x00002000,
+            Calculate_Reflect_TextureZ = 0x00004000,
+            AdditionalEffect = 0x00008000,        // should be ALPHATEXTURE | COLORKEY | ADDITIVEMIXING
+            AlphaTexture = 0x40000000,
+            Colorkey = 0x20000000,
+            AdditiveMixing = 0x80000000           // the object is blended against the world by adding RGB (see street lamps etc.)
         }
 
         public enum MeshType : uint
         {
-            MESHTYPE_STANDARD = 0x01,           // visual mesh
-            MESHTYPE_COLLISION = 0x02,          // NOTE(zaklaus): Imaginary type based on mesh name "wcol*"
-            MESHTYPE_SECTOR = 0x05,             // part of space, used for culling, effective lighting etc.
-            MESHTYPE_DUMMY = 0x06,              // invisible bounding box
-            MESHTYPE_TARGET = 0x07,             // used in human models (as a shooting target?)
-            MESHTYPE_BONE = 0x0a                // for skeletal animation
+            Standard = 0x01,           // visual mesh
+            Collision = 0x02,          // NOTE(zaklaus): Imaginary type based on mesh name "wcol*"
+            Sector = 0x05,             // part of space, used for culling, effective lighting etc.
+            Dummy = 0x06,              // invisible bounding box
+            Target = 0x07,             // used in human models (as a shooting target?)
+            Bone = 0x0a                // for skeletal animation
         }
 
         public enum VisualMeshType : uint  // subtype of mesh, when MeshType == MESHTYPE_STANDARD
         {
-            VISUALMESHTYPE_STANDARD = 0x0,      // normal mesh
-            VISUALMESHTYPE_SINGLEMESH = 0x02,   // mesh with bones
-            VISUALMESHTYPE_SINGLEMORPH = 0x03,  // combination of morph (for face) and skeletal (for body) animation
-            VISUALMESHTYPE_BILLBOARD = 0x04,    // billboarding mesh (rotates towards camera
-            VISUALMESHTYPE_MORPH = 0x05,        // mesh with morphing (non-skeletal) animation, e.g. curtains in wind
-            VISUALMESHTYPE_GLOW = 0x06,         // has no geometry, only shows glow texture
-            VISUALMESHTYPE_MIRROR = 0x08        // reflects the scene
+            Standard = 0x0,      // normal mesh
+            Single_Mesh = 0x02,   // mesh with bones
+            Single_Morph = 0x03,  // combination of morph (for face) and skeletal (for body) animation
+            Billboard = 0x04,    // billboarding mesh (rotates towards camera)
+            Morph = 0x05,        // mesh with morphing (non-skeletal) animation, e.g. curtains in wind
+            Glow = 0x06,         // has no geometry, only shows glow texture
+            Mirror = 0x08        // reflects the scene
         }
 
         [Flags]
         public enum MeshRenderFlag : uint
         {
-            MESHRENDERFLAG_USEDEPTHBIAS = 0x0001,  // whether to receive shadows
-            MESHRENDERFLAG_USESHADOWS = 0x0002,
-            MESHRENDERFLAG_UNKNOWN = 0x0008,       // always 1
-            MESHRENDERFLAG_USEPROJECTION = 0x0020, // used for projecting textures, such as blood
-            MESHRENDERFLAG_FORBIDFOG = 0x0080
+            Use_DepthBias = 0x0001,  // whether to receive shadows
+            Use_Shadows = 0x0002,
+            Unknown = 0x0008,       // always 1
+            Use_Projection = 0x0020, // used for projecting textures, such as blood
+            Forbid_Fog = 0x0080
         }
 
         [Flags]
         public enum MeshOccludingFlag : uint
         {
-            MESHOCCLUDINGFLAG_NORMAL = 0x09,
-            MESHOCCLUDINGFLAG_SECTOR = 0x7D,
-            MESHOCCLUDINGFLAG_WALL = 0x3D,       // mesh in sector (walls)
-            MESHOCCLUDINGFLAG_PORTAL = 0x1D,     // mesh in portal
-            MESHOCCLUDINGFLAG_INACTIVE = 0x11
+            Normal = 0x09,
+            Sector = 0x7D,
+            Wall = 0x3D,       // mesh in sector (walls)
+            Portal = 0x1D,     // mesh in portal
+            Inactive = 0x11
         }
 
         public struct Material
@@ -302,7 +302,7 @@ namespace OpenMafia
                     mat.transparency = reader.ReadSingle();
 
 
-                    if ((mat.flags & MaterialFlag.MATERIALFLAG_ENVIRONMENTMAP) != 0)
+                    if ((mat.flags & MaterialFlag.Environment_Map) != 0)
                     {
                         mat.envRatio = reader.ReadSingle();
                         mat.envMapName = ReadString(reader);
@@ -310,12 +310,12 @@ namespace OpenMafia
 
                     mat.diffuseMapName = ReadString(reader);
 
-                    if ((mat.flags & MaterialFlag.MATERIALFLAG_ALPHATEXTURE) != 0)
+                    if ((mat.flags & MaterialFlag.AlphaTexture) != 0)
                     {
                         mat.alphaMapName = ReadString(reader);
                     }
 
-                    if ((mat.flags & MaterialFlag.MATERIALFLAG_ANIMATEDTEXTUREDIFFUSE) != 0)
+                    if ((mat.flags & MaterialFlag.Animated_Texture_Diffuse) != 0)
                     {
                         mat.animSequenceLength = reader.ReadUInt32();
                         mat.unk0 = reader.ReadUInt16();
@@ -660,7 +660,7 @@ namespace OpenMafia
                     Mesh newMesh = new Mesh();
                     newMesh.meshType = (MeshType)reader.ReadByte();
 
-                    if (newMesh.meshType == MeshType.MESHTYPE_STANDARD)
+                    if (newMesh.meshType == MeshType.Standard)
                     {
                         newMesh.visualMeshType = (VisualMeshType)reader.ReadByte();
                         newMesh.meshRenderFlags = (MeshRenderFlag)reader.ReadUInt16();
@@ -684,29 +684,29 @@ namespace OpenMafia
 
                     switch (newMesh.meshType)
                     {
-                        case MeshType.MESHTYPE_STANDARD:
+                        case MeshType.Standard:
                             {
                                 switch (newMesh.visualMeshType)
                                 {
-                                    case VisualMeshType.VISUALMESHTYPE_STANDARD:
+                                    case VisualMeshType.Standard:
                                         {
                                             newMesh.standard = readStandard(reader);
                                         }
                                         break;
 
-                                    case VisualMeshType.VISUALMESHTYPE_MIRROR:
+                                    case VisualMeshType.Mirror:
                                         {
                                             newMesh.mirror = readMirror(reader);
                                         }
                                         break;
 
-                                    case VisualMeshType.VISUALMESHTYPE_GLOW:
+                                    case VisualMeshType.Glow:
                                         {
                                             newMesh.glow = readGlow(reader);
                                         }
                                         break;
 
-                                    case VisualMeshType.VISUALMESHTYPE_BILLBOARD:
+                                    case VisualMeshType.Billboard:
                                         {
                                             Billboard newBillboard = new Billboard();
                                             newBillboard.standard = readStandard(reader);
@@ -716,19 +716,19 @@ namespace OpenMafia
                                         }
                                         break;
 
-                                    case VisualMeshType.VISUALMESHTYPE_MORPH:
+                                    case VisualMeshType.Morph:
                                         {
                                             newMesh.morph = readMorph(reader, false);
                                         }
                                         break;
 
-                                    case VisualMeshType.VISUALMESHTYPE_SINGLEMESH:
+                                    case VisualMeshType.Single_Mesh:
                                         {
                                             newMesh.singleMesh = readSingleMesh(reader);
                                         }
                                         break;
 
-                                    case VisualMeshType.VISUALMESHTYPE_SINGLEMORPH:
+                                    case VisualMeshType.Single_Morph:
                                         {
                                             newMesh.singleMorph = readSingleMorph(reader);
                                         }
@@ -742,7 +742,7 @@ namespace OpenMafia
                             }
                             break;
 
-                        case MeshType.MESHTYPE_DUMMY:
+                        case MeshType.Dummy:
                             {
                                 Dummy newDummy = new Dummy();
                                 newDummy.minBox = ReadVector3(reader);
@@ -751,19 +751,19 @@ namespace OpenMafia
                             }
                             break;
 
-                        case MeshType.MESHTYPE_SECTOR:
+                        case MeshType.Sector:
                             {
                                 newMesh.sector = readSector(reader);
                             }
                             break;
 
-                        case MeshType.MESHTYPE_TARGET:
+                        case MeshType.Target:
                             {
                                 newMesh.target = readTarget(reader);
                             }
                             break;
 
-                        case MeshType.MESHTYPE_BONE:
+                        case MeshType.Bone:
                             {
                                 Bone newBone = new Bone();
                                 newBone.transform = ReadMatrix(reader);
@@ -783,7 +783,7 @@ namespace OpenMafia
                     string meshName = newMesh.meshName;
                     if (meshName.Contains("wcol"))
                     {
-                        newMesh.meshType = MeshType.MESHTYPE_COLLISION;
+                        newMesh.meshType = MeshType.Collision;
                     }
 
                     model.meshes.Add(newMesh);

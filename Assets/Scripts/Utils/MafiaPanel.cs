@@ -278,10 +278,6 @@ namespace OpenMafia
 
                 if (editorTask == null)
                 {
-                    // Editor has been reloaded, reset it
-                    Debug.Log("Even after shit?");
-
-                    injectors.Clear();
                     return;
                 }
 
