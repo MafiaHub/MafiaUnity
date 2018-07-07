@@ -41,7 +41,7 @@ namespace OpenMafia
 
                 foreach (var obj in sceneLoader.objects)
                 {
-                    if (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.OBJECT_TYPE_MODEL)
+                    if (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model)
                         continue;
 
                     GameObject newObject;

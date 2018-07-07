@@ -17,79 +17,79 @@ namespace OpenMafia
             [Flags]
             public enum HeaderType : uint
             {
-                HEADER_MISSION = 0x4c53,
-                HEADER_META = 0x0001,
-                HEADER_UNK_FILE = 0xAFFF,
-                HEADER_UNK_FILE2 = 0x3200,
-                HEADER_FOV = 0x3010,
-                HEADER_VIEW_DISTANCE = 0x3011,
-                HEADER_CLIPPING_PLANES = 0x3211,
-                HEADER_WORLD = 0x4000,
-                HEADER_SPECIAL_WORLD = 0xAE20,
-                HEADER_ENTITIES = 0xAE20,
-                HEADER_INIT = 0xAE50,
+                Mission = 0x4c53,
+                Meta = 0x0001,
+                Unknown_File = 0xAFFF,
+                Unknown_File2 = 0x3200,
+                Fov = 0x3010,
+                ViewDistance = 0x3011,
+                ClippingPlanes = 0x3211,
+                World = 0x4000,
+                SpecialWorld = 0xAE20,
+                Entities = 0xAE20,
+                Init = 0xAE50,
                 // WORLD subHeader
-                HEADER_OBJECT = 0x4010,
-                HEADER_SPECIAL_OBJECT = 0xAE21,
+                Object = 0x4010,
+                SpecialObject = 0xAE21,
             }
 
             [Flags]
             public enum ObjectProperty : uint
             {
-                OBJECT_TYPE_SPECIAL = 0xAE22,
-                OBJECT_TYPE_NORMAL = 0x4011,
-                OBJECT_POSITION = 0x0020,
-                OBJECT_ROTATION = 0x0022,
-                OBJECT_POSITION_2 = 0x002C,
-                OBJECT_SCALE = 0x002D,
-                OBJECT_PARENT = 0x4020,
-                OBJECT_NAME = 0x0010,
-                OBJECT_NAME_SPECIAL = 0xAE23,
-                OBJECT_MODEL = 0x2012,
-                OBJECT_LIGHT_MAIN = 0x4040,
-                OBJECT_LIGHT_TYPE = 0x4041,
-                OBJECT_LIGHT_COLOUR = 0x0026,
-                OBJECT_LIGHT_POWER = 0x4042,
-                OBJECT_LIGHT_UNK_1 = 0x4043,
-                OBJECT_LIGHT_RANGE = 0x4044,
-                OBJECT_LIGHT_FLAGS = 0x4045,
-                OBJECT_LIGHT_SECTOR = 0x4046,
-                OBJECT_SPECIAL_DATA = 0xAE24,
+                TypeSpecial = 0xAE22,
+                TypeNormal = 0x4011,
+                Position = 0x0020,
+                Rotation = 0x0022,
+                Position2 = 0x002C,
+                Scale = 0x002D,
+                Parent = 0x4020,
+                Name = 0x0010,
+                Name_Special = 0xAE23,
+                Model = 0x2012,
+                Light_Main = 0x4040,
+                Light_Type = 0x4041,
+                Light_Color = 0x0026,
+                Light_Power = 0x4042,
+                Light_Unknown = 0x4043,
+                Light_Range = 0x4044,
+                Light_Flags = 0x4045,
+                Light_Sector = 0x4046,
+                SpecialData = 0xAE24,
             }
 
             [Flags]
             public enum ObjectType : uint
             {
-                OBJECT_TYPE_LIGHT = 0x02,
-                OBJECT_TYPE_CAMERA = 0x03,
-                OBJECT_TYPE_SOUND = 0x04,
-                OBJECT_TYPE_MODEL = 0x09,
-                OBJECT_TYPE_OCCLUDER = 0x0C,
-                OBJECT_TYPE_SECTOR = 0x99,
-                OBJECT_TYPE_SCRIPT = 0x9B
+                Light = 0x02,
+                Camera = 0x03,
+                Sound = 0x04,
+                Model = 0x09,
+                Occluder = 0x0C,
+                Sector = 0x99,
+                Script = 0x9B
             }
 
             [Flags]
             public enum SpecialObjectType : uint
             {
-                SPECIAL_OBJECT_TYPE_NONE = 0,
-                SPECIAL_OBJECT_TYPE_PHYSICAL = 0x23,
-                SPECIAL_OBJECT_TYPE_PLAYER = 0x02,
-                SPECIAL_OBJECT_TYPE_CHARACTER = 0x1B,
-                SPECIAL_OBJECT_TYPE_CAR = 0x06,
-                SPECIAL_OBJECT_TYPE_PUB_VEHICLE = 0x08,
-                SPECIAL_OBJECT_TYPE_SCRIPT = 0x05,
+                None = 0,
+                Physical = 0x23,
+                Player = 0x02,
+                Character = 0x1B,
+                Car = 0x06,
+                Public_Vehicle = 0x08,
+                Script = 0x05,
             }
 
             [Flags]
             public enum LightType : uint
             {
-                LIGHT_TYPE_POINT = 0x01,
-                LIGHT_TYPE_DIRECTIONAL = 0x03,
-                LIGHT_TYPE_AMBIENT = 0x04,
-                LIGHT_TYPE_FOG = 0x05,
-                LIGHT_TYPE_POINT_AMBIENT = 0x06,
-                LIGHT_TYPE_LAYERED_FOG = 0x08,
+                Point = 0x01,
+                Directional = 0x03,
+                Ambient = 0x04,
+                Fog = 0x05,
+                Point_Ambient = 0x06,
+                Layered_Fog = 0x08,
             }
 
             public struct Header
@@ -164,8 +164,8 @@ namespace OpenMafia
             {
                 switch (header.type)
                 {
-                    case HeaderType.HEADER_SPECIAL_WORLD:
-                    case HeaderType.HEADER_WORLD:
+                    case HeaderType.SpecialWorld:
+                    case HeaderType.World:
                     {
                         uint position = offset;
                         while (position + 6 < offset + header.size)
@@ -178,26 +178,26 @@ namespace OpenMafia
                     }
                     break;
 
-                    case HeaderType.HEADER_VIEW_DISTANCE:
+                    case HeaderType.ViewDistance:
                     {
                         viewDistance = reader.ReadSingle();
                     }
                     break;
 
-                    case HeaderType.HEADER_CLIPPING_PLANES:
+                    case HeaderType.ClippingPlanes:
                     {
                         clippingPlanes = ReadVector2(reader);
                     }
                     break;
 
-                    case HeaderType.HEADER_FOV:
+                    case HeaderType.Fov:
                     {
                         FOV = reader.ReadSingle();
                     }
                     break;
 
-                    case HeaderType.HEADER_SPECIAL_OBJECT:
-                    case HeaderType.HEADER_OBJECT:
+                    case HeaderType.SpecialObject:
+                    case HeaderType.Object:
                         {
                             uint position = offset;
                             Object newObject = new Object();
@@ -211,7 +211,7 @@ namespace OpenMafia
                             }
 
                             //TODO SEction 
-                            if (header.type == HeaderType.HEADER_OBJECT && !objects.ContainsKey(newObject.name))
+                            if (header.type == HeaderType.Object && !objects.ContainsKey(newObject.name))
                             {
                                 objects.Add(newObject.name, newObject);
                             }
@@ -233,20 +233,20 @@ namespace OpenMafia
             {
                 switch ((ObjectProperty)header.type)
                 {
-                    case ObjectProperty.OBJECT_TYPE_SPECIAL:
+                    case ObjectProperty.TypeSpecial:
                     {
                         newObject.specialType = (SpecialObjectType)reader.ReadUInt32();
                     }
                     break;
 
-                    case ObjectProperty.OBJECT_TYPE_NORMAL:
+                    case ObjectProperty.TypeNormal:
                     {
                         newObject.type = (ObjectType)reader.ReadUInt32();
                     }
                     break;
 
-                    case ObjectProperty.OBJECT_NAME:
-                    case ObjectProperty.OBJECT_NAME_SPECIAL:
+                    case ObjectProperty.Name:
+                    case ObjectProperty.Name_Special:
                     {
                             var charName = reader.ReadBytes((int)header.size-7);
                             
@@ -254,11 +254,11 @@ namespace OpenMafia
                     }
                     break;
 
-                    case ObjectProperty.OBJECT_SPECIAL_DATA:
+                    case ObjectProperty.SpecialData:
                         {
                             switch (newObject.specialType)
                             {
-                                case SpecialObjectType.SPECIAL_OBJECT_TYPE_PHYSICAL:
+                                case SpecialObjectType.Physical:
                                     {
                                         reader.BaseStream.Seek(2, SeekOrigin.Current);
                                         var newSpecialObject = new SpecialProp();
@@ -277,7 +277,7 @@ namespace OpenMafia
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_MODEL:
+                    case ObjectProperty.Model:
                         {
                             var charName = reader.ReadBytes((int)header.size - 6);
                             
@@ -287,32 +287,32 @@ namespace OpenMafia
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_POSITION:
+                    case ObjectProperty.Position:
                         {
                             newObject.pos = ReadVector3(reader);
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_ROTATION:
+                    case ObjectProperty.Rotation:
                         {
                             var rot = ReadQuat(reader);
                             newObject.rot = new Quaternion(rot.y, rot.z, rot.w, -1 * rot.x);
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_POSITION_2:
+                    case ObjectProperty.Position2:
                         {
                             newObject.pos2 = ReadVector3(reader);
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_SCALE:
+                    case ObjectProperty.Scale:
                         {
                             newObject.scale = ReadVector3(reader);
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_LIGHT_MAIN:
+                    case ObjectProperty.Light_Main:
                         {
                             uint position = offset;
                             while (position + 6 < offset + header.size)
@@ -324,7 +324,7 @@ namespace OpenMafia
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_PARENT:
+                    case ObjectProperty.Parent:
                         {
                             var parentHeader = ReadHeader(reader);
                             Object parentObject = new Object();
@@ -339,44 +339,44 @@ namespace OpenMafia
             {
                 switch ((ObjectProperty)header.type)
                 {
-                    case ObjectProperty.OBJECT_LIGHT_TYPE:
+                    case ObjectProperty.Light_Type:
                         {
                             newObject.lightType = (LightType)reader.ReadInt32();
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_LIGHT_COLOUR:
+                    case ObjectProperty.Light_Color:
                         {
                             newObject.lightColour = ReadVector3(reader);
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_LIGHT_POWER:
+                    case ObjectProperty.Light_Power:
                         {
                             newObject.lightPower = reader.ReadSingle();
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_LIGHT_RANGE:
+                    case ObjectProperty.Light_Range:
                         {
                             newObject.lightNear = reader.ReadSingle();
                             newObject.lightFar = reader.ReadSingle();
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_LIGHT_SECTOR:
+                    case ObjectProperty.Light_Sector:
                         {
                             //read(srcFile, object->mLightSectors, header->mSize);
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_LIGHT_FLAGS:
+                    case ObjectProperty.Light_Flags:
                         {
                             newObject.lightFlags = reader.ReadInt32();
                         }
                         break;
 
-                    case ObjectProperty.OBJECT_LIGHT_UNK_1:
+                    case ObjectProperty.Light_Unknown:
                         {
                             newObject.lightUnk0 = reader.ReadSingle();
                             newObject.lightUnk1 = reader.ReadSingle();

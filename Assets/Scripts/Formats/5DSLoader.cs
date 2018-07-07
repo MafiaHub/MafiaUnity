@@ -11,18 +11,18 @@ namespace OpenMafia
         [Flags]
         public enum TypeOfSequence : uint
         {
-            SEQUENCE_POSITION = 0x2,
-            SEQUENCE_ROTATION = 0x4,
-            SEQUENCE_SCALE = 0x8,
-            SEQUENCE_NOTE = 0x20
+            Position = 0x2,
+            Rotation = 0x4,
+            Scale = 0x8,
+            Note = 0x20
         }
 
         [Flags]
         public enum FileVersion : ushort
         {
-            VERSION_MAFIA = 20,
-            VERSION_HD2 = 122,
-            VERSION_CHAMELEON = 123,
+            Mafia = 20,
+            HD2 = 122,
+            Chameleon = 123,
         }
         
         public struct Header
@@ -65,17 +65,17 @@ namespace OpenMafia
 
             public bool hasMovement()
             {
-                return type.HasFlag(TypeOfSequence.SEQUENCE_POSITION);
+                return type.HasFlag(TypeOfSequence.Position);
             }
 
             public bool hasRotation()
             {
-                return type.HasFlag(TypeOfSequence.SEQUENCE_ROTATION);
+                return type.HasFlag(TypeOfSequence.Rotation);
             }
 
             public bool hasScale()
             {
-                return type.HasFlag(TypeOfSequence.SEQUENCE_SCALE);
+                return type.HasFlag(TypeOfSequence.Scale);
             }
         }
 
@@ -106,7 +106,7 @@ namespace OpenMafia
             //read block type
             newSequence.type = (TypeOfSequence)reader.ReadUInt32();
            
-            if(newSequence.type.HasFlag(TypeOfSequence.SEQUENCE_ROTATION))
+            if(newSequence.type.HasFlag(TypeOfSequence.Rotation))
             {
                 var numRotationKeys = reader.ReadUInt16();
 
@@ -117,7 +117,7 @@ namespace OpenMafia
                     newSequence.rotations.Add(ReadQuat(reader));
             }
 
-            if (newSequence.type.HasFlag(TypeOfSequence.SEQUENCE_POSITION))
+            if (newSequence.type.HasFlag(TypeOfSequence.Position))
             {
                 var numPositionKeys = reader.ReadUInt16();
 
@@ -131,7 +131,7 @@ namespace OpenMafia
                     newSequence.positions.Add(ReadVector3(reader));
             }
 
-            if (newSequence.type.HasFlag(TypeOfSequence.SEQUENCE_SCALE))
+            if (newSequence.type.HasFlag(TypeOfSequence.Scale))
             {
                 var numScaleKeys = reader.ReadUInt16();
 

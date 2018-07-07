@@ -47,13 +47,13 @@ namespace OpenMafia
                     
                     children.Add(new KeyValuePair<int, Transform>(mafiaMesh.parentID, child.transform));
 
-                    if (mafiaMesh.meshType == MafiaFormats.MeshType.MESHTYPE_BONE)
+                    if (mafiaMesh.meshType == MafiaFormats.MeshType.Bone)
                     {
                         var bone = child.AddComponent<Bone>();
                         bone.data = mafiaMesh.bone;
                     }
 
-                    if (mafiaMesh.meshType != MafiaFormats.MeshType.MESHTYPE_STANDARD)
+                    if (mafiaMesh.meshType != MafiaFormats.MeshType.Standard)
                         continue;
 
                     if (mafiaMesh.standard.instanced != 0)
@@ -63,7 +63,7 @@ namespace OpenMafia
 
                     switch (mafiaMesh.visualMeshType)
                     {
-                        case MafiaFormats.VisualMeshType.VISUALMESHTYPE_STANDARD:
+                        case MafiaFormats.VisualMeshType.Standard:
                         {
                             // TODO build up more lods
                             if (mafiaMesh.standard.lods.Count > 0)
@@ -77,7 +77,7 @@ namespace OpenMafia
                         }
                         break;
 
-                        case MafiaFormats.VisualMeshType.VISUALMESHTYPE_SINGLEMORPH:
+                        case MafiaFormats.VisualMeshType.Single_Morph:
                         {
                             var meshRenderer = child.AddComponent<SkinnedMeshRenderer>();
                             meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.singleMorph.singleMesh.standard.lods[0], model, out materials);
@@ -230,7 +230,7 @@ namespace OpenMafia
 
                     Material mat;
 
-                    if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
+                    if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                     {
                         mat = new Material(Shader.Find("Standard"));
                         mat.SetFloat("_Mode", 1f); // Set rendering mode to Cutout
@@ -270,12 +270,12 @@ namespace OpenMafia
                         if (mafiaMat.diffuseMapName != null ||
                             mafiaMat.alphaMapName != null)
                         {
-                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
+                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                                 BMPLoader.useTransparencyKey = true;
 
                             BMPImage image = null;
 
-                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_TEXTUREDIFFUSE) != 0)
+                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
                                 image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.diffuseMapName));
                             else if (mafiaMat.alphaMapName != null)
                                 image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.alphaMapName));
@@ -286,7 +286,7 @@ namespace OpenMafia
                             {
                                 Texture2D tex = image.ToTexture2D();
 
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_TEXTUREDIFFUSE) != 0)
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
                                     tex.name = mafiaMat.diffuseMapName;
                                 else if (mafiaMat.alphaMapName != null)
                                     tex.name = mafiaMat.alphaMapName;
@@ -300,18 +300,18 @@ namespace OpenMafia
                             if (mafiaMat.transparency < 1)
                                 mat.SetColor("_Color", new Color32(255, 255, 255, (byte)(mafiaMat.transparency * 255)));
 
-                            if ((mafiaMat.flags & (MafiaFormats.MaterialFlag.MATERIALFLAG_ANIMATEDTEXTUREDIFFUSE | MafiaFormats.MaterialFlag.MATERIALFLAG_ANIMATEXTEXTUREALPHA)) != 0)
+                            if ((mafiaMat.flags & (MafiaFormats.MaterialFlag.Animated_Texture_Diffuse | MafiaFormats.MaterialFlag.Animated_Texture_Alpha)) != 0)
                             {
                                 List<Texture2D> frames = new List<Texture2D>();
 
                                 string fileName = null;
 
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_ANIMATEDTEXTUREDIFFUSE) != 0)
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Animated_Texture_Diffuse) != 0)
                                     fileName = mafiaMat.diffuseMapName;
                                 else
                                     fileName = mafiaMat.alphaMapName;
 
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.MATERIALFLAG_COLORKEY) != 0)
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                                     BMPLoader.useTransparencyKey = true;
 
                                 if (fileName != null)
