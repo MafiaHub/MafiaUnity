@@ -345,13 +345,20 @@ namespace OpenMafia
 
                                     for (int k = 0; k < mafiaMat.animSequenceLength; k++)
                                     {
-                                        var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + baseName + "0" + k + "." + ext));
+                                        try
+                                        {
+                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + baseName + k.ToString("D2") + "." + ext));
 
-                                        if (frameImage == null)
-                                            continue;
+                                            if (frameImage == null)
+                                                continue;
 
-                                        var frame = frameImage.ToTexture2D();
-                                        frames.Add(frame);
+                                            var frame = frameImage.ToTexture2D();
+                                            frames.Add(frame);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Debug.LogError(ex.ToString());
+                                        }
                                     }
 
                                     var framePlayer = ent.AddComponent<TextureAnimationPlayer>();
