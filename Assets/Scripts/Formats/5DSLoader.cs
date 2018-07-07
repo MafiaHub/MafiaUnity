@@ -113,6 +113,9 @@ namespace OpenMafia
                 for (var i = 0; i < numRotationKeys; i++)
                     newSequence.rotationFrames.Add(reader.ReadUInt16());
 
+                if (numRotationKeys % 2 == 0)
+                    reader.BaseStream.Seek(2, SeekOrigin.Current);
+
                 for (var i = 0; i < numRotationKeys; i++)
                     newSequence.rotations.Add(ReadQuat(reader));
             }
@@ -156,7 +159,6 @@ namespace OpenMafia
             Header newHeader = new Header();
             newHeader.magicByte = reader.ReadUInt32();
             newHeader.fileVersion = (FileVersion)reader.ReadUInt16();
-            Debug.Log("File version: " + newHeader.fileVersion.ToString());
 
             newHeader.unk1 = reader.ReadUInt32();
             newHeader.unk2 = reader.ReadUInt32();

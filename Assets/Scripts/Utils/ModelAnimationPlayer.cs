@@ -4,6 +4,7 @@ using UnityEngine;
 using OpenMafia;
 using System.IO;
 using System;
+using UnityEditor;
 
 namespace OpenMafia
 {
@@ -13,8 +14,8 @@ namespace OpenMafia
         Repeat
     }
 
-    public class ModelAnimationPlayer : MonoBehaviour {
-
+    public class ModelAnimationPlayer : MonoBehaviour
+    {
         private Dictionary<Loader5DS.AnimationSequence, GameObject> cachedSequences = new Dictionary<Loader5DS.AnimationSequence, GameObject>();
         private int[] posFrameId;
         private int[] rotFrameId;
@@ -103,12 +104,14 @@ namespace OpenMafia
 
         public bool LoadAnimation(string animName)
         {
-            GameManager.instance.SetGamePath("D:/Mafia 1.2");
+            animationSequeces.Clear();
+            isPlaying = true;
+
             FileStream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath("anims/" + animName), FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(animName), FileMode.Open);
             }
             catch
             {
@@ -123,7 +126,7 @@ namespace OpenMafia
                 foreach (var seq in animLoader.sequences)
                 {
                     var newAnimationSequence = new AnimationSequence();
-                    newAnimationSequence.boneGameObject = GameObject.Find(seq.objectName);
+                    newAnimationSequence.boneGameObject = transform.FindDeepChild(seq.objectName).gameObject;
                     newAnimationSequence.loaderSequence = seq;
                     animationSequeces.Add(newAnimationSequence);
                 }
@@ -131,13 +134,7 @@ namespace OpenMafia
 
             return true;
         }
-
-        void Start()
-        {
-            LoadAnimation("!!!Skakani.5DS");
-        }
-
-
+        
         bool IsFinished()
         {
             foreach (var animationSeq in animationSequeces)
@@ -154,19 +151,25 @@ namespace OpenMafia
 
         void Update()
         {
+            if (!isPlaying)
+                return;
+
             if (IsFinished())
             {
                 if (playbackMode == AnimationPlaybackMode.Repeat)
                     AnimReset();
                 else if (playbackMode == AnimationPlaybackMode.Once)
+                {
+                    isPlaying = false;
                     return;
+                }
             }
 
-            float deltaLerp = frameStep / frameTime;
+            float frameDelta = frameTime / frameStep;
 
             foreach (var animationSeq in animationSequeces)
             {
-                animationSeq.Update(deltaLerp);
+                animationSeq.Update(frameDelta);
 
                 if (frameTime > frameStep)
                     animationSeq.NextFrame();
@@ -178,4 +181,30 @@ namespace OpenMafia
             frameTime += Time.deltaTime;
         }
     }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(ModelAnimationPlayer))]
+    public class ModelAnimationPlayerEditor : Editor
+    {
+        string animName = "!!!Skakani";
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            GUILayout.BeginHorizontal();
+            {
+                animName = GUILayout.TextField(animName);
+
+                if (GUILayout.Button("Load Animation"))
+                {
+                    var animPlayer = target as ModelAnimationPlayer;
+
+                    animPlayer.LoadAnimation("anims/" + animName + ".5ds");
+                }
+            }
+            GUILayout.EndHorizontal();
+        }
+    }
+#endif
 }
