@@ -49,6 +49,7 @@ namespace OpenMafia
             public uint pointerToData;
         }
         
+        [Serializable]
         public class AnimationSequence
         {
             public string objectName;

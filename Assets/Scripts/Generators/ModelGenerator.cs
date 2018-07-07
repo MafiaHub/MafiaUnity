@@ -11,7 +11,7 @@ namespace OpenMafia
     {
         public override GameObject LoadObject(string path)
         {
-            GameObject rootObject = LoadCachedObject(path);
+            GameObject rootObject = null;// LoadCachedObject(path);
 
             if (rootObject == null)
                 rootObject = new GameObject(path);
@@ -51,9 +51,15 @@ namespace OpenMafia
                     {
                         var bone = child.AddComponent<Bone>();
                         bone.data = mafiaMesh.bone;
+                        continue;
                     }
-
-                    if (mafiaMesh.meshType != MafiaFormats.MeshType.Standard)
+                    else if (mafiaMesh.meshType == MafiaFormats.MeshType.Collision)
+                    {
+                        Material[] temp;
+                        child.AddComponent<MeshCollider>().sharedMesh = GenerateMesh(mafiaMesh, child, mafiaMesh.standard.lods[0], model, out temp);
+                        continue;
+                    }
+                    else if (mafiaMesh.meshType != MafiaFormats.MeshType.Standard)
                         continue;
 
                     if (mafiaMesh.standard.instanced != 0)
@@ -71,9 +77,26 @@ namespace OpenMafia
                                 var meshRenderer = child.AddComponent<MeshRenderer>();
                                 meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.standard.lods[0], model, out materials);
                                 meshRenderer.materials = materials;
+
+                                bool isTwoSided = model.materials.FindAll(x => (x.flags.HasFlag(MafiaFormats.MaterialFlag.Doublesided_Material))).Count > 0;
+
+                                if (isTwoSided)
+                                    meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
                             }
                             else
                                 continue;
+                        }
+                        break;
+
+                        case MafiaFormats.VisualMeshType.Single_Mesh:
+                        {
+                            var meshRenderer = child.AddComponent<SkinnedMeshRenderer>();
+                            meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.singleMesh.standard.lods[0], model, out materials);
+                            meshRenderer.materials = materials;
+                            meshRenderer.sharedMesh = meshFilter.sharedMesh;
+
+                            var data = child.AddComponent<SkinnedMeshData>();
+                            data.mesh = mafiaMesh.singleMesh;
                         }
                         break;
 
@@ -85,7 +108,7 @@ namespace OpenMafia
                             meshRenderer.sharedMesh = meshFilter.sharedMesh;
 
                             var data = child.AddComponent<SkinnedMeshData>();
-                            data.mesh = mafiaMesh.singleMorph;
+                            data.mesh = mafiaMesh.singleMorph.singleMesh;
                         }
                         break;
 
@@ -96,8 +119,7 @@ namespace OpenMafia
                     
                     meshId++;
                 }
-
-               
+                
                 for (int i = 0; i < children.Count; i++)
                 {
                     var parentId = children[i].Key;
@@ -123,7 +145,7 @@ namespace OpenMafia
                     if (skinnedMesh != null)
                     {
                         var data = baseObject.GetComponent<SkinnedMeshData>();
-                        var boneData = data.mesh.singleMesh.LODs[0];
+                        var boneData = data.mesh.LODs[0];
                         var bones = new List<Bone>(skinnedMesh.GetComponentsInChildren<Bone>());
                         var boneArray = new Transform[bones.Count];
                         
@@ -155,10 +177,9 @@ namespace OpenMafia
                             for (int j = 0; j < boneData.joints[i].weights.Count; j++)
                             {
                                 boneWeights[skipVertices + j].boneIndex0 = i;
-                                boneWeights[skipVertices + j].boneIndex1 = (int)boneData.joints[i].boneID;
-
                                 boneWeights[skipVertices + j].weight0 = boneData.joints[i].weights[j];
-                                boneWeights[skipVertices + j].weight1 = 1f - boneData.joints[i].weights[j];
+                                boneWeights[skipVertices + j].boneIndex1 = (int)boneData.joints[i].boneID;
+                                boneWeights[skipVertices + j].weight1 = 1f - boneData.joints[i].weights[j]; 
                             }
 
                             skipVertices += boneData.joints[i].weights.Count;
@@ -174,7 +195,7 @@ namespace OpenMafia
                 children.Clear();
             }
             
-            StoreChachedObject(path, rootObject);
+            //StoreChachedObject(path, rootObject);
             
 
             fs.Close();

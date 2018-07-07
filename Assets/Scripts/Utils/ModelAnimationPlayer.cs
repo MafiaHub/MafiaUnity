@@ -8,26 +8,21 @@ using UnityEditor;
 
 namespace OpenMafia
 {
-    public enum AnimationPlaybackMode
-    {
-        Once,
-        Repeat
-    }
-
     public class ModelAnimationPlayer : MonoBehaviour
     {
-        private Dictionary<Loader5DS.AnimationSequence, GameObject> cachedSequences = new Dictionary<Loader5DS.AnimationSequence, GameObject>();
+        public bool isPlaying = false;
+        public AnimationPlaybackMode playbackMode;
+        
         private int[] posFrameId;
         private int[] rotFrameId;
         private int[] scaleFrameId;
         private const float frameStep = 1f / 25f;
         private float frameTime;
-        public bool isPlaying = false;
-        public AnimationPlaybackMode playbackMode;
+        [SerializeField] private List<AnimationSequence> animationSequences;
 
+        [Serializable]
         private class AnimationSequence
         {
-            public GameObject boneGameObject;
             public Loader5DS.AnimationSequence loaderSequence;
             public int positionKeyFrameId;
             public int rotationKeyFrameId;
@@ -54,6 +49,9 @@ namespace OpenMafia
 
             public bool IsFinished()
             {
+                if (loaderSequence == null)
+                    return true;
+
                 bool movementResult = true;
                 if (loaderSequence.positionsFrames.Count > 0)
                     movementResult = (positionKeyFrameId + 2 == loaderSequence.positionsFrames.Count);
@@ -69,11 +67,19 @@ namespace OpenMafia
                 return movementResult && rotationResult && scaleResult;
             }
 
-            public void Update(float deltaLerp)
+            public void Update(float deltaLerp, Transform rootObject)
             {
+                if (loaderSequence == null)
+                    return;
+
+                var boneTransform = rootObject.FindDeepChild(loaderSequence.objectName);
+
+                if (boneTransform == null)
+                    return;
+                
                 if (loaderSequence.hasMovement())
                 {
-                    boneGameObject.transform.localPosition = Vector3.Lerp(loaderSequence.positions[positionKeyFrameId],
+                    boneTransform.localPosition = Vector3.Lerp(loaderSequence.positions[positionKeyFrameId],
                         loaderSequence.positions[positionKeyFrameId + 1], deltaLerp);
                 }
 
@@ -89,22 +95,21 @@ namespace OpenMafia
                         loaderSequence.rotations[rotationKeyFrameId + 1].w, 
                         -1 * loaderSequence.rotations[rotationKeyFrameId + 1].x);
 
-                    boneGameObject.transform.localRotation = Quaternion.Slerp(tmpRot, tmpRot2, deltaLerp);
+                    boneTransform.localRotation = Quaternion.Slerp(tmpRot, tmpRot2, deltaLerp);
                 }
 
                 if (loaderSequence.hasScale())
                 {
-                    boneGameObject.transform.localScale = Vector3.Lerp(loaderSequence.scales[scaleKeyFrameId],
+                    boneTransform.localScale = Vector3.Lerp(loaderSequence.scales[scaleKeyFrameId],
                         loaderSequence.scales[scaleKeyFrameId + 1], deltaLerp);
                 }
             }
         }
 
-        private List<AnimationSequence> animationSequeces = new List<AnimationSequence>();
-
         public bool LoadAnimation(string animName)
         {
-            animationSequeces.Clear();
+            AnimReset();
+            animationSequences = new List<AnimationSequence>();
             isPlaying = true;
 
             FileStream fs;
@@ -126,26 +131,31 @@ namespace OpenMafia
                 foreach (var seq in animLoader.sequences)
                 {
                     var newAnimationSequence = new AnimationSequence();
-                    newAnimationSequence.boneGameObject = transform.FindDeepChild(seq.objectName).gameObject;
                     newAnimationSequence.loaderSequence = seq;
-                    animationSequeces.Add(newAnimationSequence);
+                    animationSequences.Add(newAnimationSequence);
                 }
             }
 
             return true;
         }
         
-        bool IsFinished()
+        public bool IsFinished()
         {
-            foreach (var animationSeq in animationSequeces)
+            if (animationSequences == null)
+                return true;
+
+            foreach (var animationSeq in animationSequences)
                 if (!animationSeq.IsFinished()) return false;
 
             return true;
         }
 
-        void AnimReset()
+        public void AnimReset()
         {
-            foreach (var animationSeq in animationSequeces)
+            if (animationSequences == null)
+                return;
+
+            foreach (var animationSeq in animationSequences)
                 animationSeq.Reset();
         }
 
@@ -167,9 +177,9 @@ namespace OpenMafia
 
             float frameDelta = frameTime / frameStep;
 
-            foreach (var animationSeq in animationSequeces)
+            foreach (var animationSeq in animationSequences)
             {
-                animationSeq.Update(frameDelta);
+                animationSeq.Update(frameDelta, transform);
 
                 if (frameTime > frameStep)
                     animationSeq.NextFrame();
@@ -179,6 +189,12 @@ namespace OpenMafia
                 frameTime = 0f;
 
             frameTime += Time.deltaTime;
+        }
+
+        public enum AnimationPlaybackMode
+        {
+            Once,
+            Repeat
         }
     }
 
@@ -204,6 +220,13 @@ namespace OpenMafia
                 }
             }
             GUILayout.EndHorizontal();
+
+            if (GUILayout.Button("Reset Animation"))
+            {
+                var animPlayer = target as ModelAnimationPlayer;
+
+                animPlayer.AnimReset();
+            }
         }
     }
 #endif

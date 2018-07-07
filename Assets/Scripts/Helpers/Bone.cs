@@ -8,9 +8,13 @@ namespace OpenMafia
 
         private const float drawRadius = .05f;
         public MafiaFormats.Bone data;
+        public bool drawBones = false;
 
         private void OnDrawGizmos()
         {
+            if (!drawBones)
+                return;
+
             Gizmos.color = Color.white;
             Gizmos.DrawWireSphere(transform.position, drawRadius);
 

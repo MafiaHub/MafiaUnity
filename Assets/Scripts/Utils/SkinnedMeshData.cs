@@ -6,6 +6,7 @@ namespace OpenMafia
 {
     public class SkinnedMeshData : MonoBehaviour
     {
-        public MafiaFormats.SingleMorph mesh;
+        public MafiaFormats.SingleMesh mesh;
+
     }
 }
