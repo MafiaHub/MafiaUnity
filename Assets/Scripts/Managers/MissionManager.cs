@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     [Serializable]
     public class MissionManager

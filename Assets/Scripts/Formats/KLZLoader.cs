@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 using System;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class KLZLoader : BaseLoader
     {

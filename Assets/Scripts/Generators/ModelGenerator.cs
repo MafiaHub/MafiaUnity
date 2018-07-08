@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class ModelGenerator : BaseGenerator
     {
@@ -22,7 +22,7 @@ namespace OpenMafia
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(path), FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
             }
             catch (Exception ex)
             {
@@ -297,9 +297,9 @@ namespace OpenMafia
                             BMPImage image = null;
 
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.diffuseMapName));
+                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.diffuseMapName)));
                             else if (mafiaMat.alphaMapName != null)
-                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.alphaMapName));
+                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.alphaMapName)));
 
                             BMPLoader.useTransparencyKey = false;
 
@@ -347,7 +347,7 @@ namespace OpenMafia
                                     {
                                         try
                                         {
-                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + baseName + k.ToString("D2") + "." + ext));
+                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", baseName, k.ToString("D2"), ".", ext)));
 
                                             if (frameImage == null)
                                                 continue;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class Bone : MonoBehaviour {
 

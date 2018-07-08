@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class CityGenerator : BaseGenerator
     {
@@ -20,7 +20,7 @@ namespace OpenMafia
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(path), FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
             }
             catch
             {
@@ -40,7 +40,7 @@ namespace OpenMafia
 
                     foreach (var instance in obj.instances)
                     {
-                        var model = GameManager.instance.modelGenerator.LoadObject("models/" + instance.modelName);
+                        var model = GameManager.instance.modelGenerator.LoadObject(Path.Combine("models", instance.modelName));
 
                         if (model == null)
                             continue;
@@ -73,7 +73,7 @@ namespace OpenMafia
                 }
                 else
                 {
-                    for (var i = 0; i < objectToBeColisioned.transform.GetChildCount(); i++)
+                    for (var i = 0; i < objectToBeColisioned.transform.childCount; i++)
                     {
                         var objectChild = objectToBeColisioned.transform.GetChild(i);
                         var objectChildFilter = objectChild.GetComponent<MeshFilter>();
@@ -101,7 +101,7 @@ namespace OpenMafia
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(path), FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
             }
             catch
             {
@@ -147,8 +147,6 @@ namespace OpenMafia
 
                         var sphereCollider = objectToBeColisioned.AddComponent<SphereCollider>();
                         sphereCollider.radius = sphereCol.radius;
-
-                        Debug.Log("Sphere coll: " + linkName);
                     }
                 }
                 
@@ -169,7 +167,7 @@ namespace OpenMafia
                         objectToBeColisioned.transform.position = center;
                     
                         var boxCollider = objectToBeColisioned.AddComponent<BoxCollider>();
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner;
                     } 
                 }
 
@@ -192,7 +190,7 @@ namespace OpenMafia
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner;
                         boxCollider.center = center;
                     }
                 }
@@ -216,7 +214,7 @@ namespace OpenMafia
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner;
                         boxCollider.center = center;
                     }
                 }

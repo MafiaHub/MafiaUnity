@@ -6,7 +6,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
 
     [Serializable]
@@ -28,15 +28,18 @@ namespace OpenMafia
         #endregion
         
         /// <summary>
-        /// This constant is bumped each time we ship new build.
+        /// This constant is a version string we bump up each time we ship a new build.
+        /// Minor part gets incremented each shipped update, while Major part has to be incremented only
+        /// when framework's API radically changes.
         /// </summary>
-        public const int GAME_VERSION = 1;
+        public const string GAME_VERSION = "1.0";
 
         #region Public Fields
         public FileSystem fileSystem = new FileSystem();
         public CvarManager cvarManager = new CvarManager();
         public ConsoleManager consoleManager = new ConsoleManager();
         public MissionManager missionManager = new MissionManager();
+        public ModManager modManager = new ModManager();
 
         public ModelGenerator modelGenerator = new ModelGenerator();
         public CityGenerator cityGenerator = new CityGenerator();

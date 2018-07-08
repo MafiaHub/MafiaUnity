@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class ConsoleManager
     {
@@ -56,7 +56,7 @@ namespace OpenMafia
 
             if (fileSystem.Exists(fileName))
             {
-                var content = File.ReadAllText(fileSystem.GetCanonicalPath(fileName));
+                var content = File.ReadAllText(fileSystem.GetPath(fileName));
 
                 ExecuteString(content.Trim());
 

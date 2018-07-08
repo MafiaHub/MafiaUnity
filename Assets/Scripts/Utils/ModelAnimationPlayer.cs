@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using OpenMafia;
+using MafiaUnity;
 using System.IO;
 using System;
 using UnityEditor;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class ModelAnimationPlayer : MonoBehaviour
     {
@@ -116,7 +116,7 @@ namespace OpenMafia
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(animName), FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetPath(animName), FileMode.Open);
             }
             catch
             {
