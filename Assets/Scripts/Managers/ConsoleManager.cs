@@ -56,7 +56,7 @@ namespace MafiaUnity
 
             if (fileSystem.Exists(fileName))
             {
-                var content = File.ReadAllText(fileSystem.GetCanonicalPath(fileName));
+                var content = File.ReadAllText(fileSystem.GetPath(fileName));
 
                 ExecuteString(content.Trim());
 

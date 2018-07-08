@@ -22,7 +22,7 @@ namespace MafiaUnity
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(path), FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
             }
             catch (Exception ex)
             {
@@ -297,9 +297,9 @@ namespace MafiaUnity
                             BMPImage image = null;
 
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.diffuseMapName));
+                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.diffuseMapName)));
                             else if (mafiaMat.alphaMapName != null)
-                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + mafiaMat.alphaMapName));
+                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.alphaMapName)));
 
                             BMPLoader.useTransparencyKey = false;
 
@@ -347,7 +347,7 @@ namespace MafiaUnity
                                     {
                                         try
                                         {
-                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetCanonicalPath("maps/" + baseName + k.ToString("D2") + "." + ext));
+                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", baseName, k.ToString("D2"), ".", ext)));
 
                                             if (frameImage == null)
                                                 continue;

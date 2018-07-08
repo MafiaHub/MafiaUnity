@@ -116,7 +116,7 @@ namespace MafiaUnity
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(animName), FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetPath(animName), FileMode.Open);
             }
             catch
             {

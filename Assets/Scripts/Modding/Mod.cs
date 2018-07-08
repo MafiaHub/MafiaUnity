@@ -14,5 +14,10 @@ namespace MafiaUnity
         public string gameVersion;
 
         [SerializeField] List<string> dependencies;
+
+        public void Init()
+        {
+
+        }
     }
 }

@@ -50,10 +50,10 @@ namespace MafiaUnity
         public bool Exists(string path)
         {
             foreach (var mod in paths)
-                if (File.Exists(mod + path))
+                if (File.Exists(Path.Combine(mod, path)))
                     return true;
 
-            if (File.Exists(gamePath + path))
+            if (File.Exists(Path.Combine(gamePath, path)))
                 return true;
 
             return false;
@@ -65,13 +65,13 @@ namespace MafiaUnity
         /// </summary>
         /// <param name="path">Postfix path to check against.</param>
         /// <returns></returns>
-        public string GetCanonicalPath(string path)
+        public string GetPath(string path)
         {
             foreach (var mod in paths)
-                if (File.Exists(mod + path))
+                if (File.Exists(Path.Combine(mod, path)))
                     return mod + path;
 
-            if (File.Exists(gamePath + path))
+            if (File.Exists(Path.Combine(gamePath, path)))
                 return gamePath + path;
 
             return "";

@@ -23,7 +23,7 @@ namespace MafiaUnity
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetCanonicalPath(path), FileMode.Open);
+                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
             }
             catch
             {
@@ -49,7 +49,7 @@ namespace MafiaUnity
                     if (obj.Value.modelName == null)
                         newObject = new GameObject();
                     else
-                        newObject = GameManager.instance.modelGenerator.LoadObject("models/" + obj.Value.modelName);
+                        newObject = GameManager.instance.modelGenerator.LoadObject(Path.Combine("models", obj.Value.modelName));
                     
                     newObject.name = obj.Value.name;
                     
