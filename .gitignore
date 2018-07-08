@@ -36,3 +36,4 @@ sysinfo.txt
 
 /Assets/External Assets/*
 !/Assets/External Assets/.gitkeep
+/[Mm]ods/
