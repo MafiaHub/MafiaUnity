@@ -65,7 +65,7 @@ namespace MafiaUnity
         public bool SetGamePath(string path)
         {
             if (isInitialized)
-                return true;
+                return fileSystem.ValidateGamePath(path);
 
             if (fileSystem.SetGamePath(path))
             {
