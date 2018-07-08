@@ -40,12 +40,14 @@ public class SetupGUI : MonoBehaviour {
     // Use this for initialization
     void Start() {
         if (PlayerPrefs.HasKey("gamePath"))
+        {
             if (!GameManager.instance.SetGamePath(PlayerPrefs.GetString("gamePath")))
-            {
-                pathSelection.SetActive(true);
-            }
-                
-	}
+                PathSelectionMenu();
+        }
+        else
+            PathSelectionMenu();
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
