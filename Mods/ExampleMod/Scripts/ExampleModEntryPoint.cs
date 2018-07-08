@@ -13,6 +13,12 @@ class ScriptMain : IModScript
 
         var go = new GameObject("ExampleModObject");
         go.AddComponent<ExampleMonoBehaviourScript>();
-        go.AddComponent<MeshFilter>();
+    
+        var tommy = GameManager.instance.modelGenerator.LoadObject("models/Tommy.4ds");
+        
+        var player = tommy.AddComponent<ModelAnimationPlayer>();
+        player.LoadAnimation("anims/!!!Skakani.5ds");
+        player.isPlaying = true;
+        player.playbackMode = ModelAnimationPlayer.AnimationPlaybackMode.Repeat;
     }
 }

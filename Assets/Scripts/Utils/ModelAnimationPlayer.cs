@@ -110,7 +110,6 @@ namespace MafiaUnity
         {
             AnimReset();
             animationSequences = new List<AnimationSequence>();
-            isPlaying = true;
 
             FileStream fs;
 
@@ -217,6 +216,7 @@ namespace MafiaUnity
                     var animPlayer = target as ModelAnimationPlayer;
 
                     animPlayer.LoadAnimation("anims/" + animName + ".5ds");
+                    animPlayer.isPlaying = true;
                 }
             }
             GUILayout.EndHorizontal();
