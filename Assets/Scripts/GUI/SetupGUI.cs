@@ -8,6 +8,9 @@ public class SetupGUI : MonoBehaviour {
     public GameObject pathSelection;
     public GameObject modManager;
     public GameObject mainMenu;
+    public GameObject startupLight;
+
+    GameObject background;
 
     public void StartGame()
     {
@@ -22,6 +25,8 @@ public class SetupGUI : MonoBehaviour {
             }
         }
 
+        GameObject.Destroy(startupLight);
+        GameObject.Destroy(background);
         GameObject.Destroy(gameObject);
     }
 
@@ -43,14 +48,28 @@ public class SetupGUI : MonoBehaviour {
         {
             if (!GameManager.instance.SetGamePath(PlayerPrefs.GetString("gamePath")))
                 PathSelectionMenu();
+            else
+                SetupDefaultBackground();
         }
         else
             PathSelectionMenu();
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    bool bgWasSetup = false;
+
+    public void SetupDefaultBackground()
+    {
+        if (bgWasSetup)
+            return;
+
+        if (GameManager.instance.GetInitialized())
+        {
+            bgWasSetup = true;
+
+            var scenery = GameManager.instance.modelGenerator.LoadObject("missions/00menu/scene.4ds");
+            background = GameManager.instance.sceneGenerator.LoadObject("missions/00menu/scene2.bin");
+            scenery.transform.SetParent(background.transform);
+        }
+    }
 }

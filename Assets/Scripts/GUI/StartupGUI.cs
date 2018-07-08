@@ -43,6 +43,7 @@ public class StartupGUI : MonoBehaviour {
 
             canvas.mainMenu.SetActive(true);
             gameObject.SetActive(false);
+            canvas.SetupDefaultBackground();
         }
     }
 
