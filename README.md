@@ -1,5 +1,5 @@
 <div align="center">
-    **MafiaUnity**
+   <b>MafiaUnity</b><hr/>
     <!--<a href="https://github.com/OpenMafia/openmf"><img src="https://cdn.discordapp.com/attachments/437558384380739619/437559542176415784/banner.png" alt="OpenMF" /></a>-->
 </div>
 
