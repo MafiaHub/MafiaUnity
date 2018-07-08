@@ -22,7 +22,8 @@ public class TextureAnimationPlayer : MonoBehaviour {
         {
             ResetTime();
 
-            material.SetTexture("_MainTex", frames[frameIndex++ % frames.Count]);
+            if (frames.Count > 0)
+                material.SetTexture("_MainTex", frames[frameIndex++ % frames.Count]);
         }
         else
             timeUntilNextFrame -= Time.deltaTime;

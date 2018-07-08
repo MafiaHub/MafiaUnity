@@ -347,7 +347,8 @@ namespace MafiaUnity
                                     {
                                         try
                                         {
-                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", baseName, k.ToString("D2"), ".", ext)));
+                                            var animPath = Path.Combine("maps", baseName + k.ToString("D2") + "." + ext);
+                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(animPath));
 
                                             if (frameImage == null)
                                                 continue;
