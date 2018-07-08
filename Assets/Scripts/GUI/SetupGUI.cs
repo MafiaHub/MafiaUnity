@@ -27,6 +27,7 @@ public class SetupGUI : MonoBehaviour {
 
         GameObject.Destroy(startupLight);
         GameObject.Destroy(background);
+        GameObject.Destroy(GameObject.Find("EventSystem"));
         GameObject.Destroy(gameObject);
     }
 
