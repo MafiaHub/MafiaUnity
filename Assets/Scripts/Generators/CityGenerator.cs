@@ -147,8 +147,6 @@ namespace MafiaUnity
 
                         var sphereCollider = objectToBeColisioned.AddComponent<SphereCollider>();
                         sphereCollider.radius = sphereCol.radius;
-
-                        Debug.Log("Sphere coll: " + linkName);
                     }
                 }
                 
