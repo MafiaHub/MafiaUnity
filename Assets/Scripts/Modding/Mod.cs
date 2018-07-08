@@ -14,14 +14,13 @@ namespace MafiaUnity
         public string author;
         public string version;
         public string gameVersion;
+        [SerializeField] public List<string> dependencies;
 
         public Mod(string name)
         {
             modName = Path.Combine("mods", name, "data");
         }
-
-        [SerializeField] List<string> dependencies;
-
+        
         public void Init()
         {
             GameManager.instance.fileSystem.AddOptionalPath(modName);

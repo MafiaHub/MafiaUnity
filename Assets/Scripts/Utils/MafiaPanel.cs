@@ -181,6 +181,7 @@ namespace MafiaUnity
         ModManager modManager;
 
         List<ModEntry> modEntries;
+        int selectedModIndex = 0;
 
         bool isInitialized = false;
 
@@ -240,20 +241,95 @@ namespace MafiaUnity
                 foreach (var newMod in newMods)
                     modEntries.Add(newMod);
 
-                var newLoadOrder = new List<KeyValuePair<string, string>>();
+                ApplyChanges();
+            }
+            
+            for (var i = 0; i < modEntries.Count; i++)
+            {
+                var modEntry = modEntries[i];
+
+                GUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("+", GUILayout.Width(20)))
+                    {
+                        if (i + 1 < modEntries.Count)
+                        {
+                            var oldMod = modEntries[i + 1];
+                            modEntries[i] = oldMod;
+                            modEntries[i + 1] = modEntry;
+                        }
+                    }
+
+                    if (GUILayout.Button("-", GUILayout.Width(20)))
+                    {
+                        if (i > 0)
+                        {
+                            var oldMod = modEntries[i - 1];
+                            modEntries[i] = oldMod;
+                            modEntries[i - 1] = modEntry;
+                        }
+                    }
+
+                    modEntry.isActive = GUILayout.Toggle(modEntry.isActive != 0, "Active") ? 1 : 0;
+
+                    GUILayout.Label(modEntry.modName);
+                }
+                GUILayout.EndHorizontal();
+            }
+            
+            if (modEntries.Count > 0 && selectedModIndex >= 0 && selectedModIndex < modEntries.Count)
+            {
+                var mod = modEntries[selectedModIndex].modMeta;
+
+                if (mod == null)
+                {
+                    GUILayout.Label("Error loading mod metadata!");
+                }
+                else
+                {
+                    GUILayout.Label("Name: " + mod.name);
+                    GUILayout.Label("Author: " + mod.author);
+                    GUILayout.Label("Version: " + mod.version);
+                    GUILayout.Label("Game Version: " + mod.gameVersion);
+                    GUILayout.Label("Depends on:");
+
+                    foreach (var dep in mod.dependencies)
+                    {
+                        GUILayout.Label("  - " + dep);
+                    }
+                }
+            }
+            
+
+            if (GUILayout.Button("Apply Changes"))
+            {
+                ApplyChanges();
+            }
+
+            if (GUILayout.Button("Initialize Mods"))
+            {
+                ApplyChanges();
 
                 foreach (var mod in modEntries)
                 {
-                    newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.isActive.ToString()));
+                    if (mod.isActive != 0)
+                    {
+                        modManager.LoadMod(mod.modName);
+                    }
                 }
+            }
+        }
 
-                modManager.StoreLoadOrder(newLoadOrder.ToArray());
-            }
-            
-            foreach (var modEntry in modEntries)
+        void ApplyChanges()
+        {
+            var newLoadOrder = new List<KeyValuePair<string, string>>();
+
+            foreach (var mod in modEntries)
             {
-                GUILayout.Label(modEntry.modName);
+                newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.isActive.ToString()));
             }
+
+            modManager.StoreLoadOrder(newLoadOrder.ToArray());
         }
     }
     
