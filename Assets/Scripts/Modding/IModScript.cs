@@ -12,6 +12,6 @@ namespace MafiaUnity
     /// </summary>
     public interface IModScript
     {
-        void Start();
+        void Start(Mod mod);
     }
 }

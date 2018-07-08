@@ -44,7 +44,7 @@ using MafiaUnity;
 
 class ScriptMain : IModScript
 {
-    void IModScript.Start()
+    void IModScript.Start(Mod mod)
     {
         Debug.Log("ExampleMod was initialized!");
     }

@@ -7,9 +7,9 @@ using MafiaUnity;
 
 class ScriptMain : IModScript
 {
-    void IModScript.Start()
+    void IModScript.Start(Mod mod)
     {
-        Debug.Log("ExampleMod was initialized!");
+        Debug.Log("ExampleMod was initialized! Version: " + mod.version);
 
         var go = new GameObject("ExampleModObject");
         go.AddComponent<ExampleMonoBehaviourScript>();
