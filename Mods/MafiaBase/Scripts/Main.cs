@@ -10,7 +10,5 @@ class ScriptMain : IModScript
     void IModScript.Start(Mod mod)
     {
         Debug.Log("Initializing MafiaBase...");
-
-        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
     }
 }
