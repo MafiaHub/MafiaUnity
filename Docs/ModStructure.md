@@ -4,12 +4,12 @@ Mods in MafiaUnity are organized packages stored in `mods/` folder of the MafiaU
 They have the following structure:
 
 * ExampleMod
-  * package.json - contains metadata such as mod name, author, version and supported game version.
+  * mod.json - contains metadata such as mod name, author, version and supported game version.
   * Data/ - contains assets that will be injected to the game
   * Scripts/ - contains scripts that extend or implement the gameplay of MafiaUnity
   * Tables/ - consists of various text files acting as resources used by scripts, such as voice lines or vehicle names, etc. This folder might get replaced by an actual database later on.
   
-## package.json
+## mod.json
 This file describes the mod as well as its dependencies:
 
 ```json
