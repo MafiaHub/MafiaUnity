@@ -21,7 +21,7 @@
 
 project = 'MafiaUnity'
 copyright = '2018 MafiaUnity Team'
-author = 'ZaKlaus, DavoSK, Romop5'
+author = 'MafiaUnity Team'
 
 # The short X.Y version
 version = ''
