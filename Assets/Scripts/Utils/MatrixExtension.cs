@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public static class MatrixExtension
     {

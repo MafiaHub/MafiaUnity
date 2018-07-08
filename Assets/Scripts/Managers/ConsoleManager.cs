@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class ConsoleManager
     {

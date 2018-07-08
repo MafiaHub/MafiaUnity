@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class SceneGenerator : BaseGenerator
     {

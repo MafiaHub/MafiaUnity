@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
     public class DebugConsole : MonoBehaviour
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.IO;
 
-namespace OpenMafia
+namespace MafiaUnity
 { 
     public class Loader5DS : BaseLoader 
     {

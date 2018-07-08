@@ -6,7 +6,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
 
     [Serializable]

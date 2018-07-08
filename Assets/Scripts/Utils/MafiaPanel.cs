@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
 #if UNITY_EDITOR
     public class MafiaEditor : EditorWindow

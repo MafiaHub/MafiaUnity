@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace OpenMafia
+namespace MafiaUnity
 {
 #if UNITY_EDITOR
     public class MafiaUtils : ScriptableWizard
