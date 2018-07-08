@@ -104,10 +104,11 @@ namespace MafiaUnity
             return path;
         }
 
-        bool ValidateGamePath(string path)
-        {
-            // TODO: Validate if game files are present there.
-            return true;
+        public bool ValidateGamePath(string path)
+        {     
+            if (File.Exists(Path.Combine(path, "Game.exe")) && File.Exists(Path.Combine(path, "Setup.exe")))
+                return true;
+            else return false;
         }
     }
 }
