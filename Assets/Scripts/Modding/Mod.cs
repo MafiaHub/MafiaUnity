@@ -19,5 +19,10 @@ namespace MafiaUnity
         {
 
         }
+
+        public void Destroy()
+        {
+
+        }
     }
 }

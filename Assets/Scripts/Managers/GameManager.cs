@@ -39,6 +39,7 @@ namespace MafiaUnity
         public CvarManager cvarManager = new CvarManager();
         public ConsoleManager consoleManager = new ConsoleManager();
         public MissionManager missionManager = new MissionManager();
+        public ModManager modManager = new ModManager();
 
         public ModelGenerator modelGenerator = new ModelGenerator();
         public CityGenerator cityGenerator = new CityGenerator();

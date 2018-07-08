@@ -7,7 +7,6 @@ namespace MafiaUnity
 {
     public class FileSystem
     {
-
         public string gamePath { get; private set; }
         List<string> paths = new List<string>();
 
