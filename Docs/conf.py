@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'MafiaUnity'
-copyright = '2018, ZaKlaus, DavoSK, Romop5'
+copyright = '2018 MafiaUnity Team'
 author = 'ZaKlaus, DavoSK, Romop5'
 
 # The short X.Y version
