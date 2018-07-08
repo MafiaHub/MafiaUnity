@@ -277,7 +277,7 @@ namespace MafiaUnity
 
                     modEntry.isActive = GUILayout.Toggle(modEntry.isActive != 0, "Active") ? 1 : 0;
 
-                    GUILayout.Label(modEntry.modName);
+                    EditorGUILayout.LabelField(modEntry.modName);
                 }
                 GUILayout.EndHorizontal();
             }
