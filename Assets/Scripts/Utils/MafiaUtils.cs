@@ -14,6 +14,12 @@ namespace MafiaUnity
         {
             MafiaEditor.Init();
         }
+
+        [MenuItem("Mafia SDK/Mod Manager")]
+        static void SpawnModManager()
+        {
+            MafiaModManager.Init();
+        }
     }
 #endif
 }

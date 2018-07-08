@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace MafiaUnity
@@ -67,7 +69,7 @@ namespace MafiaUnity
             if (!File.Exists(packagePath))
                 return null;
 
-            Mod newMod = new Mod();
+            Mod newMod = new Mod(modName);
 
             var jsonContents = File.ReadAllText(packagePath);
 
@@ -94,6 +96,58 @@ namespace MafiaUnity
                 return mods[modName];
 
             return null;
+        }
+
+        public string[] GetAllModNames()
+        {
+            if (!Directory.Exists(MODS_PATH))
+                return new string[] { };
+
+            var mods = Directory.GetDirectories(MODS_PATH);
+
+            for (int i = 0; i < mods.Length; i++)
+            {
+                mods[i] = mods[i].Substring(MODS_PATH.Length);
+            }
+
+            return mods;
+        }
+
+        public KeyValuePair<string, string>[] GetLoadOrder()
+        {
+            var loadableMods = new List<KeyValuePair<string, string>>();
+
+            if (!File.Exists(Path.Combine(MODS_PATH, "loadorder.txt")))
+                return loadableMods.ToArray();
+
+            var contents = File.ReadAllLines(Path.Combine(MODS_PATH, "loadorder.txt"));
+
+            foreach (var line in contents)
+            {
+                var vals = line.Split(' ');
+                loadableMods.Add(new KeyValuePair<string, string>(vals[0], vals[1]));
+            }
+
+            return loadableMods.ToArray();
+        }
+
+        public void StoreLoadOrder(KeyValuePair<string, string>[] mods)
+        {
+            var data = new StringBuilder();
+
+            foreach (var mod in mods)
+            {
+                data.AppendFormat("{0} {1}\r\n", mod.Key, mod.Value);
+            }
+
+            try
+            {
+                File.WriteAllText(Path.Combine(MODS_PATH, "loadorder.txt"), data.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

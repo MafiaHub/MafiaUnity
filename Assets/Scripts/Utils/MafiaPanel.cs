@@ -172,6 +172,91 @@ namespace MafiaUnity
         const string EDITOR_CFG = "Assets/External Assets/editor.json";
     }
     
+    /// <summary>
+    /// Example implementation of Mod Manager GUI as well as a test ground for loading mods inside of editor.
+    /// </summary>
+    [Serializable]
+    public class MafiaModManager : EditorWindow
+    {
+        ModManager modManager;
+
+        List<ModEntry> modEntries;
+
+        bool isInitialized = false;
+
+        public static void Init()
+        {
+            var window = GetWindow<MafiaModManager>();
+            window.titleContent = new GUIContent("Mod Manager");
+            window.Show();
+        }
+
+        private void OnGUI()
+        {
+            if (!GameManager.instance.GetInitialized())
+            {
+                isInitialized = false;
+                GUILayout.Label("Game manager is not initialized yet.");
+                return;
+            }
+
+            if (!isInitialized)
+            {
+                modManager = GameManager.instance.modManager;
+                isInitialized = true;
+
+                var modNames = new List<string>(modManager.GetAllModNames());
+                var mods = new List<ModEntry>();
+                modEntries = new List<ModEntry>();
+
+                foreach (var modName in modNames)
+                {
+                    var modEntry = new ModEntry();
+                    modEntry.modMeta = modManager.ReadModInfo(modName);
+                    modEntry.modName = modName;
+                    modEntry.isActive = 0;
+                    mods.Add(modEntry);
+                }
+
+                var newMods = new List<ModEntry>(mods);
+
+                var loadOrder = modManager.GetLoadOrder();
+
+                foreach (var load in loadOrder)
+                {
+                    foreach (var mod in mods)
+                    {
+                        if (mod.modName == load.Key)
+                        {
+                            if (load.Value == "1")
+                                mod.isActive = 1;
+
+                            modEntries.Add(mod);
+                            newMods.Remove(mod);
+                        }
+                    }
+                }
+
+                foreach (var newMod in newMods)
+                    modEntries.Add(newMod);
+
+                var newLoadOrder = new List<KeyValuePair<string, string>>();
+
+                foreach (var mod in modEntries)
+                {
+                    newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.isActive.ToString()));
+                }
+
+                modManager.StoreLoadOrder(newLoadOrder.ToArray());
+            }
+            
+            foreach (var modEntry in modEntries)
+            {
+                GUILayout.Label(modEntry.modName);
+            }
+        }
+    }
+    
     [Serializable]
     public class MafiaObjectInjector : EditorWindow
     {

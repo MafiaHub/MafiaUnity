@@ -41,9 +41,10 @@ namespace MafiaUnity
 
             if (values == null)
                 values = new Dictionary<string, Cvar>();
-
-            InitDefaultValues();
+            
             LoadConfig("openmf.cfg");
+            InitDefaultValues();
+
             SaveConfig("openmf.cfg");
 
             // execute config commands in autoexec.cfg as well
