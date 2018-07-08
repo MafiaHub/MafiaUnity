@@ -250,6 +250,11 @@ namespace MafiaUnity
 
                 GUILayout.BeginHorizontal();
                 {
+                    if (GUILayout.Button("Select", GUILayout.Width(60)))
+                    {
+                        selectedModIndex = i;
+                    }
+
                     if (GUILayout.Button("+", GUILayout.Width(20)))
                     {
                         if (i + 1 < modEntries.Count)
@@ -299,25 +304,30 @@ namespace MafiaUnity
                     }
                 }
             }
-            
 
-            if (GUILayout.Button("Apply Changes"))
+
+            GUILayout.BeginHorizontal();
             {
-                ApplyChanges();
-            }
-
-            if (GUILayout.Button("Initialize Mods"))
-            {
-                ApplyChanges();
-
-                foreach (var mod in modEntries)
+                if (GUILayout.Button("Apply Changes"))
                 {
-                    if (mod.isActive != 0)
+                    ApplyChanges();
+                }
+
+                if (GUILayout.Button("Initialize Mods"))
+                {
+                    ApplyChanges();
+
+                    foreach (var mod in modEntries)
                     {
-                        modManager.LoadMod(mod.modName);
+                        if (mod.isActive != 0)
+                        {
+                            modManager.LoadMod(mod.modName);
+                        }
                     }
                 }
             }
+            GUILayout.EndHorizontal();
+
         }
 
         void ApplyChanges()

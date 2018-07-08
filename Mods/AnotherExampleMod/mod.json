@@ -3,5 +3,7 @@
     "author": "Someone 'Really' Unknown",
     "version": "1.4",
     "gameVersion": "1.0.0",
-    "dependencies": []
+    "dependencies": [
+        "ExampleMod"
+    ]
 }

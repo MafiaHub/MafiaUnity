@@ -24,6 +24,9 @@ namespace MafiaUnity
         /// <returns></returns>
         public Mod LoadMod(string modName)
         {
+            if (mods.ContainsKey(modName))
+                return mods[modName];
+
             var newMod = ReadModInfo(modName);
 
             if (newMod == null)
@@ -64,7 +67,7 @@ namespace MafiaUnity
             if (!Directory.Exists(Path.Combine(MODS_PATH, modName)))
                 return null;
 
-            var packagePath = Path.Combine(MODS_PATH, modName, "package.json");
+            var packagePath = Path.Combine(MODS_PATH, modName, "mod.json");
 
             if (!File.Exists(packagePath))
                 return null;
