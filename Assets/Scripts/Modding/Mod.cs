@@ -60,7 +60,7 @@ namespace MafiaUnity
                         if (entry == null)
                             break;
 
-                        entry.Start();
+                        entry.Start(this);
 
                         break;
                     }
