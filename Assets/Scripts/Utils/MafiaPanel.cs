@@ -243,6 +243,9 @@ namespace MafiaUnity
 
                 ApplyChanges();
             }
+
+            if (modEntries == null)
+                return;
             
             for (var i = 0; i < modEntries.Count; i++)
             {

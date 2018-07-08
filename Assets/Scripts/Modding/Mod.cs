@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 
 namespace MafiaUnity
@@ -9,26 +10,67 @@ namespace MafiaUnity
     [Serializable]
     public class Mod
     {
-        string modName;
+        string modPath, modName;
         public string name;
         public string author;
         public string version;
         public string gameVersion;
+        public Assembly assembly;
         [SerializeField] public List<string> dependencies;
 
         public Mod(string name)
         {
-            modName = Path.Combine("mods", name, "data");
+            modName = name;
+            modPath = Path.Combine("Mods", name);
         }
         
         public void Init()
         {
-            GameManager.instance.fileSystem.AddOptionalPath(modName);
+            GameManager.instance.fileSystem.AddOptionalPath(modPath);
+
+            var scriptsPath = Path.Combine(modPath, "Scripts");
+
+            if (Directory.Exists(scriptsPath))
+            {
+                var fileNames = Directory.GetFiles(scriptsPath);
+                var sources = new List<string>();
+
+                foreach (var fileName in fileNames)
+                {
+                    if (File.Exists(fileName))
+                        sources.Add(File.ReadAllText(fileName));
+                }
+
+                assembly = Compiler.CompileSource(sources.ToArray(), true);
+
+                if (assembly == null)
+                {
+                    Debug.LogError("Assembly for " + modName + " couldn't be compiled!");
+                    return;
+                }
+
+                var allTypes = Compiler.GetLoadableTypes(assembly);
+
+                foreach (var type in allTypes)
+                {
+                    if (type.ToString() == "ScriptMain")
+                    {
+                        IModScript entry = (IModScript)assembly.CreateInstance(type.ToString(), true);
+
+                        if (entry == null)
+                            break;
+
+                        entry.Start();
+
+                        break;
+                    }
+                }
+            }
         }
 
         public void Destroy()
         {
-            GameManager.instance.fileSystem.RemoveOptionalPath(modName);
+            GameManager.instance.fileSystem.RemoveOptionalPath(modPath);
         }
     }
 
