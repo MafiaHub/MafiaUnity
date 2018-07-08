@@ -120,6 +120,9 @@ namespace MafiaUnity
         {
             var loadableMods = new List<KeyValuePair<string, string>>();
 
+            if (!Directory.Exists("Mods"))
+                Directory.CreateDirectory("Mods");
+
             if (!File.Exists(Path.Combine(MODS_PATH, "loadorder.txt")))
                 return loadableMods.ToArray();
 
