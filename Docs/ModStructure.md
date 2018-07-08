@@ -1,5 +1,5 @@
 # Modding overview
-Mods in MafiaUnity are organized packages stored in `mods/` folder of the Mafia's game directory.
+Mods in MafiaUnity are organized packages stored in `mods/` folder of the MafiaUnity's directory.
 
 They have the following structure:
 
