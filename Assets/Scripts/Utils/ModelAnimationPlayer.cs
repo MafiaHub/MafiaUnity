@@ -8,6 +8,11 @@ using UnityEditor;
 
 namespace MafiaUnity
 {
+    public class MafiaAnimation
+    {
+        public List<AnimationSequence> animationSequences;
+    }
+
     public class ModelAnimationPlayer : MonoBehaviour
     {
         public bool isPlaying = false;
@@ -18,98 +23,13 @@ namespace MafiaUnity
         private int[] scaleFrameId;
         private const float frameStep = 1f / 25f;
         private float frameTime;
-        [SerializeField] private List<AnimationSequence> animationSequences;
+        [SerializeField] public MafiaAnimation mafiaAnimation = new MafiaAnimation();
 
-        [Serializable]
-        private class AnimationSequence
-        {
-            public Loader5DS.AnimationSequence loaderSequence;
-            public int positionKeyFrameId;
-            public int rotationKeyFrameId;
-            public int scaleKeyFrameId;
-            
-            public void Reset()
-            {
-                positionKeyFrameId = 0;
-                rotationKeyFrameId = 0;
-                scaleKeyFrameId = 0;
-            }
-
-            public void NextFrame()
-            {
-                if (loaderSequence.hasMovement() && positionKeyFrameId + 2 < loaderSequence.positions.Count)
-                    positionKeyFrameId++;
-
-                if (loaderSequence.hasRotation() && rotationKeyFrameId + 2 < loaderSequence.rotations.Count)
-                    rotationKeyFrameId++;
-
-                if (loaderSequence.hasScale() && scaleKeyFrameId + 2 < loaderSequence.scales.Count)
-                    scaleKeyFrameId++;
-            }
-
-            public bool IsFinished()
-            {
-                if (loaderSequence == null)
-                    return true;
-
-                bool movementResult = true;
-                if (loaderSequence.positionsFrames.Count > 0)
-                    movementResult = (positionKeyFrameId + 2 == loaderSequence.positionsFrames.Count);
-
-                bool rotationResult = true;
-                if (loaderSequence.rotationFrames.Count > 0)
-                    rotationResult = (rotationKeyFrameId + 2 == loaderSequence.rotationFrames.Count);
-
-                bool scaleResult = true;
-                if (loaderSequence.scalesFrames.Count > 0)
-                    scaleResult = (scaleKeyFrameId + 2 == loaderSequence.scalesFrames.Count);
-
-                return movementResult && rotationResult && scaleResult;
-            }
-
-            public void Update(float deltaLerp, Transform rootObject)
-            {
-                if (loaderSequence == null)
-                    return;
-
-                var boneTransform = rootObject.FindDeepChild(loaderSequence.objectName);
-
-                if (boneTransform == null)
-                    return;
-                
-                if (loaderSequence.hasMovement())
-                {
-                    boneTransform.localPosition = Vector3.Lerp(loaderSequence.positions[positionKeyFrameId],
-                        loaderSequence.positions[positionKeyFrameId + 1], deltaLerp);
-                }
-
-                if (loaderSequence.hasRotation())
-                {
-                    var tmpRot = new Quaternion(loaderSequence.rotations[rotationKeyFrameId].y, 
-                        loaderSequence.rotations[rotationKeyFrameId].z, 
-                        loaderSequence.rotations[rotationKeyFrameId].w, 
-                        -1 * loaderSequence.rotations[rotationKeyFrameId].x);
-
-                    var tmpRot2 = new Quaternion(loaderSequence.rotations[rotationKeyFrameId + 1].y, 
-                        loaderSequence.rotations[rotationKeyFrameId + 1].z, 
-                        loaderSequence.rotations[rotationKeyFrameId + 1].w, 
-                        -1 * loaderSequence.rotations[rotationKeyFrameId + 1].x);
-
-                    boneTransform.localRotation = Quaternion.Slerp(tmpRot, tmpRot2, deltaLerp);
-                }
-
-                if (loaderSequence.hasScale())
-                {
-                    boneTransform.localScale = Vector3.Lerp(loaderSequence.scales[scaleKeyFrameId],
-                        loaderSequence.scales[scaleKeyFrameId + 1], deltaLerp);
-                }
-            }
-        }
-
-        public bool LoadAnimation(string animName)
+        public MafiaAnimation LoadAnimation(string animName)
         {
             AnimReset();
-            animationSequences = new List<AnimationSequence>();
+            mafiaAnimation = new MafiaAnimation();
+            mafiaAnimation.animationSequences = new List<AnimationSequence>();
 
             FileStream fs;
 
@@ -119,7 +39,7 @@ namespace MafiaUnity
             }
             catch
             {
-                return false;
+                return null;
             }
 
             using (var reader = new BinaryReader(fs))
@@ -131,19 +51,27 @@ namespace MafiaUnity
                 {
                     var newAnimationSequence = new AnimationSequence();
                     newAnimationSequence.loaderSequence = seq;
-                    animationSequences.Add(newAnimationSequence);
+                    mafiaAnimation.animationSequences.Add(newAnimationSequence);
                 }
             }
 
-            return true;
+            return mafiaAnimation;
+        }
+
+        public void SetAnimation(MafiaAnimation anim)
+        {
+            if (mafiaAnimation == anim)
+                return;
+
+            mafiaAnimation = anim;
         }
         
         public bool IsFinished()
         {
-            if (animationSequences == null)
+            if (mafiaAnimation == null || mafiaAnimation.animationSequences == null)
                 return true;
 
-            foreach (var animationSeq in animationSequences)
+            foreach (var animationSeq in mafiaAnimation.animationSequences)
                 if (!animationSeq.IsFinished()) return false;
 
             return true;
@@ -151,10 +79,10 @@ namespace MafiaUnity
 
         public void AnimReset()
         {
-            if (animationSequences == null)
+            if (mafiaAnimation == null || mafiaAnimation.animationSequences == null)
                 return;
 
-            foreach (var animationSeq in animationSequences)
+            foreach (var animationSeq in mafiaAnimation.animationSequences)
                 animationSeq.Reset();
         }
 
@@ -176,8 +104,11 @@ namespace MafiaUnity
 
             float frameDelta = frameTime / frameStep;
 
-            foreach (var animationSeq in animationSequences)
+            foreach (var animationSeq in mafiaAnimation.animationSequences)
             {
+                if (animationSeq == null)
+                    return;
+
                 animationSeq.Update(frameDelta, transform);
 
                 if (frameTime > frameStep)
@@ -194,6 +125,92 @@ namespace MafiaUnity
         {
             Once,
             Repeat
+        }
+    }
+
+    [Serializable]
+    public class AnimationSequence
+    {
+        public Loader5DS.AnimationSequence loaderSequence;
+        public int positionKeyFrameId;
+        public int rotationKeyFrameId;
+        public int scaleKeyFrameId;
+
+        public void Reset()
+        {
+            positionKeyFrameId = 0;
+            rotationKeyFrameId = 0;
+            scaleKeyFrameId = 0;
+        }
+
+        public void NextFrame()
+        {
+            if (loaderSequence.hasMovement() && positionKeyFrameId + 2 < loaderSequence.positions.Count)
+                positionKeyFrameId++;
+
+            if (loaderSequence.hasRotation() && rotationKeyFrameId + 2 < loaderSequence.rotations.Count)
+                rotationKeyFrameId++;
+
+            if (loaderSequence.hasScale() && scaleKeyFrameId + 2 < loaderSequence.scales.Count)
+                scaleKeyFrameId++;
+        }
+
+        public bool IsFinished()
+        {
+            if (loaderSequence == null)
+                return true;
+
+            bool movementResult = true;
+            if (loaderSequence.positionsFrames.Count > 0)
+                movementResult = (positionKeyFrameId + 2 == loaderSequence.positionsFrames.Count);
+
+            bool rotationResult = true;
+            if (loaderSequence.rotationFrames.Count > 0)
+                rotationResult = (rotationKeyFrameId + 2 == loaderSequence.rotationFrames.Count);
+
+            bool scaleResult = true;
+            if (loaderSequence.scalesFrames.Count > 0)
+                scaleResult = (scaleKeyFrameId + 2 == loaderSequence.scalesFrames.Count);
+
+            return movementResult && rotationResult && scaleResult;
+        }
+
+        public void Update(float deltaLerp, Transform rootObject)
+        {
+            if (loaderSequence == null)
+                return;
+
+            var boneTransform = rootObject.FindDeepChild(loaderSequence.objectName);
+
+            if (boneTransform == null)
+                return;
+
+            if (loaderSequence.hasMovement())
+            {
+                boneTransform.localPosition = Vector3.Lerp(loaderSequence.positions[positionKeyFrameId],
+                    loaderSequence.positions[positionKeyFrameId + 1], deltaLerp);
+            }
+
+            if (loaderSequence.hasRotation())
+            {
+                var tmpRot = new Quaternion(loaderSequence.rotations[rotationKeyFrameId].y,
+                    loaderSequence.rotations[rotationKeyFrameId].z,
+                    loaderSequence.rotations[rotationKeyFrameId].w,
+                    -1 * loaderSequence.rotations[rotationKeyFrameId].x);
+
+                var tmpRot2 = new Quaternion(loaderSequence.rotations[rotationKeyFrameId + 1].y,
+                    loaderSequence.rotations[rotationKeyFrameId + 1].z,
+                    loaderSequence.rotations[rotationKeyFrameId + 1].w,
+                    -1 * loaderSequence.rotations[rotationKeyFrameId + 1].x);
+
+                boneTransform.localRotation = Quaternion.Slerp(tmpRot, tmpRot2, deltaLerp);
+            }
+
+            if (loaderSequence.hasScale())
+            {
+                boneTransform.localScale = Vector3.Lerp(loaderSequence.scales[scaleKeyFrameId],
+                    loaderSequence.scales[scaleKeyFrameId + 1], deltaLerp);
+            }
         }
     }
 
