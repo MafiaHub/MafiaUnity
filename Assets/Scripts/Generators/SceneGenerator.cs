@@ -12,7 +12,7 @@ namespace MafiaUnity
 
         public override GameObject LoadObject(string path)
         {
-            GameObject rootObject = null;// LoadCachedObject(path);
+            GameObject rootObject = LoadCachedObject(path);
 
             if (rootObject == null)
                 rootObject = new GameObject(path);
