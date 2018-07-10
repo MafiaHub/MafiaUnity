@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 using UnityEngine;
 
 namespace MafiaUnity
@@ -41,7 +42,7 @@ namespace MafiaUnity
                         sources.Add(File.ReadAllText(fileName));
                 }
 
-                assembly = Compiler.CompileSource(sources.ToArray(), true);
+                assembly = Compiler.CompileSource(sources.Where(x => Path.GetExtension(x) == "cs").ToArray(), true);
 
                 if (assembly == null)
                 {
