@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public GameObject playerPawn;
     private Transform cameraOrbitPoint;
     private float cameraUpAndDown = 2.01f;
+    private CustomButton lefButton = new CustomButton("a");
+    private CustomButton rightButton = new CustomButton("d");
 
     public void Start()
     {
@@ -26,7 +28,6 @@ public class PlayerController : MonoBehaviour
         cameraOrbitPoint = newObject.transform;
     }
 
-    private Quaternion rotToInterpolate;
     private void UpdateCameraMovement()
     {
         var x = Input.GetAxis("Mouse X") * Time.deltaTime * 800f;
@@ -45,6 +46,56 @@ public class PlayerController : MonoBehaviour
         characterController.TurnByAngle(x);
     }
 
+    private int xCountPressed = 0;
+    private int zCountPressed = 0;
+
+
+    public class CustomButton
+    {
+        private bool reset;
+        private bool firstButtonPressed;
+        private string buttonName;
+        private float timeOfFirstButton;
+
+        public CustomButton(string name)
+        {
+            buttonName = name;
+        }
+
+        public bool Button()
+        {
+            return Input.GetButton(buttonName);
+        }
+
+        public bool IsDoublePressed()
+        {
+            bool returnVal = false;
+            //TODO(DavoSK): replace with get button with simillar behaviour
+            if(Input.GetKeyDown(buttonName) && firstButtonPressed) 
+            {
+                if(Time.time - timeOfFirstButton < 1f) 
+                {
+                    returnVal = true;
+                } 
+                reset = true;
+             }
+                
+            if(Input.GetKeyDown(buttonName) && !firstButtonPressed) 
+            {
+                firstButtonPressed = true;
+                timeOfFirstButton = Time.time;
+            }
+     
+            if(reset)
+            {
+                firstButtonPressed = false;
+                reset = false;
+            }
+
+            return returnVal;
+        }
+    }
+
     public void Update()
     {
         var x = Input.GetAxisRaw("Horizontal");
@@ -52,39 +103,48 @@ public class PlayerController : MonoBehaviour
         var isRunning = !Input.GetButton("Run");
         var isCrouching = Input.GetButton("Crouch");
         
-        if (isCrouching)
+        if(!characterController.isRolling)
         {
-            characterController.ToggleCrouch(true);
-        }
-        else
-        {
-            characterController.ToggleCrouch(false);
-        }
+            if (isCrouching)
+                characterController.ToggleCrouch(true);
+            else
+                characterController.ToggleCrouch(false);
+            
+            if (isRunning && !isCrouching)
+                characterController.movementMode = MovementMode.Run;
+            else if (!isCrouching)
+                characterController.movementMode = MovementMode.Walk;
 
-        if (isRunning && !isCrouching)
-            characterController.movementMode = MovementMode.Run;
-        else if (!isCrouching)
-            characterController.movementMode = MovementMode.Walk;
+            if(lefButton.IsDoublePressed())
+                characterController.RollLeft();
 
-        if (z > 0f)
-        {
-            characterController.MoveForward();
-        }
-        else if (z < 0f)
-        {
-            characterController.MoveBackward();
-        }
+            if(rightButton.IsDoublePressed())
+                characterController.RollRight();
 
-        if (x > 0f)
-        {
-            characterController.MoveRight();
-        }
-        else if (x < 0f)
-        {
-            characterController.MoveLeft();
+            //Check even here due to code bellow :/
+            if(characterController.isRolling) return;
+
+            if (z > 0f)
+            {
+                characterController.MoveForward();
+            }
+            else if (z < 0f)
+            {
+                characterController.MoveBackward();
+            }
+
+            if (x > 0f)
+            {
+                characterController.MoveRight();
+            }
+            else if (x < 0f)
+            {
+                characterController.MoveLeft();
+            }
         }
 
         characterController.Update();
+        
         UpdateCameraMovement();
     }
 }

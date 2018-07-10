@@ -23,6 +23,7 @@ namespace MafiaUnity
         private int[] scaleFrameId;
         private const float frameStep = 1f / 25f;
         private float frameTime;
+        private Action onAnimationFinished = null;
         [SerializeField] public MafiaAnimation mafiaAnimation = new MafiaAnimation();
 
         public MafiaAnimation LoadAnimation(string animName)
@@ -66,6 +67,12 @@ namespace MafiaUnity
             mafiaAnimation = anim;
         }
         
+        public void OnAnimationFinish(Action finishAction)
+        {
+            if (finishAction != null)
+                onAnimationFinished = finishAction;
+        }
+
         public bool IsFinished()
         {
             if (mafiaAnimation == null || mafiaAnimation.animationSequences == null)
@@ -93,6 +100,14 @@ namespace MafiaUnity
 
             if (IsFinished())
             {
+                if (mafiaAnimation != null && onAnimationFinished != null)
+                {
+                    onAnimationFinished.Invoke();
+                    Debug.Log("Finished calling func");
+                }
+
+                Debug.Log("Anim finished");
+
                 if (playbackMode == AnimationPlaybackMode.Repeat)
                     AnimReset();
                 else if (playbackMode == AnimationPlaybackMode.Once)

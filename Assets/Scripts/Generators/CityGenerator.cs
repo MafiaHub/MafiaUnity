@@ -70,8 +70,6 @@ namespace MafiaUnity
                 {
                     var newCollider = objectToBeColisioned.AddComponent<MeshCollider>();
                     newCollider.sharedMesh = objectFilter.sharedMesh;
-
-                    Debug.Log("Mesh collider: " + meshName);
                 }
                 else
                 {
