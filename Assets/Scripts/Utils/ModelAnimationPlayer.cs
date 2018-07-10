@@ -101,12 +101,7 @@ namespace MafiaUnity
             if (IsFinished())
             {
                 if (mafiaAnimation != null && onAnimationFinished != null)
-                {
                     onAnimationFinished.Invoke();
-                    Debug.Log("Finished calling func");
-                }
-
-                Debug.Log("Anim finished");
 
                 if (playbackMode == AnimationPlaybackMode.Repeat)
                     AnimReset();
