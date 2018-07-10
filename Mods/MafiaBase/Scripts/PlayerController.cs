@@ -40,13 +40,9 @@ public class PlayerController : MonoBehaviour
         if (cameraUpAndDown > 3.5f)
             cameraUpAndDown = 3.5f;
 
-        if(x != 0f)
-            rotToInterpolate = Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y + x, transform.localEulerAngles.z);
-        
-
         playerCamera.transform.localPosition = Vector3.Lerp(playerCamera.transform.localPosition, new Vector3(0f, cameraUpAndDown, -1.46f), Time.deltaTime * 10f);
         playerCamera.transform.LookAt(cameraOrbitPoint);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, rotToInterpolate, Time.deltaTime * 10f);
+        characterController.TurnByAngle(x);
     }
 
     public void Update()

@@ -33,6 +33,7 @@ public class PawnController
     private Vector3 movementDirection = Vector3.zero;
     private Vector3 oldMovementDirection;
     private float movementAngle;
+	private int lastRotationState;
     
     private MafiaAnimationSet[] animationSets;
 
@@ -67,7 +68,7 @@ public class PawnController
 
             case MovementMode.Crouch:
             {
-                return 0.5f;
+                return 1f;
             }
         }
 
@@ -131,7 +132,9 @@ public class PawnController
 
     public void TurnByAngle(float angle)
 	{
-        movementAngle = angle;
+		if(angle != 0f) {
+            movementAngle = angle;
+		}
     }
 	
 	public void Jump()
@@ -193,8 +196,8 @@ public class PawnController
 
     public void Update()
     {
-        if (oldMovementDirection != movementDirection)
-            pawn.AnimReset();
+        if (oldMovementDirection != movementDirection && IsMoving())
+           pawn.AnimReset();
 
         if (IsMoving())
         {
@@ -216,19 +219,42 @@ public class PawnController
         }
         else
         {
-            pawn.SetAnimation(animationSets[(int)stanceMode].idleAnimations[0]);
-
             if (movementAngle > 0f)
             {
-
-            }
+				
+				pawn.SetAnimation(animationSets[(int)stanceMode].rotateAnimations[(int)AnimationSlots.Left]);
+				
+				if(lastRotationState == (int)AnimationSlots.Right || lastRotationState == -1) {
+					lastRotationState = (int)AnimationSlots.Left;
+					pawn.AnimReset();
+				}
+			}
             else if(movementAngle < 0f)
             {
-
+				pawn.SetAnimation(animationSets[(int)stanceMode].rotateAnimations[(int)AnimationSlots.Right]);
+				
+				if(lastRotationState == (int)AnimationSlots.Left || lastRotationState == -1) {
+					lastRotationState = (int)AnimationSlots.Right;
+					pawn.AnimReset();
+				}
             }
+			else if(movementAngle == 0f)
+			{
+				if(lastRotationState == (int)AnimationSlots.Left || lastRotationState == (int)AnimationSlots.Right) {
+					lastRotationState = -1;
+					pawn.AnimReset();
+				}
+				
+				pawn.SetAnimation(animationSets[(int)stanceMode].idleAnimations[0]);
+			}
         }
 
-        rootObject.transform.Rotate(0, 0, movementAngle);
+		var rotToInterpolate = Quaternion.Euler(rootObject.transform.localEulerAngles.x, 
+			rootObject.transform.localEulerAngles.y + movementAngle, 
+			rootObject.transform.localEulerAngles.z);
+        
+		rootObject.transform.localRotation = Quaternion.Slerp(rootObject.transform.localRotation, rotToInterpolate, Time.deltaTime * 10f);
+			
         movementAngle = 0;
     }
 
@@ -246,14 +272,14 @@ public class PawnController
 
     public class MafiaAnimationSet
     {
-        public MafiaAnimation[] walkAnimations, runAnimations;
+        public MafiaAnimation[] walkAnimations, runAnimations, rotateAnimations;
         public MafiaAnimation[] idleAnimations;
 
         public MafiaAnimationSet(int slot, ModelAnimationPlayer pawn)
         {
-            walkAnimations  = new MafiaAnimation[Enum.GetNames(typeof(AnimationSlots)).Length];
-            runAnimations   = new MafiaAnimation[Enum.GetNames(typeof(AnimationSlots)).Length];
-
+            walkAnimations  	= new MafiaAnimation[Enum.GetNames(typeof(AnimationSlots)).Length];
+            runAnimations   	= new MafiaAnimation[Enum.GetNames(typeof(AnimationSlots)).Length];
+			rotateAnimations 	= new MafiaAnimation[Enum.GetNames(typeof(AnimationSlots)).Length]; 
 
             walkAnimations[(int)AnimationSlots.Forward] = pawn.LoadAnimation("anims/walk" + slot + ".5ds");
             walkAnimations[(int)AnimationSlots.Backward] = pawn.LoadAnimation("anims/back" + slot + ".5ds");
@@ -279,6 +305,10 @@ public class PawnController
             runAnimations[(int)AnimationSlots.Left] = pawn.LoadAnimation("anims/strafL" + slot + ".5ds");
             runAnimations[(int)AnimationSlots.Right] = pawn.LoadAnimation("anims/strafR" + slot + ".5ds");
 
+			rotateAnimations[(int)AnimationSlots.Left] = pawn.LoadAnimation("anims/left" + slot + ".5ds");
+            rotateAnimations[(int)AnimationSlots.Right] = pawn.LoadAnimation("anims/right" + slot + ".5ds");
+			
+			 
             idleAnimations = new MafiaAnimation[]{ pawn.LoadAnimation("anims/breath0" + slot + "a.5ds"), 
                                pawn.LoadAnimation("anims/breath0" + slot + "b.5ds"),
                                pawn.LoadAnimation("anims/breath0" + slot + "c.5ds"), 
