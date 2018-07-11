@@ -2,7 +2,8 @@
 
 Back to [Mafia data formats](DataFiles.md)
 
-Effects serve for ... #TODO
+Effects.bin define static source of particle effects in scene. Transformation matrix of each effect
+defines where the source of particle effect is placed and where it heads. 
 
 # Structure
 
