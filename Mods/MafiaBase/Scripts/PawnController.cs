@@ -358,9 +358,9 @@ public class PawnController
             jumpAnimations[(int)AnimationSlots.Right] = pawn.LoadAnimation("anims/jumpR1.5ds");
 
             idleAnimations = new MafiaAnimation[]{ pawn.LoadAnimation("anims/breath0" + slot + "a.5ds"), 
-                               pawn.LoadAnimation("anims/breath0" + slot + "b.5ds"),
-                               pawn.LoadAnimation("anims/breath0" + slot + "c.5ds"), 
-                               pawn.LoadAnimation("anims/breath0" + slot + "d.5ds")};
+                               pawn.LoadAnimation("anims/breath0" + slot + "a.5ds"),
+                               pawn.LoadAnimation("anims/breath0" + slot + "a.5ds"), 
+                               pawn.LoadAnimation("anims/breath0" + slot + "a.5ds")};
         }
     }
 }
