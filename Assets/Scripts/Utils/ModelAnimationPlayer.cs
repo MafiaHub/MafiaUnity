@@ -19,7 +19,10 @@ namespace MafiaUnity
         public AnimationPlaybackMode playbackMode;
         public float blendBeginPercentage;
         public float blendEndPercentage;
-        [SerializeField] public MafiaAnimation mafiaAnimation;
+        
+        private Action onAnimationFinished = null;
+        [SerializeField] public MafiaAnimation mafiaAnimation = new MafiaAnimation();
+
         [SerializeField] public MafiaAnimation pairAnimation;
 
         private int[] posFrameId;
@@ -27,7 +30,7 @@ namespace MafiaUnity
         private int[] scaleFrameId;
         private const float frameStep = 1f / 25f;
         private float frameTime;
-        
+
         public MafiaAnimation LoadAndSetAnimation(string animName)
         {
             mafiaAnimation = LoadAnimation(animName);
@@ -74,6 +77,12 @@ namespace MafiaUnity
             mafiaAnimation = anim;
         }
         
+        public void OnAnimationFinish(Action finishAction)
+        {
+            if (finishAction != null)
+                onAnimationFinished = finishAction;
+        }
+
         public bool IsFinished()
         {
             if (mafiaAnimation == null || mafiaAnimation.animationSequences == null)
@@ -112,6 +121,9 @@ namespace MafiaUnity
 
             if (IsFinished())
             {
+                if (mafiaAnimation != null && onAnimationFinished != null)
+                    onAnimationFinished.Invoke();
+
                 if (playbackMode == AnimationPlaybackMode.Repeat)
                     AnimReset();
                 else if (playbackMode == AnimationPlaybackMode.Once)
