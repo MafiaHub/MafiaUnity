@@ -16,16 +16,17 @@ namespace MafiaUnity
             else
                 return rootObject;
 
-            FileStream fs;
+            Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
+                fs = DTAFileSystem.GetFileContent(path);
             }
             catch
             {
                 return null;
             }
+
 
             using (var reader = new BinaryReader(fs))
             {
@@ -86,7 +87,6 @@ namespace MafiaUnity
                     }
                 }
             }
-            
         }
 
         public GameObject LoadCollisions(string path)
@@ -98,11 +98,11 @@ namespace MafiaUnity
             else
                 return rootObject;
 
-            FileStream fs;
+			Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
+                fs = DTAFileSystem.GetFileContent(path);//new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
             }
             catch
             {
@@ -122,7 +122,7 @@ namespace MafiaUnity
                 foreach (var faceCol in newKlzLoader.faceCols)
                 {
                     var link = faceCol.indices[0].link;
-                    if (lastFaceColledMesh != newKlzLoader.linkTables[link].name)
+                    if(lastFaceColledMesh != newKlzLoader.linkTables[link].name)
                     {
                         lastFaceColledMesh = newKlzLoader.linkTables[link].name;
                         ApplyMeshColliderToMeshNode(lastFaceColledMesh);
@@ -168,10 +168,9 @@ namespace MafiaUnity
                         objectToBeColisioned.transform.position = center;
                     
                         var boxCollider = objectToBeColisioned.AddComponent<BoxCollider>();
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner;
                     } 
                 }
-               
 
                 //Load XTOBB Cols
                 foreach (var XTOBBCol in newKlzLoader.XTOBBCols)
@@ -192,7 +191,7 @@ namespace MafiaUnity
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner;
                         boxCollider.center = center;
                     }
                 }
@@ -216,7 +215,7 @@ namespace MafiaUnity
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner;
                         boxCollider.center = center;
                     }
                 }

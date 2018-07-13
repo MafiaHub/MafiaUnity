@@ -11,18 +11,18 @@ namespace MafiaUnity
     {
         public override GameObject LoadObject(string path)
         {
-            GameObject rootObject = LoadCachedObject(path);
+            GameObject rootObject = null;// LoadCachedObject(path);
 
             if (rootObject == null)
                 rootObject = new GameObject(path);
             else
                 return rootObject;
             
-            FileStream fs;
+            Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
+                fs = DTAFileSystem.GetFileContent(path);//new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
             }
             catch (Exception ex)
             {
@@ -297,9 +297,9 @@ namespace MafiaUnity
                             BMPImage image = null;
 
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.diffuseMapName)));
+                                image = bmp.LoadBMP(DTAFileSystem.GetFileContent(Path.Combine("maps", mafiaMat.diffuseMapName)));
                             else if (mafiaMat.alphaMapName != null)
-                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.alphaMapName)));
+                                image = bmp.LoadBMP(DTAFileSystem.GetFileContent(Path.Combine("maps", mafiaMat.alphaMapName)));
 
                             BMPLoader.useTransparencyKey = false;
 
@@ -348,7 +348,7 @@ namespace MafiaUnity
                                         try
                                         {
                                             var animPath = Path.Combine("maps", baseName + k.ToString("D2") + "." + ext);
-                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(animPath));
+                                            var frameImage = bmp.LoadBMP(DTAFileSystem.GetFileContent(animPath));
 
                                             if (frameImage == null)
                                                 continue;

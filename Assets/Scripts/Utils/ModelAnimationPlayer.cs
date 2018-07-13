@@ -37,16 +37,16 @@ namespace MafiaUnity
             return mafiaAnimation;
         }
 
-        public MafiaAnimation LoadAnimation(string animName)
+        public MafiaAnimation LoadAnimation(string path)
         {
             var animation = new MafiaAnimation();
             animation.animationSequences = new List<AnimationSequence>();
 
-            FileStream fs;
+            Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(animName), FileMode.Open);
+                fs = DTAFileSystem.GetFileContent(path);
             }
             catch
             {

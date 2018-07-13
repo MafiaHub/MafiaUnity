@@ -65,7 +65,14 @@ namespace MafiaUnity
         public bool SetGamePath(string path)
         {
             if (isInitialized)
-                return fileSystem.ValidateGamePath(path);
+            {
+                var returnVal = fileSystem.ValidateGamePath(path);
+                
+                if (returnVal)
+                    DTAFileSystem.MountDTAFiles();
+
+                return returnVal;
+            }
 
             if (fileSystem.SetGamePath(path))
             {
@@ -73,7 +80,7 @@ namespace MafiaUnity
                 cvarManager.Init();
 
                 isInitialized = true;
-
+                DTAFileSystem.MountDTAFiles();
                 return true;
             }
 
