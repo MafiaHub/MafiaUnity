@@ -1,6 +1,6 @@
 # Model 4DS
 
-Back to [Mafia data formats](DataFiles.md)
+Back to [Mafia data formats](../DataFiles.md)
 
 4DS model defines the geometry and special properties that provide the ability to visualize the mesh in a specific configuration
 as well as act as a node in a scene graph other objects might depend on.
