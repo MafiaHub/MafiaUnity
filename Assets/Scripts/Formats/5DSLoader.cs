@@ -54,8 +54,8 @@ namespace MafiaUnity
         {
             public string objectName;
             public List<uint> rotationFrames    = new List<uint>();
-            public List<uint> positionsFrames   = new List<uint>();
-            public List<uint> scalesFrames      = new List<uint>();
+            public List<uint> positionFrames   = new List<uint>();
+            public List<uint> scaleFrames      = new List<uint>();
 
             public List<Vector3> positions      = new List<Vector3>();
             public List<Quaternion> rotations   = new List<Quaternion>();
@@ -126,7 +126,7 @@ namespace MafiaUnity
                 var numPositionKeys = reader.ReadUInt16();
 
                 for (var i = 0; i < numPositionKeys; i++)
-                    newSequence.positionsFrames.Add(reader.ReadUInt16());
+                    newSequence.positionFrames.Add(reader.ReadUInt16());
 
                 if (numPositionKeys % 2 == 0)
                     reader.BaseStream.Seek(2, SeekOrigin.Current);
@@ -140,7 +140,7 @@ namespace MafiaUnity
                 var numScaleKeys = reader.ReadUInt16();
 
                 for (var i = 0; i < numScaleKeys; i++)
-                    newSequence.scalesFrames.Add(reader.ReadUInt16());
+                    newSequence.scaleFrames.Add(reader.ReadUInt16());
 
                 if (numScaleKeys % 2 == 0)
                     reader.BaseStream.Seek(2, SeekOrigin.Current);

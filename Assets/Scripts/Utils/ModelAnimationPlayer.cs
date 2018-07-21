@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using MafiaUnity;
 using System.IO;
 using System;
@@ -19,6 +20,7 @@ namespace MafiaUnity
         public AnimationPlaybackMode playbackMode;
         public float blendBeginPercentage;
         public float blendEndPercentage;
+        public float playbackCompletion;
         
         private Action onAnimationFinished = null;
         [SerializeField] public MafiaAnimation mafiaAnimation = new MafiaAnimation();
@@ -145,11 +147,16 @@ namespace MafiaUnity
                 if (frameTime > frameStep)
                     animationSeq.NextFrame();
             }
-
+            
             if(frameTime > frameStep)
                 frameTime = 0f;
 
             frameTime += Time.deltaTime;
+
+            var currentFrameId = mafiaAnimation.animationSequences.Max(x => Mathf.Max(x.positionKeyFrameId, x.rotationKeyFrameId, x.scaleKeyFrameId));
+            var lastFrameId = mafiaAnimation.animationSequences.Max(x => Mathf.Max(x.loaderSequence.positionFrames.Count, x.loaderSequence.rotationFrames.Count, x.loaderSequence.scaleFrames.Count));
+            
+            playbackCompletion = currentFrameId / (float)lastFrameId;
         }
 
         public enum AnimationPlaybackMode
@@ -176,13 +183,13 @@ namespace MafiaUnity
 
         public void NextFrame()
         {
-            if (loaderSequence.hasMovement() && positionKeyFrameId + 2 < loaderSequence.positions.Count)
+            if (loaderSequence.hasMovement() && positionKeyFrameId + 1 < loaderSequence.positions.Count)
                 positionKeyFrameId++;
 
-            if (loaderSequence.hasRotation() && rotationKeyFrameId + 2 < loaderSequence.rotations.Count)
+            if (loaderSequence.hasRotation() && rotationKeyFrameId + 1 < loaderSequence.rotations.Count)
                 rotationKeyFrameId++;
 
-            if (loaderSequence.hasScale() && scaleKeyFrameId + 2 < loaderSequence.scales.Count)
+            if (loaderSequence.hasScale() && scaleKeyFrameId + 1 < loaderSequence.scales.Count)
                 scaleKeyFrameId++;
         }
 
@@ -192,16 +199,16 @@ namespace MafiaUnity
                 return true;
 
             bool movementResult = true;
-            if (loaderSequence.positionsFrames.Count > 0)
-                movementResult = (positionKeyFrameId + 2 == loaderSequence.positionsFrames.Count);
+            if (loaderSequence.positionFrames.Count > 0)
+                movementResult = (positionKeyFrameId + 1 == loaderSequence.positionFrames.Count);
 
             bool rotationResult = true;
             if (loaderSequence.rotationFrames.Count > 0)
-                rotationResult = (rotationKeyFrameId + 2 == loaderSequence.rotationFrames.Count);
+                rotationResult = (rotationKeyFrameId + 1 == loaderSequence.rotationFrames.Count);
 
             bool scaleResult = true;
-            if (loaderSequence.scalesFrames.Count > 0)
-                scaleResult = (scaleKeyFrameId + 2 == loaderSequence.scalesFrames.Count);
+            if (loaderSequence.scaleFrames.Count > 0)
+                scaleResult = (scaleKeyFrameId + 1 == loaderSequence.scaleFrames.Count);
 
             return movementResult && rotationResult && scaleResult;
         }
@@ -223,13 +230,13 @@ namespace MafiaUnity
             var motion = new AnimationTransform();
 
 
-            if (loaderSequence.hasMovement())
+            if (loaderSequence.hasMovement() && loaderSequence.positions.Count > positionKeyFrameId + 1)
             {
                 motion.currentPosition = loaderSequence.positions[positionKeyFrameId];
                 motion.nextPosition = loaderSequence.positions[positionKeyFrameId + 1];
             }
 
-            if (loaderSequence.hasRotation())
+            if (loaderSequence.hasRotation() && loaderSequence.rotations.Count > rotationKeyFrameId + 1)
             {
                 motion.currentRotation = new Quaternion(loaderSequence.rotations[rotationKeyFrameId].y,
                     loaderSequence.rotations[rotationKeyFrameId].z,
@@ -242,7 +249,7 @@ namespace MafiaUnity
                     -1 * loaderSequence.rotations[rotationKeyFrameId + 1].x);
             }
 
-            if (loaderSequence.hasScale())
+            if (loaderSequence.hasScale() && loaderSequence.scales.Count > scaleKeyFrameId + 1)
             {
                 motion.currentScale = loaderSequence.scales[scaleKeyFrameId];
                 motion.nextScale = loaderSequence.scales[scaleKeyFrameId + 1];
