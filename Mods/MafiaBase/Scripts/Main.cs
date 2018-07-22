@@ -10,11 +10,31 @@ class ScriptMain : IModScript
     {
         Debug.Log("Initializing MafiaBase...");
 		
-		Test();
+		var gm = new MafiaGameMode();
+
+		GameModeManager.instance.RegisterGameMode("_MafiaBaseGameMode", gm);
+		GameModeManager.instance.SwitchGameMode("_MafiaBaseGameMode");
 	}
-	
-	private void Test()
+}
+
+// move to MafiaGameMode.cs
+class MafiaGameMode : IGameMode
+{
+	// on gm registration
+	void IGameMode.Register()
 	{
-		var newGameObject = new GameObject("Test!").AddComponent<TestPlayerController>();
+		
+	}
+
+	// on game mode switch -- being primary
+	void IGameMode.Start()
+	{
+		Debug.Log("MafiaGameMode WIP.");
+	}
+
+	// on game mode switch -- leaving primary
+	void IGameMode.End()
+	{
+		Debug.Log("MafiaGameMode is shutting down... Another GM incoming!");
 	}
 }
