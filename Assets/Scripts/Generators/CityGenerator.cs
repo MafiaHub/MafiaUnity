@@ -16,16 +16,17 @@ namespace MafiaUnity
             else
                 return rootObject;
 
-            FileStream fs;
+            Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
+                fs = DTAFileSystem.GetFileContent(path);
             }
             catch
             {
                 return null;
             }
+
 
             using (var reader = new BinaryReader(fs))
             {
@@ -97,11 +98,11 @@ namespace MafiaUnity
             else
                 return rootObject;
 
-            FileStream fs;
+			Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
+                fs = DTAFileSystem.GetFileContent(path);//new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
             }
             catch
             {
@@ -190,7 +191,7 @@ namespace MafiaUnity
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.size = bboxCorner;
+                        boxCollider.extents = bboxCorner;
                         boxCollider.center = center;
                     }
                 }
@@ -214,7 +215,7 @@ namespace MafiaUnity
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.size = bboxCorner;
+                        boxCollider.extents = bboxCorner;
                         boxCollider.center = center;
                     }
                 }
