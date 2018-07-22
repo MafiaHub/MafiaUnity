@@ -83,7 +83,7 @@ namespace MafiaUnity
             }
             catch
             {
-                Debug.LogError("Mod " + modName + " couldn't be loaded, invalid package.json!");
+                Debug.LogError("Mod " + modName + " couldn't be loaded, invalid mod.json!");
                 return null;
             }
         }

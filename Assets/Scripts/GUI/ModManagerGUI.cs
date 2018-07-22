@@ -21,9 +21,6 @@ public class ModManagerGUI : MonoBehaviour {
     public List<ModEntry> modEntries;
 
     ModEntry selectedMod = null;
-    int selectedModIndex = 0;
-
-    bool isInitialized = false;
 
     void Start () {
         modManager = GameManager.instance.modManager;
@@ -36,6 +33,10 @@ public class ModManagerGUI : MonoBehaviour {
         {
             var modEntry = new ModEntry();
             modEntry.modMeta = modManager.ReadModInfo(modName);
+
+            if (modEntry.modMeta == null)
+                continue;
+
             modEntry.modName = modName;
             modEntry.isActive = 0;
             mods.Add(modEntry);
@@ -105,6 +106,9 @@ public class ModManagerGUI : MonoBehaviour {
 
     void SelectModInfo(ModEntry mod)
     {
+        if (mod == null)
+            return;
+
         var entry = mod.modMeta;
 
         modName.text = string.Format("Name: {0}", entry.name);
