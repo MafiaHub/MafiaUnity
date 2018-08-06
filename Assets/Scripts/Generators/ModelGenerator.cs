@@ -112,6 +112,30 @@ namespace MafiaUnity
                         }
                         break;
 
+                        case MafiaFormats.VisualMeshType.Billboard:
+                        {
+                            // TODO build up more lods
+                            var standard = mafiaMesh.billboard.standard;
+                            
+                            if (standard.lods.Count > 0)
+                            {
+                                //NOTE: (DavoSK) Add our custom billboard here
+                                child.AddComponent<CustomBillboard>();
+
+                                var meshRenderer = child.AddComponent<MeshRenderer>();
+
+                                meshFilter.mesh = GenerateMesh(mafiaMesh, child, standard.lods[0], model, out materials);
+                                meshRenderer.materials = materials;
+
+                                bool isTwoSided = model.materials.FindAll(x => (x.flags.HasFlag(MafiaFormats.MaterialFlag.Doublesided_Material))).Count > 0;
+
+                                if (isTwoSided)
+                                    meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
+                            }
+                            else
+                                continue;
+                        }
+                        break;
                         // TODO add more visual types
 
                         default: continue;
