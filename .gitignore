@@ -38,5 +38,6 @@ sysinfo.txt
 !/Assets/External Assets/.gitkeep
 /[Mm]ods/*
 !/[Mm]ods/MafiaBase
+!/[Mm]ods/MafiaTest
 !/[Mm]ods/ExampleMod
 !/[Mm]ods/AnotherExampleMod

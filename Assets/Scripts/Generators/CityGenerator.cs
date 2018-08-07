@@ -86,6 +86,7 @@ namespace MafiaUnity
                     }
                 }
             }
+            
         }
 
         public GameObject LoadCollisions(string path)
@@ -121,7 +122,7 @@ namespace MafiaUnity
                 foreach (var faceCol in newKlzLoader.faceCols)
                 {
                     var link = faceCol.indices[0].link;
-                    if(lastFaceColledMesh != newKlzLoader.linkTables[link].name)
+                    if (lastFaceColledMesh != newKlzLoader.linkTables[link].name)
                     {
                         lastFaceColledMesh = newKlzLoader.linkTables[link].name;
                         ApplyMeshColliderToMeshNode(lastFaceColledMesh);
@@ -167,9 +168,10 @@ namespace MafiaUnity
                         objectToBeColisioned.transform.position = center;
                     
                         var boxCollider = objectToBeColisioned.AddComponent<BoxCollider>();
-                        boxCollider.size = bboxCorner;
+                        boxCollider.extents = bboxCorner;
                     } 
                 }
+               
 
                 //Load XTOBB Cols
                 foreach (var XTOBBCol in newKlzLoader.XTOBBCols)
@@ -190,7 +192,7 @@ namespace MafiaUnity
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.size = bboxCorner;
+                        boxCollider.extents = bboxCorner;
                         boxCollider.center = center;
                     }
                 }
@@ -214,7 +216,7 @@ namespace MafiaUnity
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.size = bboxCorner;
+                        boxCollider.extents = bboxCorner;
                         boxCollider.center = center;
                     }
                 }
