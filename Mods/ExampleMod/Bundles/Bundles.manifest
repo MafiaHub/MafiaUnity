@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 421518709
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: sampleterrain
+      Dependencies: {}

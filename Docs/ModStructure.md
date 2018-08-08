@@ -32,6 +32,8 @@ Mirrors the folder structure of Mafia's game dir with extracted game contents, t
 ## Bundles
 Asset bundles can be used to access Unity assets packaged together. Instead of re-creating your assets programatically, you can design your assets using Unity Editor directly, once you're done, make sure your asset is assigned to your asset bundle.
 
+To build, view or inspect asset bundles, navigate to `Window -> AssetBundle Browser`. Make sure you export asset bundles used by your mods with the respect to the used platform. Please, follow Unity's official documentation for more information about bundles, [more info here.](https://docs.unity3d.com/Manual/AssetBundlesIntro.html)
+
 To load an asset bundle from a mod, you can use `Mod::LoadFromFile` method, which follows the same interface as [Unity's AssetBundle::LoadFromFile](https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromFile.html) which we recommend to check out for more information.
 
 ## Scripts

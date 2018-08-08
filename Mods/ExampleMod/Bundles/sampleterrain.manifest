@@ -1,0 +1,32 @@
+ManifestFileVersion: 0
+CRC: 2352835010
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 941d44a15bddc8e44a53afcf0842872c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 07c1e1b9698e9d261ffb06629f162c64
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 154
+  Script: {instanceID: 0}
+- Class: 156
+  Script: {instanceID: 0}
+- Class: 218
+  Script: {instanceID: 0}
+Assets:
+- Assets/External Assets/SampleTerrainBundle/Main Camera.prefab
+- Assets/External Assets/SampleTerrainBundle/New Terrain.asset
+- Assets/External Assets/SampleTerrainBundle/Terrain.prefab
+Dependencies: []

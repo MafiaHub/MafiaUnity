@@ -20,5 +20,15 @@ class ScriptMain : IModScript
         player.LoadAndSetAnimation("anims/!!!Skakani.5ds");
         player.isPlaying = true;
         player.playbackMode = ModelAnimationPlayer.AnimationPlaybackMode.Repeat;
+
+        var terrainBundle = mod.LoadFromFile("sampleterrain");
+
+        if (terrainBundle != null)
+        {
+            Debug.Log("AssetBundle has been loaded!");
+
+            var terrainPrefab = terrainBundle.LoadAsset<GameObject>("Terrain");
+            GameObject.Instantiate(terrainPrefab);
+        }
     }
 }
