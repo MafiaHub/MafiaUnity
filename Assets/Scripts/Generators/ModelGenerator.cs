@@ -320,10 +320,21 @@ namespace MafiaUnity
 
                             BMPImage image = null;
 
-                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.diffuseMapName)));
-                            else if (mafiaMat.alphaMapName != null)
-                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.alphaMapName)));
+                            try
+                            {
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
+                                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.diffuseMapName)));
+                                else if (mafiaMat.alphaMapName != null)
+                                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.alphaMapName)));
+                            }
+                            catch
+                            {
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
+                                    Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.diffuseMapName);
+                                else if (mafiaMat.alphaMapName != null)
+                                    Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.alphaMapName);
+
+                            }
 
                             BMPLoader.useTransparencyKey = false;
 
