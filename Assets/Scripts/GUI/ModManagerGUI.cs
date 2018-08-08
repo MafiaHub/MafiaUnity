@@ -11,12 +11,13 @@ public class ModManagerGUI : MonoBehaviour {
     public GameObject modPrefab;
 
     public Button status;
-    public Text modName, modAuthor, modVersion, modGameVersion;
+    public Text modName, modAuthor, modVersion, modGameVersion, modDependencies, modMissingDeps;
 
     ModManager modManager;
 
     public Color activeColor = Color.green;
     public Color inactiveColor = Color.red;
+    public Color incompleteColor = Color.yellow;
 
     public List<ModEntry> modEntries;
 
@@ -38,7 +39,7 @@ public class ModManagerGUI : MonoBehaviour {
                 continue;
 
             modEntry.modName = modName;
-            modEntry.isActive = 0;
+            modEntry.status = 0;
             mods.Add(modEntry);
         }
 
@@ -53,7 +54,7 @@ public class ModManagerGUI : MonoBehaviour {
                 if (mod.modName == load.Key)
                 {
                     if (load.Value == "1")
-                        mod.isActive = 1;
+                        mod.status = ModEntryStatus.Active;
                     
                     modEntries.Add(mod);
                     newMods.Remove(mod);
@@ -65,13 +66,12 @@ public class ModManagerGUI : MonoBehaviour {
         {
             if (newMod.modName == "MafiaBase")
             {
-                newMod.isActive = 1;
+                newMod.status = ModEntryStatus.Active;
                 modEntries.Insert(0, newMod);
             }
             else
                 modEntries.Add(newMod);
         }
-            
 
         ApplyChanges();
         UpdateModList();
@@ -96,12 +96,29 @@ public class ModManagerGUI : MonoBehaviour {
             clonedButtonComponent.onClick.AddListener(delegate { SelectModInfoButton(clonedButton); });
 
             var clonedImageComponent = clonedButton.GetComponent<Image>();
-            clonedImageComponent.color = (mod.isActive != 0) ? activeColor : inactiveColor;
+            clonedImageComponent.color = (mod.status == ModEntryStatus.Active) ? activeColor : inactiveColor;
 
             var clonedTextComponent = clonedButton.transform.GetComponentInChildren<Text>();
             clonedTextComponent.text = mod.modMeta.name;
-        }
 
+            mod.missingDependencies.Clear();
+
+            foreach (var dep in mod.modMeta.dependencies)
+            {
+                var modDep = modEntries.Find(x => x.modName == dep);
+
+                if (modDep == null || (modDep != null && modDep.status != ModEntryStatus.Active))
+                {
+                    mod.missingDependencies.Add(dep);
+                }
+            }
+
+            if (mod.missingDependencies.Count > 0)
+            {
+                mod.status = ModEntryStatus.Incomplete;
+                clonedImageComponent.color = incompleteColor;
+            }
+        }
     }
 
     void SelectModInfo(ModEntry mod)
@@ -116,6 +133,21 @@ public class ModManagerGUI : MonoBehaviour {
         modVersion.text = string.Format("Version: {0}", entry.version);
         modGameVersion.text = string.Format("Game Version: {0}", entry.gameVersion);
 
+        if (entry.dependencies.Count > 0)
+            modDependencies.text = string.Format("Dependencies: {0}", string.Join(", ", entry.dependencies.ToArray()));
+        else
+            modDependencies.text = "Dependencies: None";
+
+        if (mod.missingDependencies.Count > 0)
+            modMissingDeps.text = string.Format("Missing Dependencies: {0}", string.Join(", ", mod.missingDependencies.ToArray()));
+        else
+        {
+            if (mod.status == ModEntryStatus.Incomplete)
+                mod.status = ModEntryStatus.Inactive;
+
+            modMissingDeps.text = "";
+        }
+
         UpdateStatusButton(mod);
 
         selectedMod = mod;
@@ -124,7 +156,11 @@ public class ModManagerGUI : MonoBehaviour {
     void UpdateStatusButton(ModEntry mod)
     {
         var statusTextComponent = status.GetComponentInChildren<Text>();
-        statusTextComponent.text = (mod.isActive != 0) ? "Active" : "Inactive";
+        statusTextComponent.text = (mod.status == ModEntryStatus.Active) ? "Active" : "Inactive";
+
+        if (mod.status == ModEntryStatus.Incomplete)
+            statusTextComponent.text = "Incomplete";
+
         UpdateModList();
     }
 
@@ -163,24 +199,27 @@ public class ModManagerGUI : MonoBehaviour {
 
     public void ToggleAllOn()
     {
-        modEntries.ForEach(x => x.isActive = 1);
+        modEntries.ForEach(x => x.status = ModEntryStatus.Active);
         UpdateModList();
     }
 
     public void ToggleAllOff()
     {
         var baseMod = modEntries.First(x => x.modName == "MafiaBase");
-        var baseActive = baseMod.isActive;
+        var baseActive = baseMod.status;
 
-        modEntries.ForEach(x => x.isActive = 0);
-        baseMod.isActive = baseActive;
+        modEntries.ForEach(x => x.status = ModEntryStatus.Inactive);
+        baseMod.status = baseActive;
 
         UpdateModList();
     }
 
     public void ToggleModStatus()
     {
-        selectedMod.isActive = 1 - selectedMod.isActive;
+        if (selectedMod.status == ModEntryStatus.Incomplete)
+            return;
+
+        selectedMod.status = 1 - selectedMod.status;
         UpdateStatusButton(selectedMod);
     }
 
@@ -199,7 +238,7 @@ public class ModManagerGUI : MonoBehaviour {
 
         foreach (var mod in modEntries)
         {
-            newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.isActive.ToString()));
+            newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.status == ModEntryStatus.Active ? "1" : "0"));
         }
 
         modManager.StoreLoadOrder(newLoadOrder.ToArray());

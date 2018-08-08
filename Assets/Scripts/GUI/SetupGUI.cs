@@ -19,7 +19,7 @@ public class SetupGUI : MonoBehaviour {
 
         foreach (var mod in mods.modEntries)
         {
-            if (mod.isActive != 0)
+            if (mod.status != 0)
             {
                 modManager.LoadMod(mod.modName);
             }

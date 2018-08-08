@@ -27,6 +27,23 @@ namespace MafiaUnity
         
         public void Init()
         {
+            bool isMissingDependency = false;
+
+            foreach (var dep in dependencies)
+            {
+                if (GameManager.instance.modManager.GetActiveMod(dep) == null)
+                {
+                    Debug.LogErrorFormat("Mod: '{0}' is missing a dependency '{1}'", name, dep);
+                    isMissingDependency = true;
+                }
+            }
+
+            if (isMissingDependency)
+            {
+                Debug.LogErrorFormat("Make sure all dependencies for mod '{0}' are met.", name);
+                return;
+            }
+
             GameManager.instance.fileSystem.AddOptionalPath(modPath);
 
             var scriptsPath = Path.Combine(modPath, "Scripts");
@@ -78,10 +95,18 @@ namespace MafiaUnity
         }
     }
 
+    public enum ModEntryStatus
+    {
+        Inactive,
+        Active,
+        Incomplete
+    }
+
     public class ModEntry
     {
         public string modName;
         public Mod modMeta;
-        public int isActive;
+        public ModEntryStatus status;
+        public List<string> missingDependencies = new List<string>();
     }
 }

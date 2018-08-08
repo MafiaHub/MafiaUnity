@@ -215,7 +215,7 @@ namespace MafiaUnity
                     var modEntry = new ModEntry();
                     modEntry.modMeta = modManager.ReadModInfo(modName);
                     modEntry.modName = modName;
-                    modEntry.isActive = 0;
+                    modEntry.status = 0;
                     mods.Add(modEntry);
                 }
 
@@ -230,7 +230,7 @@ namespace MafiaUnity
                         if (mod.modName == load.Key)
                         {
                             if (load.Value == "1")
-                                mod.isActive = 1;
+                                mod.status = ModEntryStatus.Active;
 
                             modEntries.Add(mod);
                             newMods.Remove(mod);
@@ -278,7 +278,7 @@ namespace MafiaUnity
                         }
                     }
 
-                    modEntry.isActive = GUILayout.Toggle(modEntry.isActive != 0, "Active") ? 1 : 0;
+                    modEntry.status = GUILayout.Toggle(modEntry.status == ModEntryStatus.Active, "Active") ? ModEntryStatus.Active : ModEntryStatus.Inactive;
 
                     EditorGUILayout.LabelField(modEntry.modName);
                 }
@@ -322,7 +322,7 @@ namespace MafiaUnity
 
                     foreach (var mod in modEntries)
                     {
-                        if (mod.isActive != 0)
+                        if (mod.status != 0)
                         {
                             modManager.LoadMod(mod.modName);
                         }
@@ -339,7 +339,7 @@ namespace MafiaUnity
 
             foreach (var mod in modEntries)
             {
-                newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.isActive.ToString()));
+                newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.status.ToString()));
             }
 
             modManager.StoreLoadOrder(newLoadOrder.ToArray());
