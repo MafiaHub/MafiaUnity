@@ -64,13 +64,7 @@ public class ModManagerGUI : MonoBehaviour {
 
         foreach (var newMod in newMods)
         {
-            if (newMod.modName == "MafiaBase")
-            {
-                newMod.status = ModEntryStatus.Active;
-                modEntries.Insert(0, newMod);
-            }
-            else
-                modEntries.Add(newMod);
+            modEntries.Add(newMod);
         }
 
         ApplyChanges();

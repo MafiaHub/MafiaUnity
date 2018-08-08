@@ -128,12 +128,18 @@ namespace MafiaUnity
 
             var contents = File.ReadAllLines(Path.Combine(MODS_PATH, "loadorder.txt"));
 
+            loadableMods.Add(new KeyValuePair<string, string>("MafiaBase", "1"));
+
             foreach (var line in contents)
             {
                 var vals = line.Split(' ');
+
+                if (vals[0] == "MafiaBase")
+                    continue;
+
                 loadableMods.Add(new KeyValuePair<string, string>(vals[0], vals[1]));
             }
-
+            
             return loadableMods.ToArray();
         }
 
