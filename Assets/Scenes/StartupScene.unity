@@ -1344,6 +1344,7 @@ MonoBehaviour:
   modMissingDeps: {fileID: 741409513}
   activeColor: {r: 0.81350124, g: 0.9528302, b: 0.81350124, a: 1}
   inactiveColor: {r: 1, g: 0.7216981, b: 0.7216981, a: 1}
+  incompleteColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &453668211
 GameObject:
   m_ObjectHideFlags: 0
@@ -4353,7 +4354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1726098538
 MonoBehaviour:
   m_ObjectHideFlags: 0
