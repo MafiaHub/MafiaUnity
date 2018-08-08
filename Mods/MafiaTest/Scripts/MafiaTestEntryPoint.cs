@@ -30,6 +30,13 @@ class MafiaTestGameMode : IGameMode
 
 		var player = new GameObject("Tommy Test");
 		player.AddComponent<TestPlayerController>();
+
+		var sun = new GameObject("Sun");
+		sun.transform.rotation = Quaternion.Euler(50, -30, 0);
+
+		var sunLight = sun.AddComponent<Light>();
+		sunLight.color = new Color(1f, 0.9030898f, 0.7028302f);
+		sunLight.type = LightType.Directional;
 	}
 
 	// on game mode switch -- leaving primary
