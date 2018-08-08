@@ -345,6 +345,77 @@ namespace MafiaUnity
             modManager.StoreLoadOrder(newLoadOrder.ToArray());
         }
     }
+
+    [Serializable]
+    public class MafiaGenerateSolution : EditorWindow
+    {
+        public static void Init()
+        {
+            var window = GetWindow<MafiaGenerateSolution>();
+            window.titleContent = new GUIContent("Solution Generation");
+            window.Show();
+        }
+
+        private void OnGUI()
+        {
+            GUILayout.BeginHorizontal();
+            {
+                unityPath = GUILayout.TextField(unityPath);
+
+                if (GUILayout.Button("Browse"))
+                {
+                    unityPath = EditorUtility.OpenFolderPanel("Select Unity installation directory", "", "");
+                }
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            {
+                solutionPath = GUILayout.TextField(solutionPath);
+
+                if (GUILayout.Button("Browse"))
+                {
+                    solutionPath = EditorUtility.OpenFolderPanel("Select output directory", "", "");
+                }
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            {
+                solutionName = GUILayout.TextField(solutionName);
+
+                if (GUILayout.Button("Generate"))
+                {
+                    Debug.Log("Generating .sln file...");
+
+                    var projectPath = Path.Combine(solutionPath, solutionName);
+
+                    if (!Directory.Exists(projectPath))
+                        Directory.CreateDirectory(projectPath);
+
+                    var solutionTemplate = File.ReadAllText(SOLUTION_TPL);
+                    var projectTemplate = File.ReadAllText(PROJECT_TPL);
+
+                    solutionTemplate = solutionTemplate.Replace("[SOLUTION_NAME]", solutionName);
+                    projectTemplate = projectTemplate.Replace("[UNITY_PATH]", unityPath);
+                    
+                    string mafiaPath = Path.Combine(Application.dataPath, "..");
+                    projectTemplate = projectTemplate.Replace("[MAFIA_PATH]", mafiaPath);
+
+                    File.WriteAllText(Path.Combine(solutionPath, solutionName + ".sln"), solutionTemplate);
+                    File.WriteAllText(Path.Combine(projectPath, solutionName + ".csproj"), projectTemplate);
+                }
+            }
+            GUILayout.EndHorizontal();
+        }
+
+        const string SOLUTION_TPL = @"Assets/Resources/Solution.tpl";
+        const string PROJECT_TPL = @"Assets/Resources/Project.tpl";
+
+        string unityPath = @"F:/Unity/2018.2.2f1";
+        string solutionPath = @"F:/OpenMF.git/Mods/MafiaBase/Temp";
+        string solutionName = @"MafiaBase";
+    }
     
     [Serializable]
     public class MafiaObjectInjector : EditorWindow

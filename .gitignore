@@ -37,9 +37,7 @@ sysinfo.txt
 /Assets/External Assets/*
 !/Assets/External Assets/.gitkeep
 /[Mm]ods/*
-/[Mm]ods/MafiaBase/Scripts/MafiaBase.sln
-/[Mm]ods/MafiaBase/Scripts/MafiaBase
-/[Mm]ods/MafiaBase/Scripts/.vs
+/[Mm]ods/*/Temp
 !/[Mm]ods/MafiaBase
 !/[Mm]ods/MafiaTest
 !/[Mm]ods/ExampleMod

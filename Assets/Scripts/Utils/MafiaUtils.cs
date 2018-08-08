@@ -21,6 +21,12 @@ namespace MafiaUnity
         {
             MafiaModManager.Init();
         }
+
+        [MenuItem("Mafia SDK/Solution Generator")]
+        static void SpawnSolutionGenerator()
+        {
+            MafiaGenerateSolution.Init();
+        }
     }
 #endif
 }
