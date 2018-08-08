@@ -187,7 +187,7 @@ namespace AssetBundleBrowser
                     m_UserData.m_BuildTarget = tgt;
                     if(m_UserData.m_UseDefaultPath)
                     {
-                        m_UserData.m_OutputPath = "AssetBundles/";
+                        m_UserData.m_OutputPath = "Assets/External Assets/Bundles/";
                         m_UserData.m_OutputPath += m_UserData.m_BuildTarget.ToString();
                         //EditorUserBuildSettings.SetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath", m_OutputPath);
                     }
@@ -405,7 +405,7 @@ namespace AssetBundleBrowser
         private void ResetPathToDefault()
         {
             m_UserData.m_UseDefaultPath = true;
-            m_UserData.m_OutputPath = "AssetBundles/";
+            m_UserData.m_OutputPath = "Assets/External Assets/Bundles/";
             m_UserData.m_OutputPath += m_UserData.m_BuildTarget.ToString();
             //EditorUserBuildSettings.SetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath", m_OutputPath);
         }
