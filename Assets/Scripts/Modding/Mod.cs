@@ -38,11 +38,14 @@ namespace MafiaUnity
 
                 foreach (var fileName in fileNames)
                 {
-                    if (File.Exists(fileName))
+                    if (File.Exists(fileName) && Path.GetExtension(fileName) == ".cs")
                         sources.Add(File.ReadAllText(fileName));
                 }
 
-                assembly = Compiler.CompileSource(sources.Where(x => Path.GetExtension(x) == "cs").ToArray(), true);
+                if (sources.Count < 1)
+                    return;
+
+                assembly = Compiler.CompileSource(sources.ToArray(), true);
 
                 if (assembly == null)
                 {

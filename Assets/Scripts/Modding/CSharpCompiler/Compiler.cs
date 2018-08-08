@@ -83,8 +83,8 @@ namespace MafiaUnity
                 var msg = new StringBuilder();
                 foreach (CompilerError error in result.Errors)
                 {
-                    msg.AppendFormat("Error ({0}): {1}\n",
-                        error.ErrorNumber, error.ErrorText);
+                    msg.AppendFormat("Error ({0}, {2}) in {3} : {1}\n",
+                        error.ErrorNumber, error.ErrorText, error.Line, error.FileName);
                 }
 
                 throw new Exception(msg.ToString());
