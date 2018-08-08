@@ -93,6 +93,16 @@ namespace MafiaUnity
         {
             GameManager.instance.fileSystem.RemoveOptionalPath(modPath);
         }
+
+        public AssetBundle LoadFromFile(string path, uint crc = 0, ulong offset = 0)
+        {
+            var bundlesPath = Path.Combine(modPath, "Bundles");
+
+            if (!Directory.Exists(bundlesPath))
+                return null;
+
+            return AssetBundle.LoadFromFile(Path.Combine(bundlesPath, path), crc, offset);
+        }
     }
 
     public enum ModEntryStatus
