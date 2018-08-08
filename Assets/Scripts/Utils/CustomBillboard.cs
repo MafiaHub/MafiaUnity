@@ -15,9 +15,8 @@ namespace MafiaUnity
         // Update is called once per frame
         void Update()
         {
-            var dir = Camera.main.transform.position - transform.position;
-            dir.y = 0f;
-            transform.localRotation = Quaternion.LookRotation(dir, Vector3.up);
+            transform.LookAt(Camera.main.transform);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
     }
 }
