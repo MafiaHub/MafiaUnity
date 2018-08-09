@@ -174,7 +174,7 @@ namespace AssetBundleBrowser
             bool newState = false;
             var centeredStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
             centeredStyle.alignment = TextAnchor.UpperCenter;
-            GUILayout.Label(new GUIContent("Example build setup"), centeredStyle);
+            
             //basic options
             EditorGUILayout.Space();
             GUILayout.BeginVertical();

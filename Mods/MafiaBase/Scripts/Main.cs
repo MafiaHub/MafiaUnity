@@ -23,7 +23,8 @@ class MafiaGameMode : IGameMode
 	// on gm registration
 	void IGameMode.Register()
 	{
-		
+		var go = new GameObject("DebugMode");
+		go.AddComponent<DebugConsole>();
 	}
 
 	// on game mode switch -- being primary
