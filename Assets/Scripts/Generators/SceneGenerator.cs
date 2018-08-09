@@ -41,17 +41,18 @@ namespace MafiaUnity
 
                 foreach (var obj in sceneLoader.objects)
                 {
-                    if (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model)
-                        continue;
-
                     GameObject newObject;
 
-                    if (obj.Value.modelName == null)
+                    if (obj.Value.modelName == null || obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model)
                         newObject = new GameObject();
                     else
                         newObject = GameManager.instance.modelGenerator.LoadObject(Path.Combine("models", obj.Value.modelName));
                     
                     newObject.name = obj.Value.name;
+
+                    newObject.transform.localPosition = obj.Value.pos;
+                    newObject.transform.localRotation = obj.Value.rot;
+                    newObject.transform.localScale = obj.Value.scale;
                     
                     objects.Add(new KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>(newObject, obj.Value));
                 }
@@ -82,6 +83,12 @@ namespace MafiaUnity
                     specObject.Init();
                 }
             }
+
+            // NOTE(zaklaus): Hardcode 'Primary sector' scale to (1,1,1)
+            var primarySector = GameObject.Find("Primary sector");
+            
+            if (primarySector != null)
+                primarySector.transform.localScale = new Vector3(1,1,1);
 
             StoreChachedObject(path, rootObject);
 

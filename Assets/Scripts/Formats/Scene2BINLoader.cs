@@ -131,7 +131,7 @@ namespace MafiaUnity
                 public float lightUnk1;
                 public float lightNear;
                 public float lightFar;
-                public char[] lightSectors; //5000
+                public string lightSectors; //5000
                 public SpecialProp physicalObject;
             }
 
@@ -366,7 +366,9 @@ namespace MafiaUnity
 
                     case ObjectProperty.Light_Sector:
                         {
-                            //read(srcFile, object->mLightSectors, header->mSize);
+                            var charName = reader.ReadBytes((int)header.size - 6);
+
+                            newObject.lightSectors = System.Text.Encoding.ASCII.GetString(charName);
                         }
                         break;
 

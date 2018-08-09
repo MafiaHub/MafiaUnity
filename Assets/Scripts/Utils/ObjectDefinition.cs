@@ -21,6 +21,21 @@ namespace MafiaUnity
 
                 case MafiaFormats.Scene2BINLoader.ObjectType.Light:
                 {
+                    //NOTE(zaklaus): Re-parent the light
+                    var parent = GameObject.Find(data.lightSectors);
+
+                    if (parent != null)
+                    {
+                        transform.parent = parent.transform;
+
+                        transform.localPosition = data.pos;
+                        transform.localRotation = data.rot;
+                        transform.localScale = data.scale;
+                    }
+
+                    if (data.lightType != MafiaFormats.Scene2BINLoader.LightType.Point)
+                        break;
+
                     var light = gameObject.AddComponent<Light>();
 
                     light.type = LightType.Point;
