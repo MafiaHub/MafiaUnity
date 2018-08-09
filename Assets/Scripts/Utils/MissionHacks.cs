@@ -12,6 +12,24 @@ namespace MafiaUnity
     {
         public MissionHacks(string missionName, MafiaFormats.Scene2BINLoader data)
         {
+            // Fix backdrop sector
+            var backdrop = GameObject.Find("Backdrop sector");
+            {
+                if (backdrop != null)
+                {
+                    backdrop.AddComponent<BackdropManipulator>();
+                }
+            }
+
+            // Change view distance
+            {
+                var mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+
+                var viewDistance = data.viewDistance;
+
+                mainCamera.farClipPlane = viewDistance;
+            }
+
             switch (missionName)
             {
                 // example usage
@@ -66,25 +84,26 @@ namespace MafiaUnity
                         SetUpSkybox(box02.transform);
                 }
                 break;
-            }
 
-            // Fix backdrop sector
-            {
-                var backdrop = GameObject.Find("Backdrop sector");
-
-                if (backdrop != null)
+                case "mise20-galery":
                 {
-                    backdrop.AddComponent<BackdropManipulator>();
+                    var obloha = GameObject.Find("obloha");
+                    var obloha01 = GameObject.Find("obloha01");
+
+                    if (obloha != null)
+                    {
+                        SetUpSkybox(obloha.transform);
+                        obloha.transform.parent = backdrop.transform;
+
+                        obloha.transform.localScale = new Vector3(2, 2, 2);
+                    }
+
+                    if (obloha01 != null)
+                    {
+                        obloha01.SetActive(false);
+                    }
                 }
-            }
-
-            // Change view distance
-            {
-                var mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
-
-                var viewDistance = data.viewDistance;
-
-                mainCamera.farClipPlane = viewDistance;
+                break;
             }
         }
 
@@ -134,7 +153,7 @@ namespace MafiaUnity
 
         private void OnDestroy()
         {
-            GameObject.DestroyImmediate(skyboxCamera, true);
+            GameObject.Destroy(skyboxCamera);
         }
     }
 }
