@@ -58,6 +58,9 @@ namespace MafiaUnity
             if (File.Exists(Path.Combine(gamePath, path)))
                 return true;
 
+            if (DTAFileExists(path))
+                return true;
+
             return false;
         }
 
