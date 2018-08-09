@@ -69,11 +69,7 @@ namespace MafiaUnity
         {
             if (mission != null)
             {
-#if UNITY_EDITOR
-                GameObject.DestroyImmediate(mission.rootObject);
-#else
-                GameObject.Destroy(mission.rootObject);
-#endif
+                GameObject.DestroyImmediate(mission.rootObject, true);
 
                 mission = null;
 
@@ -81,6 +77,7 @@ namespace MafiaUnity
                     onMissionDestroyed.Invoke(mission.missionName);
             }
 
+            Resources.UnloadUnusedAssets();
         }
 
     }

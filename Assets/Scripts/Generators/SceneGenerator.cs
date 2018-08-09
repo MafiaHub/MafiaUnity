@@ -12,7 +12,7 @@ namespace MafiaUnity
 
         public override GameObject LoadObject(string path)
         {
-            GameObject rootObject = LoadCachedObject(path);
+            GameObject rootObject = null;
 
             if (rootObject == null)
                 rootObject = new GameObject(path);
@@ -99,7 +99,7 @@ namespace MafiaUnity
             if (primarySector != null)
                 primarySector.transform.localScale = new Vector3(1,1,1);
 
-            StoreChachedObject(path, rootObject);
+            //StoreChachedObject(path, rootObject);
 
             return rootObject;
         }

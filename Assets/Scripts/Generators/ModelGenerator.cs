@@ -9,15 +9,17 @@ namespace MafiaUnity
 {
     public class ModelGenerator : BaseGenerator
     {
+        Dictionary<string, Texture2D> cachedTextures = new Dictionary<string, Texture2D>();
+
         public override GameObject LoadObject(string path)
         {
             GameObject rootObject = LoadCachedObject(path);
-
+            
             if (rootObject == null)
                 rootObject = new GameObject(path);
             else
                 return rootObject;
-            
+
             FileStream fs;
 
             try
@@ -215,13 +217,11 @@ namespace MafiaUnity
                     }
                 }
 
-
                 children.Clear();
             }
             
             StoreChachedObject(path, rootObject);
             
-
             fs.Close();
 
             return rootObject;
@@ -318,39 +318,51 @@ namespace MafiaUnity
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                                 BMPLoader.useTransparencyKey = true;
 
-                            BMPImage image = null;
+                            Texture2D tex = null;
+                            string finalMapName = "";
 
-                            try
-                            {
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.diffuseMapName)));
-                                else if (mafiaMat.alphaMapName != null)
-                                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", mafiaMat.alphaMapName)));
-                            }
-                            catch
-                            {
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                    Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.diffuseMapName);
-                                else if (mafiaMat.alphaMapName != null)
-                                    Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.alphaMapName);
+                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
+                                finalMapName = mafiaMat.diffuseMapName;
+                            else if (mafiaMat.alphaMapName != null)
+                                finalMapName = mafiaMat.alphaMapName;
 
+                            if (cachedTextures.ContainsKey(finalMapName))
+                                tex = cachedTextures[finalMapName];
+
+                            if (tex == null)
+                            {
+                                BMPImage image = null;
+
+                                try
+                                {
+                                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", finalMapName)));
+                                }
+                                catch
+                                {
+                                    if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
+                                        Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.diffuseMapName);
+                                    else if (mafiaMat.alphaMapName != null)
+                                        Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.alphaMapName);
+
+                                }
+
+                                if (image != null)
+                                    tex = image.ToTexture2D();
                             }
 
                             BMPLoader.useTransparencyKey = false;
 
-                            if (image != null)
+                            if (tex != null)
                             {
-                                Texture2D tex = image.ToTexture2D();
-
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                    tex.name = mafiaMat.diffuseMapName;
-                                else if (mafiaMat.alphaMapName != null)
-                                    tex.name = mafiaMat.alphaMapName;
+                                tex.name = finalMapName;
 
                                 mat.SetTexture("_MainTex", tex);
 
                                 if (GameManager.instance.cvarManager.Get("filterMode", "1") == "0")
                                     tex.filterMode = FilterMode.Point;
+
+                                if (!cachedTextures.ContainsKey(finalMapName))
+                                    cachedTextures.Add(finalMapName, tex);
                             }
 
                             if (mafiaMat.transparency < 1)

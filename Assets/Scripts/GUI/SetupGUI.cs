@@ -10,8 +10,19 @@ public class SetupGUI : MonoBehaviour {
     public GameObject mainMenu;
     public GameObject startupLight;
 
+    GameObject background;
+
     public void StartGame()
     {
+        // Revert settings back to default.
+        RenderSettings.ambientLight = new Color(54, 58, 66);
+        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
+
+        GameObject.Destroy(startupLight);
+        GameObject.DestroyImmediate(background, true);
+        GameObject.Destroy(GameObject.Find("EventSystem"));
+        GameObject.Destroy(gameObject);
+        
         var modManager = GameManager.instance.modManager;
         var mods = GetComponent<ModManagerGUI>();
 
@@ -22,14 +33,6 @@ public class SetupGUI : MonoBehaviour {
                 modManager.LoadMod(mod.modName);
             }
         }
-
-        // Revert settings back to default.
-        RenderSettings.ambientLight = new Color(54, 58, 66);
-        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
-
-        GameObject.Destroy(startupLight);
-        GameObject.Destroy(GameObject.Find("EventSystem"));
-        GameObject.Destroy(gameObject);
     }
 
     public void PathSelectionMenu()
@@ -69,7 +72,11 @@ public class SetupGUI : MonoBehaviour {
         {
             bgWasSetup = true;
 
-            GameManager.instance.missionManager.LoadMission("00menu");
+            var scenery = GameManager.instance.modelGenerator.LoadObject("missions/00menu/scene.4ds");
+            background = GameManager.instance.sceneGenerator.LoadObject("missions/00menu/scene2.bin");
+            scenery.transform.SetParent(background.transform);
+
+            GameManager.instance.sceneGenerator.lastLoader = null;
         }
     }
 }
