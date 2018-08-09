@@ -107,11 +107,31 @@ namespace MafiaUnity
                     }
                 }
                 break;
+
+                case "freeride":
+                {
+                    var box02 = GameObject.Find("zapad/Box02");
+
+                    SetUpSkybox(box02.transform);
+                }
+                break;
+
+                case "freekrajina":
+                {
+                    var box01 = GameObject.Find("denjasno00/Box01");
+                    var box02 = GameObject.Find("denjasno00/Box02");
+
+                    SetUpSkybox(box01.transform);
+                    SetUpSkybox(box02.transform);
+                }
+                break;
             }
         }
 
         void SetUpSkybox(Transform skybox)
         {
+            skybox.gameObject.layer = LayerMask.NameToLayer("Backdrop");
+
             var meshRenderer = skybox.GetComponent<MeshRenderer>();
 
             foreach (var mat in meshRenderer.sharedMaterials)
@@ -139,7 +159,7 @@ namespace MafiaUnity
 
             var cam = skyboxCamera.gameObject.AddComponent<Camera>();
             cam.farClipPlane = 5000f;
-            cam.cullingMask = LayerMask.NameToLayer("Backdrop");
+            cam.cullingMask = (1 << LayerMask.NameToLayer("Backdrop"));
             cam.depth = 1 + mainCamera.GetComponent<Camera>().depth;
             cam.clearFlags = CameraClearFlags.Nothing;
 
