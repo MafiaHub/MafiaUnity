@@ -48,7 +48,7 @@ namespace MafiaUnity
         /// <returns></returns>
         public bool Exists(string path)
         {
-            path = path.ToLower();
+            path = FixPath(path, true);
 
             foreach (var mod in paths)
                 if (File.Exists(Path.Combine(mod, path)))
@@ -68,7 +68,7 @@ namespace MafiaUnity
         /// <returns></returns>
         public string GetPath(string path)
         {
-            path = path.ToLower();
+            path = FixPath(path, true);
 
             foreach (var mod in paths)
                 if (File.Exists(Path.Combine(mod, path)))
@@ -100,11 +100,12 @@ namespace MafiaUnity
         }
 
 
-        string FixPath(string path)
+        string FixPath(string path, bool isFile = false)
         {
             path = path.ToLower();
+            path = path.Replace("\\", "/");
 
-            if (!path.EndsWith("/"))
+            if (!isFile && !path.EndsWith("/"))
                 return path + "/";
 
             return path;
@@ -112,7 +113,7 @@ namespace MafiaUnity
 
         public bool ValidateGamePath(string path)
         {
-            path = path.ToLower();
+            path = FixPath(path);
 
             if (File.Exists(Path.Combine(path, "Game.exe")) && File.Exists(Path.Combine(path, "Setup.exe")))
                 return true;
