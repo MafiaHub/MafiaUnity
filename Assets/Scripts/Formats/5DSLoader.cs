@@ -25,7 +25,7 @@ namespace MafiaUnity
             Chameleon = 123,
         }
         
-        public struct Header
+        public class Header
         {
             // should be "5DS\0" 
             public uint magicByte;
@@ -36,14 +36,14 @@ namespace MafiaUnity
             public uint lengthOfAnimationData;
         }
    
-        public struct Description
+        public class Description
         {
             public ushort numberOfAnimatedObjects;
             // Note: 25 frames = 1 seconds
             public ushort mOverallCountOfFrames;
         }
 
-        public struct PointerTable
+        public class PointerTable
         {
             public uint pointerToString;
             public uint pointerToData;

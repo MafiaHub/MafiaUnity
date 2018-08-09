@@ -53,7 +53,7 @@ namespace MafiaUnity
                         continue;
 
 
-                    if (obj.Value.modelName == null || obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model)
+                    if (obj.Value.modelName == null || (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model && obj.Value.specialType == 0))
                         newObject = new GameObject();
                     else
                         newObject = GameManager.instance.modelGenerator.LoadObject(Path.Combine("models", obj.Value.modelName));

@@ -76,7 +76,10 @@ namespace MafiaUnity
                 Physical = 0x23,
                 Player = 0x02,
                 Character = 0x1B,
-                Car = 0x06,
+                Car = 0x04,
+                Door = 0x06,
+                Dog = 0x15,
+                Pumper = 0x19,
                 Public_Vehicle = 0x08,
                 Script = 0x05,
             }
@@ -92,13 +95,13 @@ namespace MafiaUnity
                 Layered_Fog = 0x08,
             }
 
-            public struct Header
+            public class Header
             {
                 public HeaderType type;
                 public uint size;
             }
 
-            public struct SpecialProp
+            public class PhysicalProp
             {
                 // Physical object properties
                 public float movVal1;
@@ -110,7 +113,23 @@ namespace MafiaUnity
                 public int sound;
             }
 
-            public struct Object
+            public class DoorProp
+            {
+                // Door properties
+                public byte open1;
+                public byte open2;
+                public float moveAngle;
+                public byte open;
+                public byte locked;
+                public float closeSpeed;
+                public float openSpeed;
+                public string openSound;
+                public string closeSound;
+                public string lockedSound;
+                public byte flag;
+            }
+
+            public class Object
             {
                 public ObjectType type;
                 public SpecialObjectType specialType;
@@ -132,7 +151,8 @@ namespace MafiaUnity
                 public float lightNear;
                 public float lightFar;
                 public string lightSectors; //5000
-                public SpecialProp physicalObject;
+                public PhysicalProp physicalObject;
+                public DoorProp doorObject;
             }
 
             public Dictionary<string, Object> objects = new Dictionary<string, Object>();
@@ -209,9 +229,8 @@ namespace MafiaUnity
                                 ReadObject(reader, ref nextHeader, ref newObject, position + 6);
                                 position += nextHeader.size;
                             }
-
-                            //TODO SEction 
-                            if (header.type == HeaderType.Object && !objects.ContainsKey(newObject.name))
+ 
+                            if (header.type == HeaderType.Object)
                             {
                                 objects.Add(newObject.name, newObject);
                             }
@@ -222,6 +241,24 @@ namespace MafiaUnity
                                     var targetObject = objects[newObject.name];
                                     targetObject.specialType = newObject.specialType;
                                     targetObject.physicalObject = newObject.physicalObject;
+                                    targetObject.doorObject = newObject.doorObject;
+                                }
+                                else
+                                {
+                                    var go = GameObject.Find(newObject.name);
+
+                                    if (go != null)
+                                    {
+                                        var objDef = go.GetComponent<ObjectDefinition>();
+
+                                        if (objDef == null)
+                                            objDef = go.AddComponent<ObjectDefinition>();
+
+                                        objDef.data = newObject;
+
+                                        objDef.Init();
+                                    }
+                                    else objects.Add(newObject.name, newObject);
                                 }
                             }
                         }
@@ -259,20 +296,42 @@ namespace MafiaUnity
                             switch (newObject.specialType)
                             {
                                 case SpecialObjectType.Physical:
-                                    {
-                                        reader.BaseStream.Seek(2, SeekOrigin.Current);
-                                        var newSpecialObject = new SpecialProp();
-                                        newSpecialObject.movVal1 = reader.ReadSingle();
-                                        newSpecialObject.movVal2 = reader.ReadSingle();
-                                        newSpecialObject.weight = reader.ReadSingle();
-                                        newSpecialObject.friction = reader.ReadSingle();
-                                        newSpecialObject.movVal4 = reader.ReadSingle();
-                                        newSpecialObject.sound = reader.ReadInt32();
-                                        reader.BaseStream.Seek(1, SeekOrigin.Current);
-                                        newSpecialObject.movVal5 = reader.ReadInt32();
-                                        newObject.physicalObject = newSpecialObject;
-                                    }
-                                    break;
+                                {
+                                    reader.BaseStream.Seek(2, SeekOrigin.Current);
+                                    var newSpecialObject = new PhysicalProp();
+                                    newSpecialObject.movVal1 = reader.ReadSingle();
+                                    newSpecialObject.movVal2 = reader.ReadSingle();
+                                    newSpecialObject.weight = reader.ReadSingle();
+                                    newSpecialObject.friction = reader.ReadSingle();
+                                    newSpecialObject.movVal4 = reader.ReadSingle();
+                                    newSpecialObject.sound = reader.ReadInt32();
+                                    reader.BaseStream.Seek(1, SeekOrigin.Current);
+                                    newSpecialObject.movVal5 = reader.ReadInt32();
+                                    newObject.physicalObject = newSpecialObject;
+                                }
+                                break;
+
+                                case SpecialObjectType.Door:
+                                {
+                                    reader.BaseStream.Seek(5, SeekOrigin.Current);
+                                    var newSpecialObject = new DoorProp();
+                                    newSpecialObject.open1 = reader.ReadByte();
+                                    newSpecialObject.open2 = reader.ReadByte();
+                                    newSpecialObject.moveAngle = reader.ReadSingle();
+                                    newSpecialObject.open = reader.ReadByte();
+                                    newSpecialObject.locked = reader.ReadByte();
+                                    newSpecialObject.closeSpeed = reader.ReadSingle();
+                                    newSpecialObject.openSpeed = reader.ReadSingle();
+                                    newSpecialObject.openSound = reader.ReadString();
+                                    reader.BaseStream.Seek((16 - newSpecialObject.openSound.Length - 1), SeekOrigin.Current);
+                                    newSpecialObject.closeSound = reader.ReadString();
+                                    reader.BaseStream.Seek((16 - newSpecialObject.closeSound.Length - 1), SeekOrigin.Current);
+                                    newSpecialObject.lockedSound = reader.ReadString();
+                                    reader.BaseStream.Seek((16 - newSpecialObject.lockedSound.Length - 1), SeekOrigin.Current);
+                                    newSpecialObject.flag = reader.ReadByte();
+                                    newObject.doorObject = newSpecialObject;
+                                }
+                                break;
                             }
                         }
                         break;

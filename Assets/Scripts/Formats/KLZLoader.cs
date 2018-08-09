@@ -19,7 +19,7 @@ namespace MafiaUnity
             REFERENCE_CYLINDER = 0x84
         }
 
-        public struct Header
+        public class Header
         {
             public uint signature;
             public uint version;
@@ -29,13 +29,13 @@ namespace MafiaUnity
             public uint unknown2;
         }
 
-        public struct Link
+        public class Link
         {
             public uint flags;
             public string name;
         }
 
-        public struct DataHeader
+        public class DataHeader
         {
             public float gridMinX;
             public float gridMinY;
@@ -65,7 +65,7 @@ namespace MafiaUnity
             public uint unknown1;
         }
 
-        public struct Properties
+        public class Properties
         {
             public byte material;
             public byte flags;
@@ -73,14 +73,14 @@ namespace MafiaUnity
             public byte unknown;    // different values for different collision types of objects
         }
     
-        public struct FaceVertexIndex
+        public class FaceVertexIndex
         {
             public ushort index;
             public ushort link;            // index to link table, this will be the same for all three indices of one face
         }  
 ;
         
-        public struct FaceCol
+        public class FaceCol
         {
             public Properties properties;        // NOTE(ASM): Material (8 bit) | Flags (8 bit) | SortInfo (8 bit) | 0 (8 bit)
             public FaceVertexIndex[] indices; // [3]
@@ -88,7 +88,7 @@ namespace MafiaUnity
             public float distance;
         }
 
-        public struct AABBCol
+        public class AABBCol
         {
             public Properties properties;   // NOTE(ASM): Material(8 bit) | Flags (8 bit) | 0 (8 bit) | 0x81 (8 bit)
             public uint link;         // NOTE(ASM): index into LinkNameOffsetTable
@@ -96,7 +96,7 @@ namespace MafiaUnity
             public Vector3 max;              // second point that defines the box in space
         }                   // axis-aligned bounding box
 
-        public struct XTOBBCol
+        public class XTOBBCol
         {
             public Properties properties;   // NOTE(ASM): Material(8 bit) | Flags (8 bit) | 0 (8 bit) | 0x80 (8 bit)
             public uint link;
@@ -107,7 +107,7 @@ namespace MafiaUnity
             public Matrix4x4 inverseTransform;
         }                 // oriented bounding box, in addition to OBB has an additional precomputed AABB
 
-        public struct CylinderCol
+        public class CylinderCol
         {
             public Properties properties;    // NOTE(ASM): Material(8 bit) | Flags (8 bit) | 0 (8 bit) | 0x84 (8 bit)
             public uint link;
@@ -115,7 +115,7 @@ namespace MafiaUnity
             public float radius;
         }              // cylindrical collision object
   
-        public struct OBBCol
+        public class OBBCol
         {
             public Properties properties;   // NOTE(ASM): Material(8 bit) | Flags (8 bit) | 0 (8 bit) | 0x83 (8 bit)
             public uint link;
@@ -124,7 +124,7 @@ namespace MafiaUnity
             public Matrix4x4 inverseTransform;
         }                   // oriented bounding box
 
-        public struct SphereCol
+        public class SphereCol
         {
             public Properties properties;   // NOTE(ASM): Material(8 bit) | Flags (8 bit) | 0 (8 bit) | 0x82 (8 bit)
             public uint link;
@@ -132,7 +132,7 @@ namespace MafiaUnity
             public float radius;
         }                // spherical collision object
 
-        public struct Cell
+        public class Cell
         {
             public uint numObjects;
             public uint[] reserved; // [2]

@@ -28,14 +28,14 @@ namespace MafiaUnity
             Other = 0x1000
         }
        
-        public struct Header
+        public class Header
         {
             // should be 0x1ABCEDF
             public uint magic;
             public uint numPoints;
         }
 
-        public struct Point
+        public class Point
         {
             public Vector3 pos;
             public PointType type;
@@ -46,7 +46,7 @@ namespace MafiaUnity
             public byte exitLinks; // equals mEnterLinks
         }
 
-        public struct Link
+        public class Link
         {
             public ushort targetPoint;
             public ushort linkType;

@@ -46,6 +46,21 @@ namespace MafiaUnity
                 }
                 break;
             }
+
+            switch (data.specialType)
+            {
+                case MafiaFormats.Scene2BINLoader.SpecialObjectType.Physical:
+                {
+
+                }
+                break;
+                
+                case MafiaFormats.Scene2BINLoader.SpecialObjectType.Door:
+                {
+                    Debug.Log(data.doorObject.closeSound);
+                }
+                break;
+            }
         }
     }
 }

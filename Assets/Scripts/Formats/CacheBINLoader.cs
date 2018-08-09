@@ -9,13 +9,13 @@ namespace MafiaUnity
     {
         public class CacheBINLoader : BaseLoader
         {
-            public struct Header
+            public class Header
             {
                 public ushort type;
                 public uint size;
             }
 
-            public struct Instance
+            public class Instance
             {
                 public Header header;
                 public string modelName;
@@ -26,7 +26,7 @@ namespace MafiaUnity
                 public Vector3 scale2;
             }
 
-            public struct Object
+            public class Object
             {
                 public Header header;
                 public string objectName;
@@ -34,7 +34,7 @@ namespace MafiaUnity
                 public List<Instance> instances;
             }
 
-            public struct Chunk
+            public class Chunk
             {
                 public uint version;
             }
