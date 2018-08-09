@@ -145,6 +145,8 @@ namespace MafiaUnity
 
                         case MafiaFormats.VisualMeshType.Glow:
                         {
+                            List<string> usedMaps = new List<string>();
+
                             foreach (var g in mafiaMesh.glow.glowData)
                             {
                                 if (g.materialID-1 >= model.materials.Count)
@@ -155,6 +157,9 @@ namespace MafiaUnity
                                 var mat = model.materials[matID];
                                 var mapName = mat.diffuseMapName;
 
+                                if (usedMaps.Contains(mapName))
+                                    continue;
+
                                 foreach (var m in model.meshes)
                                 {
                                     if (m.standard.lods == null)
@@ -162,6 +167,8 @@ namespace MafiaUnity
 
                                     if (m.standard.lods.Count < 1)
                                         continue;
+
+                                    bool used = false;
 
                                     foreach (var gr in m.standard.lods[0].faceGroups)
                                     {
@@ -176,10 +183,18 @@ namespace MafiaUnity
                                             var flarePrefab = (Flare)Resources.Load("GlowFlare");
                                             var flare = (Flare)GameObject.Instantiate(flarePrefab);
                                             glow.flare = flare;
-                                            continue;
+                                            glow.fadeSpeed = 8f;
+
+                                            used = true;
+                                            break;
                                         }
                                     }
+
+                                    if (used == true)
+                                        break;
                                 }
+
+                                usedMaps.Add(mapName);
                             }
                         }
                         break;
