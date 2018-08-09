@@ -122,7 +122,6 @@ namespace MafiaUnity
                 dtaFiles.Add(lowered, dtaReader);
             }
 
-            Debug.Log(dtaFileName);
             return true;
         }
 
