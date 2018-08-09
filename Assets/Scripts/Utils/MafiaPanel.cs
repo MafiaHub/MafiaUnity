@@ -376,6 +376,7 @@ namespace MafiaUnity
                 if (GUILayout.Button("Browse"))
                 {
                     solutionPath = EditorUtility.OpenFolderPanel("Select output directory", "", "");
+                    solutionName = Path.GetFileName(Directory.GetParent(solutionPath).FullName);
                 }
             }
             GUILayout.EndHorizontal();
@@ -398,8 +399,8 @@ namespace MafiaUnity
 
                     solutionTemplate = solutionTemplate.Replace("[SOLUTION_NAME]", solutionName);
                     projectTemplate = projectTemplate.Replace("[UNITY_PATH]", unityPath);
-                    
-                    string mafiaPath = Path.Combine(Application.dataPath, "..");
+
+                    string mafiaPath = Directory.GetParent(Application.dataPath).FullName;
                     projectTemplate = projectTemplate.Replace("[MAFIA_PATH]", mafiaPath);
 
                     File.WriteAllText(Path.Combine(solutionPath, solutionName + ".sln"), solutionTemplate);
