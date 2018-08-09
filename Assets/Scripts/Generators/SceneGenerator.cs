@@ -85,14 +85,6 @@ namespace MafiaUnity
                     specObject.data = obj.Value;
                     specObject.Init();
                 }
-
-                // NOTE(zaklaus): Get rid of Backdrop sector for now...
-                // TODO(zaklaus): Handle special cases like skybox and such, per mission
-#if UNITY_EDITOR
-                GameObject.DestroyImmediate(backdrop);
-#else
-                GameObject.Destroy(backdrop);
-#endif
             }
 
             // NOTE(zaklaus): Hardcode 'Primary sector' scale to (1,1,1)

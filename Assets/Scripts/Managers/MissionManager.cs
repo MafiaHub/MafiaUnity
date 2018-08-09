@@ -52,6 +52,8 @@ namespace MafiaUnity
             if (gameManager.fileSystem.Exists(missionPath + "tree.klz"))
                 gameManager.cityGenerator.LoadCollisions(missionPath + "tree.klz").transform.parent = missionObject.transform;
 
+            new MissionHacks(missionName);
+
             mission = new Mission
             {
                 missionName = missionName,
