@@ -118,5 +118,10 @@ namespace MafiaUnity
 
             transform.position = mainCamera.position;
         }
+
+        private void OnDestroy()
+        {
+            GameObject.DestroyImmediate(skyboxCamera, true);
+        }
     }
 }
