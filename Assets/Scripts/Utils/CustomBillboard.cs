@@ -15,6 +15,9 @@ namespace MafiaUnity
         // Update is called once per frame
         void Update()
         {
+            if (Camera.main == null)
+                return;
+                
             transform.LookAt(Camera.main.transform);
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }

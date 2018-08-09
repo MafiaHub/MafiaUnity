@@ -41,6 +41,9 @@ namespace MafiaUnity
                     {
                         SetUpSkybox(skybox.transform.Find("Box02"));
                         SetUpSkybox(skybox.transform.Find("Box03"));
+
+                        var slunko = skybox.transform.Find("slunko");
+                        slunko.gameObject.SetActive(false);
                     }
 
                     // handle roof
