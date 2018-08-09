@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>[MAFIA_PATH]\obj\Debug\Assembly-CSharp.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>[UNITY_PATH]\Editor\Data\Managed\UnityEditor.dll</HintPath>
     </Reference>

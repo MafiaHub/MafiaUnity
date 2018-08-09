@@ -400,9 +400,6 @@ namespace MafiaUnity
                     solutionTemplate = solutionTemplate.Replace("[SOLUTION_NAME]", solutionName);
                     projectTemplate = projectTemplate.Replace("[UNITY_PATH]", unityPath);
 
-                    string mafiaPath = Directory.GetParent(Application.dataPath).FullName;
-                    projectTemplate = projectTemplate.Replace("[MAFIA_PATH]", mafiaPath);
-
                     File.WriteAllText(Path.Combine(solutionPath, solutionName + ".sln"), solutionTemplate);
                     File.WriteAllText(Path.Combine(projectPath, solutionName + ".csproj"), projectTemplate);
                 }
