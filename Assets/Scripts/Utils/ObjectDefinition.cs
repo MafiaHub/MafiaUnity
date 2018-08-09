@@ -41,6 +41,7 @@ namespace MafiaUnity
                     light.type = LightType.Point;
 
                     light.intensity = data.lightPower;
+                    light.range = data.lightFar;
                     light.color = new Color(data.lightColour.x, data.lightColour.y, data.lightColour.z);
                 }
                 break;
