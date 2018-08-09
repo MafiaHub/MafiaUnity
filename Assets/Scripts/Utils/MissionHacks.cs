@@ -53,6 +53,19 @@ namespace MafiaUnity
                     }
                 }
                 break;
+
+                case "mise06-autodrom":
+                {
+                    var box01 = GameObject.Find("oblohamirrored/Box01");
+                    var box02 = GameObject.Find("denjasno/Box02");
+
+                    if (box01 != null)
+                        SetUpSkybox(box01.transform);
+
+                    if (box02 != null)
+                        SetUpSkybox(box02.transform);
+                }
+                break;
             }
 
             // Fix backdrop sector
@@ -79,7 +92,7 @@ namespace MafiaUnity
         {
             var meshRenderer = skybox.GetComponent<MeshRenderer>();
 
-            foreach (var mat in meshRenderer.materials)
+            foreach (var mat in meshRenderer.sharedMaterials)
             {
                 mat.shader = Shader.Find("Unlit/Texture");
             }
