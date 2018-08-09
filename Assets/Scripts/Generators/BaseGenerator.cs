@@ -26,10 +26,14 @@ namespace MafiaUnity
 
         protected GameObject StoreChachedObject(string path, GameObject obj)
         {
-            if (!models.ContainsKey(path))
-                models.Add(path, obj);
+            var copy = GameObject.Instantiate(obj, obj.transform);
+            copy.SetActive(false);
+            copy.name = path + " (cached)";
 
-            return obj;
+            if (!models.ContainsKey(path))
+                models.Add(path, copy);
+
+            return copy;
         }
 
         public virtual GameObject LoadObject(string path)

@@ -10,8 +10,6 @@ public class SetupGUI : MonoBehaviour {
     public GameObject mainMenu;
     public GameObject startupLight;
 
-    GameObject background;
-
     public void StartGame()
     {
         var modManager = GameManager.instance.modManager;
@@ -30,7 +28,6 @@ public class SetupGUI : MonoBehaviour {
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
 
         GameObject.Destroy(startupLight);
-        GameObject.Destroy(background);
         GameObject.Destroy(GameObject.Find("EventSystem"));
         GameObject.Destroy(gameObject);
     }
@@ -72,9 +69,7 @@ public class SetupGUI : MonoBehaviour {
         {
             bgWasSetup = true;
 
-            var scenery = GameManager.instance.modelGenerator.LoadObject("missions/00menu/scene.4ds");
-            background = GameManager.instance.sceneGenerator.LoadObject("missions/00menu/scene2.bin");
-            scenery.transform.SetParent(background.transform);
+            GameManager.instance.missionManager.LoadMission("00menu");
         }
     }
 }

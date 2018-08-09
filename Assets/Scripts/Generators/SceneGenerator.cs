@@ -42,9 +42,16 @@ namespace MafiaUnity
                 var backdrop = new GameObject("Backdrop sector");
                 backdrop.transform.parent = rootObject.transform;
 
+                var primary = new GameObject("Primary sector");
+                primary.transform.parent = rootObject.transform;
+
                 foreach (var obj in sceneLoader.objects)
                 {
                     GameObject newObject;
+
+                    if (obj.Value.name == "Primary sector")
+                        continue;
+
 
                     if (obj.Value.modelName == null || obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model)
                         newObject = new GameObject();
@@ -75,7 +82,6 @@ namespace MafiaUnity
                     }
                     else
                         newObject.transform.parent = rootObject.transform;
-
 
                     newObject.transform.localPosition = obj.Value.pos;
                     newObject.transform.localRotation = obj.Value.rot;

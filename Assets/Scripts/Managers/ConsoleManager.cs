@@ -82,6 +82,13 @@ namespace MafiaUnity
             {
                 return SetCvar(text, CvarManager.CvarMode.Archived);
             });
+
+            commands.Add("loadMission", (string text) =>
+            {
+                GameManager.instance.missionManager.LoadMission(text);
+
+                return "ok";
+            });
         }
 
         string SetCvar(string text, CvarManager.CvarMode mode)

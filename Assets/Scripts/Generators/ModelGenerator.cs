@@ -219,7 +219,7 @@ namespace MafiaUnity
                 children.Clear();
             }
             
-            //StoreChachedObject(path, rootObject);
+            StoreChachedObject(path, rootObject);
             
 
             fs.Close();
