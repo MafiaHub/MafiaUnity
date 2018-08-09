@@ -20,11 +20,11 @@ namespace MafiaUnity
             else
                 return rootObject;
 
-            FileStream fs;
+            Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
+                fs = GameManager.instance.fileSystem.GetStreamFromPath(path);
             }
             catch (Exception ex)
             {
@@ -337,7 +337,7 @@ namespace MafiaUnity
 
                                 try
                                 {
-                                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(Path.Combine("maps", finalMapName)));
+                                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", finalMapName)));
                                 }
                                 catch
                                 {
@@ -397,7 +397,7 @@ namespace MafiaUnity
                                         try
                                         {
                                             var animPath = Path.Combine("maps", baseName + k.ToString("D2") + "." + ext);
-                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetPath(animPath));
+                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetStreamFromPath(animPath));
 
                                             if (frameImage == null)
                                                 continue;

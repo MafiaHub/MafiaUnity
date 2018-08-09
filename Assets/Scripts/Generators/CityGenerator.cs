@@ -16,11 +16,11 @@ namespace MafiaUnity
             else
                 return rootObject;
 
-            FileStream fs;
+            Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
+                fs = GameManager.instance.fileSystem.GetStreamFromPath(path);
             }
             catch
             {
@@ -98,11 +98,11 @@ namespace MafiaUnity
             else
                 return rootObject;
 
-            FileStream fs;
+            Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(path), FileMode.Open);
+                fs = GameManager.instance.fileSystem.GetStreamFromPath(path);
             }
             catch
             {
