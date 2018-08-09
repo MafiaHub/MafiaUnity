@@ -327,6 +327,8 @@ namespace MafiaUnity
                             modManager.LoadMod(mod.modName);
                         }
                     }
+
+                    modManager.InitializeMods();
                 }
             }
             GUILayout.EndHorizontal();

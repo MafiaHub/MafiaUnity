@@ -328,8 +328,10 @@ namespace MafiaUnity
                             else if (mafiaMat.alphaMapName != null)
                                 finalMapName = mafiaMat.alphaMapName;
 
-                            if (cachedTextures.ContainsKey(finalMapName))
-                                tex = cachedTextures[finalMapName];
+                            var modMapName = GameManager.instance.fileSystem.GetPath(Path.Combine("maps", finalMapName));
+
+                            if (cachedTextures.ContainsKey(modMapName))
+                                tex = cachedTextures[modMapName];
 
                             if (tex == null)
                             {
@@ -363,8 +365,8 @@ namespace MafiaUnity
                                 if (GameManager.instance.cvarManager.Get("filterMode", "1") == "0")
                                     tex.filterMode = FilterMode.Point;
 
-                                if (!cachedTextures.ContainsKey(finalMapName))
-                                    cachedTextures.Add(finalMapName, tex);
+                                if (!cachedTextures.ContainsKey(modMapName))
+                                    cachedTextures.Add(modMapName, tex);
                             }
 
                             if (mafiaMat.transparency < 1)

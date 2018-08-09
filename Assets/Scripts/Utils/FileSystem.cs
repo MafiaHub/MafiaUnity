@@ -17,7 +17,7 @@ namespace MafiaUnity
         /// <param name="path"></param>
         public void AddOptionalPath(string path)
         {
-            paths.Insert(0, FixPath(path));
+            paths.Insert(0, Path.Combine(FixPath(path), "Data"));
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace MafiaUnity
         /// <param name="path"></param>
         public void RemoveOptionalPath(string path)
         {
-            paths.Remove(FixPath(path));
+            paths.Remove(Path.Combine(FixPath(path), "Data"));
         }
 
         /// <summary>
@@ -163,12 +163,12 @@ namespace MafiaUnity
 
             foreach (var mod in paths)
                 if (File.Exists(Path.Combine(mod, path)))
-                    return mod + path;
+                    return Path.Combine(mod, path);
 
             if (File.Exists(Path.Combine(gamePath, path)))
-                return gamePath + path;
+                return Path.Combine(gamePath, path);
 
-            return "";
+            return path;
         }
 
         /// <summary>
@@ -184,14 +184,16 @@ namespace MafiaUnity
             //Check files in normal file system
             foreach (var mod in paths)
                 if (File.Exists(Path.Combine(mod, path)))
-                    return new FileStream(mod + path, FileMode.Open);
+                    return new FileStream(Path.Combine(mod, path), FileMode.Open);
 
             if (File.Exists(Path.Combine(gamePath, path)))
-                return new FileStream(gamePath + path, FileMode.Open);
+                return new FileStream(Path.Combine(gamePath, path), FileMode.Open);
 
             //If we didn't found eny file let's search in DTA File system
             if (DTAFileExists(path))
                 return DTAGetFileContent(path);
+
+            throw new FileNotFoundException(path);
 
             return null;
         }

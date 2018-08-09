@@ -33,6 +33,8 @@ public class SetupGUI : MonoBehaviour {
                 modManager.LoadMod(mod.modName);
             }
         }
+
+        modManager.InitializeMods();
     }
 
     public void PathSelectionMenu()

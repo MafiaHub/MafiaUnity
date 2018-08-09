@@ -40,11 +40,11 @@ namespace MafiaUnity
             var animation = new MafiaAnimation();
             animation.animationSequences = new List<AnimationSequence>();
 
-            FileStream fs;
+            Stream fs;
 
             try
             {
-                fs = new FileStream(GameManager.instance.fileSystem.GetPath(animName), FileMode.Open);
+                fs = GameManager.instance.fileSystem.GetStreamFromPath(animName);
             }
             catch
             {

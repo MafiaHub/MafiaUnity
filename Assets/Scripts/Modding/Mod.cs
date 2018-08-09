@@ -69,22 +69,28 @@ namespace MafiaUnity
                     Debug.LogError("Assembly for " + modName + " couldn't be compiled!");
                     return;
                 }
+            }
+        }
 
-                var allTypes = Compiler.GetLoadableTypes(assembly);
+        public void Start()
+        {
+            if (assembly == null)
+                return;
+                
+            var allTypes = Compiler.GetLoadableTypes(assembly);
 
-                foreach (var type in allTypes)
+            foreach (var type in allTypes)
+            {
+                if (type.ToString() == "ScriptMain")
                 {
-                    if (type.ToString() == "ScriptMain")
-                    {
-                        IModScript entry = (IModScript)assembly.CreateInstance(type.ToString(), true);
+                    IModScript entry = (IModScript)assembly.CreateInstance(type.ToString(), true);
 
-                        if (entry == null)
-                            break;
-
-                        entry.Start(this);
-
+                    if (entry == null)
                         break;
-                    }
+
+                    entry.Start(this);
+
+                    break;
                 }
             }
         }

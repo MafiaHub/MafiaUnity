@@ -38,6 +38,14 @@ namespace MafiaUnity
             return newMod;
         }
 
+        public void InitializeMods()
+        {
+            foreach (var mod in mods)
+            {
+                mod.Value.Start();
+            }
+        }
+
         /// <summary>
         /// Removes an active mod from the list.
         /// </summary>
