@@ -57,6 +57,13 @@ namespace MafiaUnity
                 
                 case MafiaFormats.Scene2BINLoader.SpecialObjectType.Door:
                 {
+                    var meshFilter = GetComponent<MeshFilter>();
+
+                    if (meshFilter != null)
+                    {
+                        gameObject.AddComponent<MeshCollider>().sharedMesh = meshFilter.sharedMesh;
+                    }
+                    
                     Debug.Log(data.doorObject.closeSound);
                 }
                 break;
