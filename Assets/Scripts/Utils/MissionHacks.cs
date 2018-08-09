@@ -10,7 +10,7 @@ namespace MafiaUnity
     */
     public class MissionHacks
     {
-        public MissionHacks(string missionName)
+        public MissionHacks(string missionName, MafiaFormats.Scene2BINLoader data)
         {
             switch (missionName)
             {
@@ -21,7 +21,8 @@ namespace MafiaUnity
 
                     if (skybox != null)
                     {
-                        GameObject.DestroyImmediate(skybox, true);
+                        SetUpSkybox(skybox.transform.Find("Box02"));
+                        SetUpSkybox(skybox.transform.Find("Box03"));
                     }
 
                     // handle roof
@@ -53,6 +54,69 @@ namespace MafiaUnity
                 }
                 break;
             }
+
+            // Fix backdrop sector
+            {
+                var backdrop = GameObject.Find("Backdrop sector");
+
+                if (backdrop != null)
+                {
+                    backdrop.AddComponent<BackdropManipulator>();
+                }
+            }
+
+            // Change view distance
+            {
+                var mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+
+                var viewDistance = data.viewDistance;
+
+                mainCamera.farClipPlane = viewDistance;
+            }
+        }
+
+        void SetUpSkybox(Transform skybox)
+        {
+            var meshRenderer = skybox.GetComponent<MeshRenderer>();
+
+            foreach (var mat in meshRenderer.materials)
+            {
+                mat.shader = Shader.Find("Unlit/Texture");
+            }
+        }
+    }
+
+    public class BackdropManipulator : MonoBehaviour
+    {
+        Transform mainCamera = null;
+        Transform skyboxCamera = null;
+
+        private void Start()
+        {
+            mainCamera = GameObject.Find("Main Camera").transform;
+            skyboxCamera = new GameObject("Backdrop camera").transform;
+
+            skyboxCamera.parent = mainCamera;
+
+            skyboxCamera.localPosition = Vector3.zero;
+            skyboxCamera.localRotation = Quaternion.identity;
+            skyboxCamera.localScale = Vector3.one;
+
+            var cam = skyboxCamera.gameObject.AddComponent<Camera>();
+            cam.farClipPlane = 5000f;
+            cam.cullingMask = LayerMask.NameToLayer("Backdrop");
+            cam.depth = 1 + mainCamera.GetComponent<Camera>().depth;
+            cam.clearFlags = CameraClearFlags.Nothing;
+
+            gameObject.layer = LayerMask.NameToLayer("Backdrop");
+        }
+
+        private void Update()
+        {
+            if (mainCamera == null)
+                return;
+
+            transform.position = mainCamera.position;
         }
     }
 }
