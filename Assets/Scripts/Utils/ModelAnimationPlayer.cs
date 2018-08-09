@@ -26,10 +26,6 @@ namespace MafiaUnity
         [SerializeField] public MafiaAnimation mafiaAnimation = new MafiaAnimation();
 
         [SerializeField] public MafiaAnimation pairAnimation;
-
-        private int[] posFrameId;
-        private int[] rotFrameId;
-        private int[] scaleFrameId;
         private const float frameStep = 1f / 25f;
         private float frameTime;
 
