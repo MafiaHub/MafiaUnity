@@ -39,6 +39,9 @@ namespace MafiaUnity
 
                 var objects = new List<KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>>();
 
+                var backdrop = new GameObject("Backdrop sector");
+                backdrop.transform.parent = rootObject.transform;
+
                 foreach (var obj in sceneLoader.objects)
                 {
                     GameObject newObject;
@@ -82,6 +85,14 @@ namespace MafiaUnity
                     specObject.data = obj.Value;
                     specObject.Init();
                 }
+
+                // NOTE(zaklaus): Get rid of Backdrop sector for now...
+                // TODO(zaklaus): Handle special cases like skybox and such, per mission
+#if UNITY_EDITOR
+                GameObject.DestroyImmediate(backdrop);
+#else
+                GameObject.Destroy(backdrop);
+#endif
             }
 
             // NOTE(zaklaus): Hardcode 'Primary sector' scale to (1,1,1)
