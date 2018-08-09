@@ -46,32 +46,11 @@ namespace MafiaUnity
                         slunko.gameObject.SetActive(false);
                     }
 
-                    // handle roof
-                    {
-                        var box05a = GameObject.Find("sector Box05a/Box05a");
+                    var light22 = GameObject.Find("sector Box12/light22")?.GetComponent<Light>();
+                    if (light22 != null) light22.shadows = LightShadows.Soft;
 
-                        if (box05a != null)
-                        {
-                            var meshRenderer = box05a.GetComponent<MeshRenderer>();
-
-                            if (meshRenderer != null)
-                            {
-                                meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
-                            }
-                        }
-
-                        var box10 = GameObject.Find("sector Box12/Box12/Box10");
-
-                        if (box10 != null)
-                        {
-                            var meshRenderer = box10.GetComponent<MeshRenderer>();
-
-                            if (meshRenderer != null)
-                            {
-                                meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
-                            }
-                        }
-                    }
+                    var light10 = GameObject.Find("sector Box12/light10")?.GetComponent<Light>();
+                    if (light10 != null) light10.shadows = LightShadows.Soft;
                 }
                 break;
 

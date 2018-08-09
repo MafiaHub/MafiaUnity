@@ -15,6 +15,7 @@ namespace MafiaUnity
             public Vector2 clippingPlanes;
 
             [Flags]
+            [Serializable]
             public enum HeaderType : uint
             {
                 Mission = 0x4c53,
@@ -34,6 +35,7 @@ namespace MafiaUnity
             }
 
             [Flags]
+            [Serializable]
             public enum ObjectProperty : uint
             {
                 TypeSpecial = 0xAE22,
@@ -58,6 +60,7 @@ namespace MafiaUnity
             }
 
             [Flags]
+            [Serializable]
             public enum ObjectType : uint
             {
                 Light = 0x02,
@@ -70,6 +73,7 @@ namespace MafiaUnity
             }
 
             [Flags]
+            [Serializable]
             public enum SpecialObjectType : uint
             {
                 None = 0,
@@ -85,7 +89,8 @@ namespace MafiaUnity
             }
 
             [Flags]
-            public enum LightType : uint
+            [Serializable]
+            public enum LightType : int
             {
                 Point = 0x01,
                 Directional = 0x03,
@@ -101,6 +106,7 @@ namespace MafiaUnity
                 public uint size;
             }
 
+            [Serializable]
             public class PhysicalProp
             {
                 // Physical object properties
@@ -113,6 +119,7 @@ namespace MafiaUnity
                 public int sound;
             }
 
+            [Serializable]
             public class DoorProp
             {
                 // Door properties
@@ -129,6 +136,7 @@ namespace MafiaUnity
                 public byte flag;
             }
 
+            [Serializable]
             public class Object
             {
                 public ObjectType type;
@@ -147,12 +155,12 @@ namespace MafiaUnity
                 public int lightFlags;
                 public float lightPower;           // 1.0 = 100% (can be even over 1.0)
                 public float lightUnk0;
-                public float lightUnk1;
+                public float lightAngle;
                 public float lightNear;
                 public float lightFar;
                 public string lightSectors; //5000
-                public PhysicalProp physicalObject;
-                public DoorProp doorObject;
+                [SerializeField] public PhysicalProp physicalObject;
+                [SerializeField] public DoorProp doorObject;
             }
 
             public Dictionary<string, Object> objects = new Dictionary<string, Object>();
@@ -401,6 +409,9 @@ namespace MafiaUnity
                     case ObjectProperty.Light_Type:
                         {
                             newObject.lightType = (LightType)reader.ReadInt32();
+
+                            if ((int)newObject.lightType == 2)
+                                newObject.lightType = LightType.Directional;
                         }
                         break;
 
@@ -440,7 +451,7 @@ namespace MafiaUnity
                     case ObjectProperty.Light_Unknown:
                         {
                             newObject.lightUnk0 = reader.ReadSingle();
-                            newObject.lightUnk1 = reader.ReadSingle();
+                            newObject.lightAngle = reader.ReadSingle();
                         }
                         break;
                 }

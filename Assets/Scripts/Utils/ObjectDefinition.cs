@@ -7,7 +7,7 @@ namespace MafiaUnity
     public class ObjectDefinition : MonoBehaviour
     {
 
-        public MafiaFormats.Scene2BINLoader.Object data;
+        [SerializeField] public MafiaFormats.Scene2BINLoader.Object data;
 
         public void Init()
         {
@@ -33,12 +33,18 @@ namespace MafiaUnity
                         transform.localScale = data.scale;
                     }
 
-                    if (data.lightType != MafiaFormats.Scene2BINLoader.LightType.Point)
+                    if (data.lightType != MafiaFormats.Scene2BINLoader.LightType.Directional && data.lightType != MafiaFormats.Scene2BINLoader.LightType.Point)
                         break;
 
                     var light = gameObject.AddComponent<Light>();
 
                     light.type = LightType.Point;
+
+                    if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Directional)
+                    {
+                        light.type = LightType.Spot;
+                        light.spotAngle = Mathf.Rad2Deg * data.lightAngle;
+                    }
 
                     light.intensity = data.lightPower;
                     light.range = data.lightFar;

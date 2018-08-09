@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace MafiaUnity
 {
@@ -79,6 +80,7 @@ namespace MafiaUnity
                                 var meshRenderer = child.AddComponent<MeshRenderer>();
                                 meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.standard.lods[0], model, out materials);
                                 meshRenderer.materials = materials;
+                                meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
 
                                 bool isTwoSided = model.materials.FindAll(x => (x.flags.HasFlag(MafiaFormats.MaterialFlag.Doublesided_Material))).Count > 0;
 
@@ -96,6 +98,7 @@ namespace MafiaUnity
                             meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.singleMesh.standard.lods[0], model, out materials);
                             meshRenderer.materials = materials;
                             meshRenderer.sharedMesh = meshFilter.sharedMesh;
+                            meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
 
                             var data = child.AddComponent<SkinnedMeshData>();
                             data.mesh = mafiaMesh.singleMesh;
@@ -108,6 +111,7 @@ namespace MafiaUnity
                             meshFilter.mesh = GenerateMesh(mafiaMesh, child, mafiaMesh.singleMorph.singleMesh.standard.lods[0], model, out materials);
                             meshRenderer.materials = materials;
                             meshRenderer.sharedMesh = meshFilter.sharedMesh;
+                            meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
 
                             var data = child.AddComponent<SkinnedMeshData>();
                             data.mesh = mafiaMesh.singleMorph.singleMesh;
