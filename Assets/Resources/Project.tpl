@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="[MAFIA_PATH]\Assembly-CSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="UnityEditor">
       <HintPath>[UNITY_PATH]\Editor\Data\Managed\UnityEditor.dll</HintPath>
     </Reference>
