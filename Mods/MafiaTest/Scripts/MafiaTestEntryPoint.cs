@@ -37,6 +37,7 @@ class MafiaTestGameMode : IGameMode
 		var sunLight = sun.AddComponent<Light>();
 		sunLight.color = new Color(1f, 0.9030898f, 0.7028302f);
 		sunLight.type = LightType.Directional;
+        sunLight.shadows = LightShadows.Soft;
 	}
 
 	// on game mode switch -- leaving primary
