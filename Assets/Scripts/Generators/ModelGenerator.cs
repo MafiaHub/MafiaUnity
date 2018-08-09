@@ -142,6 +142,48 @@ namespace MafiaUnity
                                 continue;
                         }
                         break;
+
+                        case MafiaFormats.VisualMeshType.Glow:
+                        {
+                            foreach (var g in mafiaMesh.glow.glowData)
+                            {
+                                if (g.materialID-1 >= model.materials.Count)
+                                    continue;
+
+                                var matID = g.materialID-1;
+
+                                var mat = model.materials[matID];
+                                var mapName = mat.diffuseMapName;
+
+                                foreach (var m in model.meshes)
+                                {
+                                    if (m.standard.lods == null)
+                                        continue;
+
+                                    if (m.standard.lods.Count < 1)
+                                        continue;
+
+                                    foreach (var gr in m.standard.lods[0].faceGroups)
+                                    {
+                                        if (gr.materialID == matID)
+                                        {
+                                            var flareObject = new GameObject("Flare " + mapName);
+                                            flareObject.transform.parent = rootObject.transform;
+                                            flareObject.transform.localPosition = m.pos;
+
+                                            var glow = flareObject.AddComponent<LensFlare>();
+
+                                            var flarePrefab = (Flare)Resources.Load("GlowFlare");
+                                            var flare = (Flare)GameObject.Instantiate(flarePrefab);
+                                            glow.flare = flare;
+                                            continue;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
                         // TODO add more visual types
 
                         default: continue;
