@@ -120,6 +120,13 @@ namespace MafiaUnity
                 if (GUILayout.Button("Destroy Mission"))
                 {
                     GameManager.instance.missionManager.DestroyMission();
+
+                    var leftover = GameObject.Find(missionName);
+
+                    if (leftover != null)
+                    {
+                        GameObject.DestroyImmediate(leftover, true);
+                    }
                 }
             }
             EditorGUILayout.EndHorizontal();
