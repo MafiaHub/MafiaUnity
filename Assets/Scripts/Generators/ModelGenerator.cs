@@ -86,6 +86,22 @@ namespace MafiaUnity
 
                                 if (isTwoSided)
                                     meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
+
+                                // Handle special textures
+                                foreach (var m in meshRenderer.sharedMaterials)
+                                {
+                                    var name = m.GetTexture("_MainTex")?.name;
+
+                                    if (IsTextureGlow(name))
+                                    {
+                                        var glowTexture = (Texture2D)Resources.Load("Flares/" + Path.GetFileNameWithoutExtension(name));
+
+                                        m.shader = Shader.Find("Unlit/Transparent");
+                                        m.SetTexture("_MainTex", glowTexture);
+                                        
+                                        break;
+                                    }
+                                }
                             }
                             else
                                 continue;
@@ -174,16 +190,7 @@ namespace MafiaUnity
                                     {
                                         if (gr.materialID == matID)
                                         {
-                                            var flareObject = new GameObject("Flare " + mapName);
-                                            flareObject.transform.parent = rootObject.transform;
-                                            flareObject.transform.localPosition = m.pos;
-
-                                            var glow = flareObject.AddComponent<LensFlare>();
-
-                                            var flarePrefab = (Flare)Resources.Load("GlowFlare");
-                                            var flare = (Flare)GameObject.Instantiate(flarePrefab);
-                                            glow.flare = flare;
-                                            glow.fadeSpeed = 8f;
+                                            GenerateGlow(mapName, rootObject, m.pos);
 
                                             used = true;
                                             break;
@@ -370,122 +377,116 @@ namespace MafiaUnity
                         mat.SetFloat("_Glossiness", 0f);
                     }
 
-                    //if (matId > 0)
+                    if (mafiaMat.diffuseMapName != null ||
+                        mafiaMat.alphaMapName != null)
                     {
+                        if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
+                            BMPLoader.useTransparencyKey = true;
 
-                        // TODO support more types as well as transparency
+                        Texture2D tex = null;
+                        string finalMapName = "";
 
-                        if (mafiaMat.diffuseMapName != null ||
-                            mafiaMat.alphaMapName != null)
+                        if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
+                            finalMapName = mafiaMat.diffuseMapName;
+                        else if (mafiaMat.alphaMapName != null)
+                            finalMapName = mafiaMat.alphaMapName;
+
+                        var modMapName = GameManager.instance.fileSystem.GetPath(Path.Combine("maps", finalMapName));
+
+                        if (cachedTextures.ContainsKey(modMapName))
+                            tex = cachedTextures[modMapName];
+
+                        if (tex == null)
                         {
+                            BMPImage image = null;
+
+                            try
+                            {
+                                image = bmp.LoadBMP(GameManager.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", finalMapName)));
+                            }
+                            catch
+                            {
+                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
+                                    Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.diffuseMapName);
+                                else if (mafiaMat.alphaMapName != null)
+                                    Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.alphaMapName);
+
+                            }
+
+                            if (image != null)
+                                tex = image.ToTexture2D();
+                        }
+
+                        BMPLoader.useTransparencyKey = false;
+
+                        if (tex != null)
+                        {
+                            tex.name = finalMapName;
+
+                            mat.SetTexture("_MainTex", tex);
+
+                            if (GameManager.instance.cvarManager.Get("filterMode", "1") == "0")
+                                tex.filterMode = FilterMode.Point;
+
+                            if (!cachedTextures.ContainsKey(modMapName))
+                                cachedTextures.Add(modMapName, tex);
+                        }
+
+                        if (mafiaMat.transparency < 1)
+                            mat.SetColor("_Color", new Color32(255, 255, 255, (byte)(mafiaMat.transparency * 255)));
+
+                        if ((mafiaMat.flags & (MafiaFormats.MaterialFlag.Animated_Texture_Diffuse | MafiaFormats.MaterialFlag.Animated_Texture_Alpha)) != 0)
+                        {
+                            List<Texture2D> frames = new List<Texture2D>();
+
+                            string fileName = null;
+
+                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Animated_Texture_Diffuse) != 0)
+                                fileName = mafiaMat.diffuseMapName;
+                            else
+                                fileName = mafiaMat.alphaMapName;
+
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                                 BMPLoader.useTransparencyKey = true;
 
-                            Texture2D tex = null;
-                            string finalMapName = "";
-
-                            if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                finalMapName = mafiaMat.diffuseMapName;
-                            else if (mafiaMat.alphaMapName != null)
-                                finalMapName = mafiaMat.alphaMapName;
-
-                            var modMapName = GameManager.instance.fileSystem.GetPath(Path.Combine("maps", finalMapName));
-
-                            if (cachedTextures.ContainsKey(modMapName))
-                                tex = cachedTextures[modMapName];
-
-                            if (tex == null)
+                            if (fileName != null)
                             {
-                                BMPImage image = null;
+                                var path = fileName.Split('.');
+                                string baseName = path[0];
+                                string ext = path[1];
 
-                                try
+                                baseName = baseName.Substring(0, baseName.Length - 2);
+
+                                for (int k = 0; k < mafiaMat.animSequenceLength; k++)
                                 {
-                                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", finalMapName)));
-                                }
-                                catch
-                                {
-                                    if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Textured_Diffuse) != 0)
-                                        Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.diffuseMapName);
-                                    else if (mafiaMat.alphaMapName != null)
-                                        Debug.LogWarningFormat("Image {0} couldn't be loaded!", mafiaMat.alphaMapName);
+                                    try
+                                    {
+                                        var animPath = Path.Combine("maps", baseName + k.ToString("D2") + "." + ext);
+                                        var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetStreamFromPath(animPath));
 
+                                        if (frameImage == null)
+                                            continue;
+
+                                        var frame = frameImage.ToTexture2D();
+                                        frames.Add(frame);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Debug.LogError(ex.ToString());
+                                    }
                                 }
 
-                                if (image != null)
-                                    tex = image.ToTexture2D();
+                                var framePlayer = ent.AddComponent<TextureAnimationPlayer>();
+
+                                framePlayer.frames = frames;
+                                framePlayer.framePeriod = mafiaMat.framePeriod;
+                                framePlayer.material = mat;
                             }
 
                             BMPLoader.useTransparencyKey = false;
-
-                            if (tex != null)
-                            {
-                                tex.name = finalMapName;
-
-                                mat.SetTexture("_MainTex", tex);
-
-                                if (GameManager.instance.cvarManager.Get("filterMode", "1") == "0")
-                                    tex.filterMode = FilterMode.Point;
-
-                                if (!cachedTextures.ContainsKey(modMapName))
-                                    cachedTextures.Add(modMapName, tex);
-                            }
-
-                            if (mafiaMat.transparency < 1)
-                                mat.SetColor("_Color", new Color32(255, 255, 255, (byte)(mafiaMat.transparency * 255)));
-
-                            if ((mafiaMat.flags & (MafiaFormats.MaterialFlag.Animated_Texture_Diffuse | MafiaFormats.MaterialFlag.Animated_Texture_Alpha)) != 0)
-                            {
-                                List<Texture2D> frames = new List<Texture2D>();
-
-                                string fileName = null;
-
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Animated_Texture_Diffuse) != 0)
-                                    fileName = mafiaMat.diffuseMapName;
-                                else
-                                    fileName = mafiaMat.alphaMapName;
-
-                                if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
-                                    BMPLoader.useTransparencyKey = true;
-
-                                if (fileName != null)
-                                {
-                                    var path = fileName.Split('.');
-                                    string baseName = path[0];
-                                    string ext = path[1];
-
-                                    baseName = baseName.Substring(0, baseName.Length - 2);
-
-                                    for (int k = 0; k < mafiaMat.animSequenceLength; k++)
-                                    {
-                                        try
-                                        {
-                                            var animPath = Path.Combine("maps", baseName + k.ToString("D2") + "." + ext);
-                                            var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetStreamFromPath(animPath));
-
-                                            if (frameImage == null)
-                                                continue;
-
-                                            var frame = frameImage.ToTexture2D();
-                                            frames.Add(frame);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Debug.LogError(ex.ToString());
-                                        }
-                                    }
-
-                                    var framePlayer = ent.AddComponent<TextureAnimationPlayer>();
-
-                                    framePlayer.frames = frames;
-                                    framePlayer.framePeriod = mafiaMat.framePeriod;
-                                    framePlayer.material = mat;
-                                }
-
-                                BMPLoader.useTransparencyKey = false;
-                            }
                         }
                     }
-
+                    
                     mats.Add(mat);
                 }
 
@@ -496,5 +497,43 @@ namespace MafiaUnity
 
             return mesh;
         }
+
+        void GenerateGlow(string mapName, GameObject rootObject, Vector3 pos)
+        {
+            var flareObject = new GameObject("Flare " + mapName);
+            flareObject.transform.parent = rootObject.transform;
+            flareObject.transform.localPosition = pos;
+
+            string glowName = Path.GetFileNameWithoutExtension(mapName);
+
+            var glow = flareObject.AddComponent<LensFlare>();
+            flareObject.AddComponent<LensFlareFixedDistance>();
+
+            var flarePrefab = (Flare)Resources.Load("Flares/" + glowName + "_FLARE");
+
+            if (flarePrefab == null)
+            {
+                Debug.LogWarningFormat("Flare {0} couldn't be found!", glowName);
+                GameObject.DestroyImmediate(flareObject);
+                return;
+            }
+
+            var flare = (Flare)GameObject.Instantiate(flarePrefab);
+            glow.flare = flare;
+            glow.fadeSpeed = 8f;
+        }
+
+        bool IsTextureGlow(string mapName)
+        {
+            string glowName = Path.GetFileNameWithoutExtension(mapName);
+
+            return glowNames.Contains(glowName);
+        }
+
+        List<string> glowNames = new List<string> {
+            "00GLOW",
+            "2CLGL",
+            "2CBGL",
+        };
     }
 }

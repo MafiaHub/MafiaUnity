@@ -5,7 +5,7 @@ Flare:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: GlowFlare
+  m_Name: 00GLOW_FLARE
   m_FlareTexture: {fileID: 2800000, guid: 81b03af8e0f7f0d4f9eaf2695afc012b, type: 3}
   m_TextureLayout: 2
   m_Elements:

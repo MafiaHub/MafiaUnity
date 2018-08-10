@@ -15,7 +15,7 @@ namespace MafiaUnity
             {
                 case MafiaFormats.Scene2BINLoader.ObjectType.Model:
                 {
-                    // TODO: Load model over here?
+                    
                 }
                 break;
 
