@@ -12,8 +12,16 @@ namespace MafiaUnity
 		bool isMoving = false;
 		int openDirection = 0;
 
+		AudioClip openSound, closeSound, lockedSound;
+
+		AudioSource audioSource;
+
 		private void Start()
 		{
+			audioSource = gameObject.AddComponent<AudioSource>();
+
+			// TODO Use WAVLoader to load audio clips
+
 			startRotation = transform.localRotation;
 
 			if (door.open > 0)
@@ -80,7 +88,8 @@ namespace MafiaUnity
 		{
 			if (door.locked > 0)
 			{
-				// TODO play locked sound
+                audioSource.clip = lockedSound;
+                audioSource.Play();
 				return;
 			}
 			
@@ -89,7 +98,17 @@ namespace MafiaUnity
 			
 			isMoving = true;
 			openDirection = doorSide;
-			Debug.Log("Door status: " + door.open);
+			
+			if (door.open > 0)
+			{
+				audioSource.clip = closeSound;
+			}
+			else
+			{
+                audioSource.clip = openSound;
+			}
+
+			audioSource.Play();
 		}
     }
 }
