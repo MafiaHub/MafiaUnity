@@ -46,7 +46,7 @@ We respect copyrights and intelectual property and you need to own the original 
 If you'd like to join us and contribute, feel free to connect to [our Discord server](https://discord.gg/eBQ4QHX).
 
 ## Media
-![](https://i.imgur.com/doGSydE.jpg)
+![](https://i.imgur.com/7b1ln6z.jpg)
 ![](https://i.imgur.com/A92V7mh.jpg)
-![](https://i.imgur.com/oqmPtde.jpg)
-![](https://i.imgur.com/3Yk6eq3.jpg)
+![](https://i.imgur.com/6xSzE3O.jpg)
+![](https://i.imgur.com/COocDgd.jpg)
