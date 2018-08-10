@@ -348,7 +348,7 @@ namespace MafiaUnity
 
             foreach (var mod in modEntries)
             {
-                newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.status.ToString()));
+                newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.status == ModEntryStatus.Active ? "1" : "0"));
             }
 
             modManager.StoreLoadOrder(newLoadOrder.ToArray());
