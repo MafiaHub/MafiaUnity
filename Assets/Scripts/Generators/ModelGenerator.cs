@@ -537,6 +537,7 @@ namespace MafiaUnity
             var flare = (Flare)GameObject.Instantiate(flarePrefab);
             glow.flare = flare;
             glow.fadeSpeed = 8f;
+            glow.brightness = 2f;
         }
 
         bool IsTextureGlow(string mapName)
