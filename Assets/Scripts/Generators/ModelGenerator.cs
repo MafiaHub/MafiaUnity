@@ -94,7 +94,7 @@ namespace MafiaUnity
 
                                     if (IsTextureGlow(name))
                                     {
-                                        var glowTexture = (Texture2D)Resources.Load("Flares/" + Path.GetFileNameWithoutExtension(name));
+                                        var glowTexture = Resources.Load<Texture2D>("Flares/" + Path.GetFileNameWithoutExtension(name));
 
                                         m.shader = Shader.Find("Unlit/Transparent");
                                         m.SetTexture("_MainTex", glowTexture);
