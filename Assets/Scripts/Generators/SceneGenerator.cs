@@ -58,6 +58,9 @@ namespace MafiaUnity
                     else
                         newObject = GameManager.instance.modelGenerator.LoadObject(Path.Combine("models", obj.Value.modelName));
                     
+                    if (newObject == null)
+                        continue;
+                        
                     newObject.name = obj.Value.name;
 
                     newObject.transform.localPosition = obj.Value.pos;

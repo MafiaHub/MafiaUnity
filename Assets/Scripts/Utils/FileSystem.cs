@@ -26,7 +26,7 @@ namespace MafiaUnity
         /// <param name="path"></param>
         public void RemoveOptionalPath(string path)
         {
-            paths.Remove(Path.Combine(FixPath(path), "Data"));
+            paths.Remove(FixPath(path));
         }
 
         /// <summary>
