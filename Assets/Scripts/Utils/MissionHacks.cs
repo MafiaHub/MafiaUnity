@@ -30,7 +30,7 @@ namespace MafiaUnity
                 mainCamera.farClipPlane = viewDistance;
             }
 
-            switch (missionName)
+            switch (missionName.ToLower())
             {
                 // example usage
                 case "tutorial":
@@ -51,6 +51,19 @@ namespace MafiaUnity
 
                     var light10 = GameObject.Find("sector Box12/light10")?.GetComponent<Light>();
                     if (light10 != null) light10.shadows = LightShadows.Soft;
+                }
+                break;
+
+                case "mise04-motorest":
+                {
+                    var box01 = GameObject.Find("denjasno/Box01");
+                    var box02 = GameObject.Find("denjasno/Box02");
+
+                    if (box01 != null)
+                        SetUpSkybox(box01.transform);
+
+                    if (box02 != null)
+                        SetUpSkybox(box02.transform);
                 }
                 break;
 
@@ -112,6 +125,7 @@ namespace MafiaUnity
             skybox.gameObject.layer = LayerMask.NameToLayer("Backdrop");
 
             var meshRenderer = skybox.GetComponent<MeshRenderer>();
+            meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
 
             foreach (var mat in meshRenderer.sharedMaterials)
             {
