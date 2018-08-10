@@ -153,6 +153,22 @@ namespace MafiaUnity
 
                                 if (isTwoSided)
                                     meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
+
+                                // Handle special textures
+                                foreach (var m in meshRenderer.sharedMaterials)
+                                {
+                                    var name = m.GetTexture("_MainTex")?.name;
+
+                                    if (IsTextureGlow(name))
+                                    {
+                                        var glowTexture = (Texture2D)Resources.Load("Flares/" + Path.GetFileNameWithoutExtension(name));
+
+                                        m.shader = Shader.Find("Unlit/Transparent");
+                                        m.SetTexture("_MainTex", glowTexture);
+
+                                        break;
+                                    }
+                                }
                             }
                             else
                                 continue;
