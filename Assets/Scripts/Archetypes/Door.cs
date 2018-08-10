@@ -65,7 +65,7 @@ namespace MafiaUnity
 			}	
 
 			// debug
-			if (Input.GetKeyDown(KeyCode.O))
+			/* if (Input.GetKeyDown(KeyCode.O))
 			{
 				UseDoor(gameObject, 0);
 			}
@@ -73,7 +73,7 @@ namespace MafiaUnity
             if (Input.GetKeyDown(KeyCode.I))
             {
                 UseDoor(gameObject, 1);
-            }
+            } */
 		}
 
 		public void UseDoor(GameObject user, int doorSide)
