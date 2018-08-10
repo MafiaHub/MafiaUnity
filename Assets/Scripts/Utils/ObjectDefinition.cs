@@ -68,9 +68,10 @@ namespace MafiaUnity
                     if (meshFilter != null)
                     {
                         gameObject.AddComponent<MeshCollider>().sharedMesh = meshFilter.sharedMesh;
+
+                        var door = gameObject.AddComponent<Door>();
+                        door.door = data.doorObject;
                     }
-                    
-                    Debug.Log(data.doorObject.closeSound);
                 }
                 break;
             }
