@@ -82,11 +82,6 @@ namespace MafiaUnity
                                 meshRenderer.materials = materials;
                                 meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
 
-                                bool isTwoSided = model.materials.FindAll(x => (x.flags.HasFlag(MafiaFormats.MaterialFlag.Doublesided_Material))).Count > 0;
-
-                                if (isTwoSided)
-                                    meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
-
                                 // Handle special textures
                                 foreach (var m in meshRenderer.sharedMaterials)
                                 {
@@ -148,11 +143,7 @@ namespace MafiaUnity
 
                                 meshFilter.mesh = GenerateMesh(mafiaMesh, child, standard.lods[0], model, out materials);
                                 meshRenderer.materials = materials;
-
-                                bool isTwoSided = model.materials.FindAll(x => (x.flags.HasFlag(MafiaFormats.MaterialFlag.Doublesided_Material))).Count > 0;
-
-                                if (isTwoSided)
-                                    meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.TwoSided;
+                                meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
 
                                 // Handle special textures
                                 foreach (var m in meshRenderer.sharedMaterials)
