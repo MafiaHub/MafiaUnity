@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public GameObject playerPawn;
     private Transform cameraOrbitPoint;
     private float cameraUpAndDown = 2.01f;
-    private CustomButton lefButton = new CustomButton("a");
+    private CustomButton leftButton = new CustomButton("a");
     private CustomButton rightButton = new CustomButton("d");
 
     public void Start()
@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
             else if (!isCrouching)
                 characterController.movementMode = MovementMode.Walk;
 
-            if(lefButton.IsDoublePressed())
+            if(leftButton.IsDoublePressed())
                 characterController.RollLeft();
 
             if(rightButton.IsDoublePressed())
