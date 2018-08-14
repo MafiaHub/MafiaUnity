@@ -389,8 +389,8 @@ namespace MafiaUnity
                     }
                     else
                     {
-                        mat = new Material(Shader.Find("Standard"));
-                        mat.SetFloat("_Glossiness", 0f);
+                        mat = new Material(Shader.Find("Mafia/Diffuse"));
+                        //mat.SetFloat("_Glossiness", 0f);
                     }
 
                     if (mafiaMat.diffuseMapName != null ||
