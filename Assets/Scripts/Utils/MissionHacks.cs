@@ -66,6 +66,17 @@ namespace MafiaUnity
                         var s = photoFrame.transform.localScale;
                         photoFrame.transform.localScale = new Vector3(2.304092f, s.y, s.z);
                     }
+
+                    var menugl = GameObject.Find("menugl/Rectangle04");
+
+                    if (menugl != null)
+                    {
+                        var meshRenderer = menugl.GetComponent<MeshRenderer>();
+                        var mat = meshRenderer.sharedMaterial;
+
+                        mat.shader = Shader.Find("Mafia/Unlit Transparent");
+                        mat.SetColor("_Color", new Color(1f, 252 / 255f, 218 / 255f, 2 / 255f));
+                    }
                 }
                 break;
 
