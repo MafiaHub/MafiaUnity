@@ -13,7 +13,6 @@
 	
 		struct Input {
 			float2 uv_MainTex;
-			float2 uv_LightTex;
 		};
 	
 		sampler2D _MainTex;
@@ -21,7 +20,7 @@
 	
 		void surf (Input IN, inout SurfaceOutput o) {
 			o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb;
-			o.Albedo *= tex2D(_LightTex, IN.uv_LightTex).rgb;
+			o.Albedo *= tex2D(_LightTex, IN.uv_MainTex).rgb;
 		}
 		ENDCG
 
