@@ -32,7 +32,59 @@ namespace MafiaUnity
 
             switch (missionName.ToLower())
             {
-                // example usage
+                case "00menu":
+                {
+                    var projectorRay = GameObject.Find("9promitac/Cylinder18");
+                    var projectorIDontCarePart = GameObject.Find("9promitac/Cylinder05");
+
+                    if (projectorRay != null && projectorIDontCarePart != null)
+                    {
+                        var meshRenderer = projectorRay.GetComponent<MeshRenderer>();
+                        var mat = meshRenderer.sharedMaterial;
+
+                        mat.shader = Shader.Find("Unlit/Transparent");
+                        var oldTex = mat.GetTexture("_MainTex");
+                        var tex = ModelGenerator.LoadTexture(oldTex.name, false, true, true);
+                        mat.SetTexture("_MainTex", tex);
+
+                        projectorIDontCarePart.SetActive(false);
+                    }
+
+                    var lampRay = GameObject.Find("svetlo");
+
+                    if (lampRay != null)
+                    {
+                        var meshRenderer = lampRay.GetComponent<MeshRenderer>();
+                        var mat = meshRenderer.sharedMaterial;
+
+                        mat.shader = Shader.Find("Unlit/Transparent");
+                        var oldTex = mat.GetTexture("_MainTex");
+                        var tex = ModelGenerator.LoadTexture(oldTex.name, false, true, true);
+                        mat.SetTexture("_MainTex", tex);
+                        //mat.SetColor("_Color", new Color(1f, 244/255f, 112/255f, 62/255f));
+                    }
+
+                    var photoFrame = GameObject.Find("foto");
+
+                    if (photoFrame != null)
+                    {
+                        var s = photoFrame.transform.localScale;
+                        photoFrame.transform.localScale = new Vector3(2.304092f, s.y, s.z);
+                    }
+/* 
+                    var menugl = GameObject.Find("menugl/Rectangle04");
+
+                    if (menugl != null)
+                    {
+                        var meshRenderer = menugl.GetComponent<MeshRenderer>();
+                        var mat = meshRenderer.sharedMaterial;
+
+                        mat.shader = Shader.Find("Mafia/Unlit Transparent");
+                        mat.SetColor("_Color", new Color(1f, 252 / 255f, 218 / 255f, 2 / 255f));
+                    } */
+                }
+                break;
+
                 case "tutorial":
                 {
                     var skybox = GameObject.Find("o_m_");
@@ -169,7 +221,8 @@ namespace MafiaUnity
 
         private void OnDestroy()
         {
-            GameObject.Destroy(skyboxCamera);
+            if (skyboxCamera != null)
+                GameObject.Destroy(skyboxCamera.gameObject);
         }
     }
 }

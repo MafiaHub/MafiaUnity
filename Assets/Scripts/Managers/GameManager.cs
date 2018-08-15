@@ -34,6 +34,8 @@ namespace MafiaUnity
         /// </summary>
         public const string GAME_VERSION = "1.0";
 
+        public bool isPaused = false;
+
         #region Public Fields
         public FileSystem fileSystem = new FileSystem();
         public CvarManager cvarManager = new CvarManager();

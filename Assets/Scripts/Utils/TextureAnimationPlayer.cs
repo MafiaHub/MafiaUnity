@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using MafiaUnity;
 
 public class TextureAnimationPlayer : MonoBehaviour {
 
@@ -18,6 +19,9 @@ public class TextureAnimationPlayer : MonoBehaviour {
     }
 
     void Update () {
+        if (GameManager.instance.isPaused)
+            return;
+
         if (timeUntilNextFrame < 0)
         {
             ResetTime();
