@@ -14,7 +14,7 @@ Shader "Mafia/Transparent" {
         Blend SrcAlpha OneMinusSrcAlpha
 
 		CGPROGRAM
-        #pragma surface surf Lambert alpha:cutout
+        #pragma surface surf Standard fullforwardshadows alpha:fade
 	
 		struct Input {
 			float2 uv_MainTex;
@@ -25,7 +25,7 @@ Shader "Mafia/Transparent" {
 		sampler2D _MainTex;
 		sampler2D _LightTex;
 	
-		void surf (Input IN, inout SurfaceOutput o) {
+		void surf (Input IN, inout SurfaceOutputStandard o) {
             float4 col = tex2D(_MainTex, IN.uv_MainTex);
 			o.Albedo = col.rgb;
 			o.Albedo *= tex2D(_LightTex, IN.uv_MainTex).rgb;
