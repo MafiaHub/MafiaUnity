@@ -111,6 +111,9 @@ namespace MafiaUnity
 
         void Update()
         {
+            if (GameManager.instance.isPaused)
+                return;
+                
             if (!isPlaying)
                 return;
 

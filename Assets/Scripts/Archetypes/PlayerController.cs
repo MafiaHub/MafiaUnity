@@ -98,6 +98,9 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+        if (GameManager.instance.isPaused)
+            return;
+            
         if (characterController == null)
             return;
             
