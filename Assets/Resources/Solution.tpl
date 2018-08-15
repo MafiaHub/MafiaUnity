@@ -6,6 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "[SOLUTION_NAME]", "[SOLUTIO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "[MAFIA_PATH]\Assembly-CSharp.csproj", "{E3C2AC32-62C7-867A-A746-81DFB59B7539}"
 EndProject
+[MAFIABASE_STUB]
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

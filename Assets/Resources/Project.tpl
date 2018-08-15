@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="[MAFIA_PATH]\Assembly-CSharp.csproj" />
+    [MAFIABASE_STUB]
   </ItemGroup>
 
   <ItemGroup>

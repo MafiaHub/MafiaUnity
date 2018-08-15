@@ -398,52 +398,76 @@ namespace MafiaUnity
                 {
                     Debug.Log("Generating .sln file...");
 
-                    var projectPath = Path.Combine(solutionPath, solutionName);
+                    // NOTE: We need to generate files for MafiaBase mod first...
+                    GenerateSolution("Mods/MafiaBase/Temp", "MafiaBase");
 
-                    if (!Directory.Exists(projectPath))
-                        Directory.CreateDirectory(projectPath);
-
-                    var solutionTemplate = File.ReadAllText(SOLUTION_TPL);
-                    var projectTemplate = File.ReadAllText(PROJECT_TPL);
-                    string mafiaPath = Directory.GetParent(Application.dataPath).FullName;
-
-                    solutionTemplate = solutionTemplate.Replace("[SOLUTION_NAME]", solutionName);
-                    solutionTemplate = solutionTemplate.Replace("[MAFIA_PATH]", mafiaPath);
-
-                    projectTemplate = projectTemplate.Replace("[UNITY_PATH]", unityPath);
-                    projectTemplate = projectTemplate.Replace("[MAFIA_PATH]", mafiaPath);
-
-                    string includeFiles = "";
-
-                    var scriptsDir = Path.Combine(solutionPath, "..", "Scripts");
-
-                    if (Directory.Exists(scriptsDir))
-                    {
-                        foreach (var cs in Directory.EnumerateFiles(scriptsDir, "*.cs", SearchOption.AllDirectories))
-                        {
-                            var fcs = cs.Replace(scriptsDir+Path.DirectorySeparatorChar,"");
-
-                            includeFiles += fileInclude.Replace("[INCLUDE_NAME]", fcs);
-                        }
-                    }
-
-                    projectTemplate = projectTemplate.Replace("[SOURCE_FILES]", includeFiles);
-
-                    File.WriteAllText(Path.Combine(solutionPath, solutionName + ".sln"), solutionTemplate);
-                    File.WriteAllText(Path.Combine(projectPath, solutionName + ".csproj"), projectTemplate);
+                    if (solutionName != "MafiaBase")
+                        GenerateSolution(solutionPath, solutionName);
                 }
             }
             GUILayout.EndHorizontal();
+
+            GUILayout.TextArea("IMPORTANT: Output directory must be contained inside a mod folder, preferably in a folder called \"Temp\". Your mod MUST be located inside of Mods folder, otherwise the generator will fail to work!");
+        }
+
+        void GenerateSolution(string path, string name)
+        {
+            var projectPath = Path.Combine(path, name);
+
+            if (!Directory.Exists(projectPath))
+                Directory.CreateDirectory(projectPath);
+
+            var solutionTemplate = File.ReadAllText(SOLUTION_TPL);
+            var projectTemplate = File.ReadAllText(PROJECT_TPL);
+            string mafiaPath = Directory.GetParent(Application.dataPath).FullName;
+
+            solutionTemplate = solutionTemplate.Replace("[SOLUTION_NAME]", name);
+            solutionTemplate = solutionTemplate.Replace("[MAFIA_PATH]", mafiaPath);
+
+            projectTemplate = projectTemplate.Replace("[UNITY_PATH]", unityPath);
+            projectTemplate = projectTemplate.Replace("[MAFIA_PATH]", mafiaPath);
+
+            string includeFiles = "";
+
+            var scriptsDir = Path.Combine(path, "..", "Scripts");
+
+            if (Directory.Exists(scriptsDir))
+            {
+                foreach (var cs in Directory.EnumerateFiles(scriptsDir, "*.cs", SearchOption.AllDirectories))
+                {
+                    var fcs = cs.Replace(scriptsDir + Path.DirectorySeparatorChar, "");
+
+                    includeFiles += fileInclude.Replace("[INCLUDE_NAME]", fcs);
+                }
+            }
+
+            projectTemplate = projectTemplate.Replace("[SOURCE_FILES]", includeFiles);
+
+            if (name != "MafiaBase")
+            {
+                solutionTemplate = solutionTemplate.Replace("[MAFIABASE_STUB]", solutionMafiaBase);
+                projectTemplate = projectTemplate.Replace("[MAFIABASE_STUB]", projectMafiaBase);
+            }
+            else 
+            {
+                solutionTemplate = solutionTemplate.Replace("[MAFIABASE_STUB]", "");
+                projectTemplate = projectTemplate.Replace("[MAFIABASE_STUB]", "");
+            }
+
+            File.WriteAllText(Path.Combine(path, name + ".sln"), solutionTemplate);
+            File.WriteAllText(Path.Combine(projectPath, name + ".csproj"), projectTemplate);
         }
 
         const string SOLUTION_TPL = @"Assets/Resources/Solution.tpl";
         const string PROJECT_TPL = @"Assets/Resources/Project.tpl";
 
         string unityPath = @"F:/Unity/2018.2.2f1";
-        string solutionPath = @"F:/OpenMF.git/Mods/MafiaBase/Temp";
-        string solutionName = @"MafiaBase";
+        string solutionPath = @"Mods/ExampleMod/Temp";
+        string solutionName = @"ExampleMod";
 
         string fileInclude = "<Compile Include=\"..\\..\\Scripts\\[INCLUDE_NAME]\" Link=\"[INCLUDE_NAME]\" />";
+        string solutionMafiaBase = "Project(\"{9A19103F-16F7-4668-BE54-9A1E7A4F7556}\") = \"MafiaBase\", \"..\\..\\MafiaBase\\Temp\\MafiaBase\\MafiaBase.csproj\", \"{021E1AD1-69A2-4B96-9B81-1CB1B91C0C47}\"\nEndProject";
+        string projectMafiaBase = "<ProjectReference Include=\"..\\..\\..\\MafiaBase\\Temp\\MafiaBase\\MafiaBase.csproj\" />";
     }
     
     [Serializable]
