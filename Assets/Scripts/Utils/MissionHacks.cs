@@ -42,8 +42,10 @@ namespace MafiaUnity
                         var meshRenderer = projectorRay.GetComponent<MeshRenderer>();
                         var mat = meshRenderer.sharedMaterial;
 
-                        mat.shader = Shader.Find("Mafia/Transparent");
-                        mat.SetColor("_Color", new Color(1f, 1f, 1f, 7/255f));
+                        mat.shader = Shader.Find("Unlit/Transparent");
+                        var oldTex = mat.GetTexture("_MainTex");
+                        var tex = ModelGenerator.LoadTexture(oldTex.name, false, true, true);
+                        mat.SetTexture("_MainTex", tex);
 
                         projectorIDontCarePart.SetActive(false);
                     }
@@ -55,8 +57,11 @@ namespace MafiaUnity
                         var meshRenderer = lampRay.GetComponent<MeshRenderer>();
                         var mat = meshRenderer.sharedMaterial;
 
-                        mat.shader = Shader.Find("Mafia/Transparent");
-                        mat.SetColor("_Color", new Color(1f, 244/255f, 112/255f, 62/255f));
+                        mat.shader = Shader.Find("Unlit/Transparent");
+                        var oldTex = mat.GetTexture("_MainTex");
+                        var tex = ModelGenerator.LoadTexture(oldTex.name, false, true, true);
+                        mat.SetTexture("_MainTex", tex);
+                        //mat.SetColor("_Color", new Color(1f, 244/255f, 112/255f, 62/255f));
                     }
 
                     var photoFrame = GameObject.Find("foto");
@@ -66,7 +71,7 @@ namespace MafiaUnity
                         var s = photoFrame.transform.localScale;
                         photoFrame.transform.localScale = new Vector3(2.304092f, s.y, s.z);
                     }
-
+/* 
                     var menugl = GameObject.Find("menugl/Rectangle04");
 
                     if (menugl != null)
@@ -76,7 +81,7 @@ namespace MafiaUnity
 
                         mat.shader = Shader.Find("Mafia/Unlit Transparent");
                         mat.SetColor("_Color", new Color(1f, 252 / 255f, 218 / 255f, 2 / 255f));
-                    }
+                    } */
                 }
                 break;
 
