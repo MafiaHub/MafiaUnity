@@ -363,6 +363,7 @@ namespace MafiaUnity
                     {
                         mat = new Material(Shader.Find("Mafia/Transparent"));
                         mat.SetFloat("_Cutout", 0.9f);
+                        mat.renderQueue = 2005;
                     }
                     else if (mafiaMat.transparency < 1)
                     {

@@ -8,13 +8,17 @@ Shader "Mafia/Transparent" {
 	}
 	
 	SubShader {
-		Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+		Tags {
+            "Queue"="Transparent"
+            "IgnoreProjector"="True" 
+            "RenderType"="Transparent"
+            }
 
         ZWrite Off
         Blend SrcAlpha OneMinusSrcAlpha
 
 		CGPROGRAM
-        #pragma surface surf Standard fullforwardshadows alpha:fade
+        #pragma surface surf Lambert alpha:blend
 	
 		struct Input {
 			float2 uv_MainTex;
@@ -25,7 +29,7 @@ Shader "Mafia/Transparent" {
 		sampler2D _MainTex;
 		sampler2D _LightTex;
 	
-		void surf (Input IN, inout SurfaceOutputStandard o) {
+		void surf (Input IN, inout SurfaceOutput o) {
             float4 col = tex2D(_MainTex, IN.uv_MainTex);
 			o.Albedo = col.rgb;
 			o.Albedo *= tex2D(_LightTex, IN.uv_MainTex).rgb;
