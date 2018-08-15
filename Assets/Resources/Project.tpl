@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    [SOURCE_FILES]
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="[MAFIA_PATH]\Assembly-CSharp.csproj" />
   </ItemGroup>
 

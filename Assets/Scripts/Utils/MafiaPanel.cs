@@ -413,6 +413,22 @@ namespace MafiaUnity
                     projectTemplate = projectTemplate.Replace("[UNITY_PATH]", unityPath);
                     projectTemplate = projectTemplate.Replace("[MAFIA_PATH]", mafiaPath);
 
+                    string includeFiles = "";
+
+                    var scriptsDir = Path.Combine(solutionPath, "..", "Scripts");
+
+                    if (Directory.Exists(scriptsDir))
+                    {
+                        foreach (var cs in Directory.EnumerateFiles(scriptsDir, "*.cs", SearchOption.AllDirectories))
+                        {
+                            var fcs = cs.Replace(scriptsDir+Path.DirectorySeparatorChar,"");
+
+                            includeFiles += fileInclude.Replace("[INCLUDE_NAME]", fcs);
+                        }
+                    }
+
+                    projectTemplate = projectTemplate.Replace("[SOURCE_FILES]", includeFiles);
+
                     File.WriteAllText(Path.Combine(solutionPath, solutionName + ".sln"), solutionTemplate);
                     File.WriteAllText(Path.Combine(projectPath, solutionName + ".csproj"), projectTemplate);
                 }
@@ -426,6 +442,8 @@ namespace MafiaUnity
         string unityPath = @"F:/Unity/2018.2.2f1";
         string solutionPath = @"F:/OpenMF.git/Mods/MafiaBase/Temp";
         string solutionName = @"MafiaBase";
+
+        string fileInclude = "<Compile Include=\"..\\..\\Scripts\\[INCLUDE_NAME]\" Link=\"[INCLUDE_NAME]\" />";
     }
     
     [Serializable]
