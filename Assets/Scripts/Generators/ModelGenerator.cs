@@ -369,6 +369,12 @@ namespace MafiaUnity
                         mat = new Material(Shader.Find("Mafia/Transparent"));
                         mat.renderQueue = 2005;
                     }
+                    else if (mafiaMat.flags.HasFlag(MafiaFormats.MaterialFlag.AlphaTexture))
+                    {
+                        mat = new Material(Shader.Find("Mafia/Transparent"));
+                        mat.SetColor("_Color", new Color(1,1,1,.5f));
+                        mat.renderQueue = 2005;
+                    }
                     else
                     {
                         mat = new Material(Shader.Find("Mafia/Diffuse"));
@@ -430,7 +436,7 @@ namespace MafiaUnity
                         }
 
                         if (mafiaMat.transparency < 1)
-                            mat.SetColor("_Color", new Color32(255, 255, 255, (byte)(mafiaMat.transparency * 255)));
+                            mat.SetColor("_Color", new Color(1f, 1f, 1f, (byte)(mafiaMat.transparency)));
 
                         if ((mafiaMat.flags & (MafiaFormats.MaterialFlag.Animated_Texture_Diffuse | MafiaFormats.MaterialFlag.Animated_Texture_Alpha)) != 0)
                         {
