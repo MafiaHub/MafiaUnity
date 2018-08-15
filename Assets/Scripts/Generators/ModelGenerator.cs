@@ -359,38 +359,18 @@ namespace MafiaUnity
 
                     Material mat;
 
-                    if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
+                    if (mafiaMat.flags.HasFlag(MafiaFormats.MaterialFlag.Colorkey))
                     {
-                        //mat = new Material(Shader.Find("Standard"));
-                        mat = new Material(Shader.Find("Legacy Shaders/Transparent/Cutout/Diffuse"));
-                        mat.SetFloat("_Cutoff", 0.9f);
-                        // mat.SetFloat("_Mode", 1f); // Set rendering mode to Cutout
-                        // mat.SetFloat("_Glossiness", 0f);
-                        // mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                        // mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                        // mat.SetInt("_ZWrite", 1);
-                        // mat.DisableKeyword("_ALPHATEST_ON");
-                        // mat.EnableKeyword("_ALPHABLEND_ON");
-                        // mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                        // mat.renderQueue = 3000;
+                        mat = new Material(Shader.Find("Mafia/Transparent"));
+                        mat.SetFloat("_Cutout", 0.9f);
                     }
                     else if (mafiaMat.transparency < 1)
                     {
-                        mat = new Material(Shader.Find("Standard"));
-                        mat.SetFloat("_Mode", 3f); // Set rendering mode to Transparent
-                        mat.SetFloat("_Glossiness", 0f);
-                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                        mat.SetInt("_ZWrite", 1);
-                        mat.DisableKeyword("_ALPHATEST_ON");
-                        mat.EnableKeyword("_ALPHABLEND_ON");
-                        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                        mat.renderQueue = 3000;
+                        mat = new Material(Shader.Find("Mafia/Transparent"));
                     }
                     else
                     {
                         mat = new Material(Shader.Find("Mafia/Diffuse"));
-                        //mat.SetFloat("_Glossiness", 0f);
                     }
 
                     if (mafiaMat.diffuseMapName != null ||

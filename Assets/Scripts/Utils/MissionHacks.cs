@@ -32,7 +32,43 @@ namespace MafiaUnity
 
             switch (missionName.ToLower())
             {
-                // example usage
+                case "00menu":
+                {
+                    var projectorRay = GameObject.Find("9promitac/Cylinder18");
+                    var projectorIDontCarePart = GameObject.Find("9promitac/Cylinder05");
+
+                    if (projectorRay != null && projectorIDontCarePart != null)
+                    {
+                        var meshRenderer = projectorRay.GetComponent<MeshRenderer>();
+                        var mat = meshRenderer.sharedMaterial;
+
+                        mat.shader = Shader.Find("Mafia/Transparent");
+                        mat.SetColor("_Color", new Color(1f, 1f, 1f, 7/255f));
+
+                        projectorIDontCarePart.SetActive(false);
+                    }
+
+                    var lampRay = GameObject.Find("svetlo");
+
+                    if (lampRay != null)
+                    {
+                        var meshRenderer = lampRay.GetComponent<MeshRenderer>();
+                        var mat = meshRenderer.sharedMaterial;
+
+                        mat.shader = Shader.Find("Mafia/Transparent");
+                        mat.SetColor("_Color", new Color(1f, 244/255f, 112/255f, 62/255f));
+                    }
+
+                    var photoFrame = GameObject.Find("foto");
+
+                    if (photoFrame != null)
+                    {
+                        var s = photoFrame.transform.localScale;
+                        photoFrame.transform.localScale = new Vector3(2.304092f, s.y, s.z);
+                    }
+                }
+                break;
+
                 case "tutorial":
                 {
                     var skybox = GameObject.Find("o_m_");
@@ -150,6 +186,9 @@ namespace MafiaUnity
             skyboxCamera.localRotation = Quaternion.identity;
             skyboxCamera.localScale = Vector3.one;
 
+            // TODO: Fix transparent shader issues related to having secondary camera used.
+            skyboxCamera.gameObject.SetActive(false);
+
             var cam = skyboxCamera.gameObject.AddComponent<Camera>();
             cam.farClipPlane = 5000f;
             cam.cullingMask = (1 << LayerMask.NameToLayer("Backdrop"));
@@ -169,7 +208,8 @@ namespace MafiaUnity
 
         private void OnDestroy()
         {
-            GameObject.Destroy(skyboxCamera);
+            if (skyboxCamera != null)
+                GameObject.Destroy(skyboxCamera.gameObject);
         }
     }
 }
