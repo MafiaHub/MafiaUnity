@@ -1,29 +1,30 @@
-Shader "Mafia/Transparent" {
+Shader "Mafia/Cutout" {
 	
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
+        _Cutout ("Cutout", float) = 0.5
 		_MainTex ("Diffuse", 2D) = "white" {}
 		_LightTex ("Lightmap", 2D) = "white" {}
 	}
 	
 	SubShader {
 		Tags {
-			"Queue"="Transparent"
-			"IgnoreProjector"="True"
-            "RenderType"="Transparent"
+            "RenderType"="Opaque"
             }
         
-		ZWrite Off
-		Blend SrcAlpha OneMinusSrcAlpha
+        LOD 400
+
+        Cull Off
 
 		CGPROGRAM
-        #pragma surface surf Lambert alpha:blend
+        #pragma surface surf Lambert
 	
 		struct Input {
 			float2 uv_MainTex;
 		};
 	
 		float4 _Color;
+        float _Cutout;
 		sampler2D _MainTex;
 		sampler2D _LightTex;
 	
@@ -33,6 +34,7 @@ Shader "Mafia/Transparent" {
 			o.Albedo *= tex2D(_LightTex, IN.uv_MainTex).rgb;
 			o.Albedo *= _Color.rgb;
             o.Alpha = _Color.a*col.a;
+            clip(_Color.a*col.a - _Cutout);
 		}
 		ENDCG
 

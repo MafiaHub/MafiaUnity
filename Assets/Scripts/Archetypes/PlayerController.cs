@@ -98,6 +98,9 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+        if (characterController == null)
+            return;
+            
         var x = Input.GetAxisRaw("Horizontal");
         var z = Input.GetAxisRaw("Vertical");
         var isRunning = !Input.GetButton("Run");

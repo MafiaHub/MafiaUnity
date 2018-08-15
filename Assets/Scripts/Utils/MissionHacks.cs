@@ -186,9 +186,6 @@ namespace MafiaUnity
             skyboxCamera.localRotation = Quaternion.identity;
             skyboxCamera.localScale = Vector3.one;
 
-            // TODO: Fix transparent shader issues related to having secondary camera used.
-            skyboxCamera.gameObject.SetActive(false);
-
             var cam = skyboxCamera.gameObject.AddComponent<Camera>();
             cam.farClipPlane = 5000f;
             cam.cullingMask = (1 << LayerMask.NameToLayer("Backdrop"));

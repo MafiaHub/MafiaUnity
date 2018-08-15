@@ -361,13 +361,13 @@ namespace MafiaUnity
 
                     if (mafiaMat.flags.HasFlag(MafiaFormats.MaterialFlag.Colorkey))
                     {
-                        mat = new Material(Shader.Find("Mafia/Transparent"));
+                        mat = new Material(Shader.Find("Mafia/Cutout"));
                         mat.SetFloat("_Cutout", 0.9f);
-                        mat.renderQueue = 2005;
                     }
-                    else if (mafiaMat.transparency < 1)
+                    else if (mafiaMat.transparency < 1f)
                     {
                         mat = new Material(Shader.Find("Mafia/Transparent"));
+                        mat.renderQueue = 2005;
                     }
                     else
                     {
