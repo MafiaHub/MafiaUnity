@@ -6,19 +6,20 @@ namespace MafiaUnity
 {
     public class CustomBillboard : MonoBehaviour
     {
-        // Use this for initialization
+        GameObject cameraObject = null;
+
         void Start()
         {
-
+            cameraObject = GameObject.Find("Main Camera");
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Camera.main == null)
+            if (cameraObject == null)
                 return;
                 
-            transform.LookAt(Camera.main.transform);
+            transform.LookAt(cameraObject.transform);
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
     }
