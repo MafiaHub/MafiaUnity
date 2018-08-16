@@ -293,9 +293,7 @@ namespace MafiaUnity
                     case ObjectProperty.Name:
                     case ObjectProperty.Name_Special:
                     {
-                            var charName = reader.ReadBytes((int)header.size-7);
-                            
-                            newObject.name = System.Text.Encoding.ASCII.GetString(charName);
+                            newObject.name = ReadTerminatedString(reader);
                     }
                     break;
 
@@ -346,11 +344,7 @@ namespace MafiaUnity
 
                     case ObjectProperty.Model:
                         {
-                            var charName = reader.ReadBytes((int)header.size - 6);
-                            
-                            newObject.modelName = System.Text.Encoding.ASCII.GetString(charName).Replace(".I3D", ".4ds");
-                            newObject.modelName = newObject.modelName.Replace(".i3d", ".4ds");
-                            newObject.modelName = newObject.modelName.Trim().Split('\0')[0];
+                            newObject.modelName = ReadTerminatedString(reader).ToLower().Replace(".i3d", ".4ds");
                         }
                         break;
 

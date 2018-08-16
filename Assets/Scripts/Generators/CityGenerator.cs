@@ -111,7 +111,7 @@ namespace MafiaUnity
 
             using (var reader = new BinaryReader(fs))
             {
-                var newKlzLoader = new KLZLoader();
+                var newKlzLoader = new MafiaFormats.KLZLoader();
                 newKlzLoader.load(reader);
 
                 //NOTE(DavoSK): All face colls are inside of mesh nodes not in tree.klz

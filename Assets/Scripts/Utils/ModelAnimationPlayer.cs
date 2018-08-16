@@ -53,7 +53,7 @@ namespace MafiaUnity
 
             using (var reader = new BinaryReader(fs))
             {
-                Loader5DS animLoader = new Loader5DS();
+                MafiaFormats.Loader5DS animLoader = new MafiaFormats.Loader5DS();
                 animLoader.load(reader);
 
                 foreach (var seq in animLoader.sequences)
@@ -168,7 +168,7 @@ namespace MafiaUnity
     [Serializable]
     public class AnimationSequence
     {
-        public Loader5DS.AnimationSequence loaderSequence;
+        public MafiaFormats.Loader5DS.AnimationSequence loaderSequence;
         public int positionKeyFrameId;
         public int rotationKeyFrameId;
         public int scaleKeyFrameId;

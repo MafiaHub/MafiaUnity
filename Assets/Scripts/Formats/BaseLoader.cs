@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace MafiaUnity
@@ -45,6 +46,21 @@ namespace MafiaUnity
         {
             var length = reader.ReadByte();
             return System.Text.Encoding.ASCII.GetString(reader.ReadBytes(length));
+        }
+        
+        public static string ReadTerminatedString(BinaryReader reader)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            int status = 0;
+
+            while ((status = reader.ReadByte()) != '\0')
+            {
+                char c = (char)status;
+                sb.Append(c);
+            }
+
+            return sb.ToString();
         }
     }
 }

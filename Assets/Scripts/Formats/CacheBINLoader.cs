@@ -82,7 +82,7 @@ namespace MafiaUnity
 
                         //NOTE(DavoSK): renaming .i3ds to 4ds
                         var modelNameLength = reader.ReadUInt32();
-                        newInstance.modelName = new string(reader.ReadChars((int)modelNameLength)).Replace(".i3d", ".4ds");
+                        newInstance.modelName = new string(reader.ReadChars((int)modelNameLength)).ToLower().Replace(".i3d", ".4ds");
 
                         newInstance.pos = ReadVector3(reader);
                         newInstance.rot = ReadQuat(reader);
