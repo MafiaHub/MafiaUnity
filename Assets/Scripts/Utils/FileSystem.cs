@@ -202,8 +202,6 @@ namespace MafiaUnity
                 return DTAGetFileContent(path);
 
             throw new FileNotFoundException(path);
-
-            return null;
         }
 
         /// <summary>
