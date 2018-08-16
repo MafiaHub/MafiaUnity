@@ -2196,7 +2196,7 @@ MonoBehaviour:
   SmallTerminalRatio: 0.33
   ToggleSpeed: 360
   ToggleHotkey: '`'
-  ToggleFullHotkey: _
+  ToggleFullHotkey: '#`'
   BufferSize: 512
   ConsoleFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   InputCaret: '>'
