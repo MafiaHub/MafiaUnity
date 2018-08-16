@@ -30,6 +30,14 @@ namespace MafiaUnity
         }
 
         /// <summary>
+        /// Clears out all optional paths.
+        /// </summary>
+        public void ClearOptionalPaths()
+        {
+            paths.Clear();
+        }
+
+        /// <summary>
         /// Retrieves all paths except the game path.
         /// </summary>
         /// <returns></returns>
@@ -210,6 +218,7 @@ namespace MafiaUnity
             if (ValidateGamePath(path))
             {
                 gamePath = path;
+                ClearOptionalPaths();
 
                 //Mount dta files after correct path is set
                 DTAMountFiles();

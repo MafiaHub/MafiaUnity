@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using CommandTerminal;
 
 namespace MafiaUnity
 {
@@ -12,6 +13,7 @@ namespace MafiaUnity
         public Dictionary<string, Func<string, string>> commands = new Dictionary<string, Func<string, string>>();
 
         private string[] toKeyword = new string[] { " to " };
+        private bool debugMode = false;
 
         /// <summary>
         /// Executes console commands separated by newline.
@@ -26,6 +28,9 @@ namespace MafiaUnity
             var output = new StringBuilder();
 
             var lines = buffer.Split('\n');
+
+            if (debugMode)
+                Debug.Log("> \"" + buffer + "\"");
 
             foreach (var line in lines)
             {
@@ -42,7 +47,10 @@ namespace MafiaUnity
                     output.AppendLine(cvarManager.Get(cmd, ""));
             }
 
-            return output.ToString();
+            string outputString = output.ToString();
+            Debug.Log(outputString);
+
+            return outputString;
         }
 
         /// <summary>
@@ -68,23 +76,24 @@ namespace MafiaUnity
 
         public ConsoleManager()
         {
-            commands.Add("test", (string text) =>
-            {
-                return "Testing " + text;
-            });
-
-            commands.Add("set", (string text) =>
-            {
+            AddCommand("set", "Set a value to cvar", (string text) => {
                 return SetCvar(text, CvarManager.CvarMode.None);
             });
 
-            commands.Add("pset", (string text) =>
-            {
+            AddCommand("pset", "Set a persistent value to cvar", (string text) => {
                 return SetCvar(text, CvarManager.CvarMode.Archived);
             });
 
-            commands.Add("loadMission", (string text) =>
-            {
+            AddCommand("get", "Get a value from a cvar", (string text) => {
+                return GameManager.instance.cvarManager.Get(text, "(null)");
+            });
+
+            AddCommand("dbg", "Toggle console debug mode", (string text) => {
+                debugMode = !debugMode;
+                return debugMode.ToString();
+            });
+
+            AddCommand("loadMission", "Loads a mission", (string text) => {
                 GameManager.instance.missionManager.LoadMission(text);
 
                 return "ok";
@@ -112,7 +121,16 @@ namespace MafiaUnity
             else
                 GameManager.instance.cvarManager.Set(cvar, value);
 
-            return "Value set to" + " \"" + value + "\".";
+            return "Value for \"" + cvar + "\" set to" + " \"" + value + "\".";
+        }
+
+        public void AddCommand(string name, string help, Func<string, string> cb)
+        {
+            commands.Add(name, cb);
+
+            Terminal.Shell.AddCommand(name, (CommandArg[] args) => {
+                GameManager.instance.consoleManager.ExecuteString(name + " " + string.Join(" ", args).Trim());
+            }, 0, -1, help);
         }
     }
 }

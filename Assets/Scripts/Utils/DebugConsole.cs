@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace MafiaUnity
 {
+    /// <summary>
+    /// Obsolete
+    /// </summary>
     public class DebugConsole : MonoBehaviour
     {
         public KeyCode toggleKey = KeyCode.BackQuote;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using MafiaUnity;
+using CommandTerminal;
 
 class ScriptMain : IModScript
 {
@@ -24,9 +25,6 @@ class MafiaGameMode : IGameMode
 	// on gm registration
 	void IGameMode.Register()
 	{
-		var go = new GameObject("DebugMode");
-		go.AddComponent<DebugConsole>();
-
 		var menuManagerObject = new GameObject("MenuManager");
         var menuManager = menuManagerObject.AddComponent<MenuManager>();
 		

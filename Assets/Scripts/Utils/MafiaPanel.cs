@@ -73,7 +73,7 @@ namespace MafiaUnity
                 {
                     if (GUILayout.Button("-", GUILayout.Width(20)))
                     {
-                        GameManager.instance.fileSystem.RemoveOptionalPath(p);
+                        GameManager.instance.fileSystem.RemoveOptionalPath(p.Replace(Path.DirectorySeparatorChar+"Data", ""));
                     }
 
                     GUILayout.Label(p);
