@@ -128,6 +128,12 @@ namespace MafiaUnity
         {
             commands.Add(name, cb);
 
+            if (Terminal.Shell == null)
+            {
+                Debug.LogWarning("No Terminal is available. Falling back to internal routine!");
+                return;
+            }
+
             Terminal.Shell.AddCommand(name, (CommandArg[] args) => {
                 GameManager.instance.consoleManager.ExecuteString(name + " " + string.Join(" ", args).Trim());
             }, 0, -1, help);
