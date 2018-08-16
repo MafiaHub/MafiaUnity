@@ -170,6 +170,35 @@ namespace MafiaUnity
                 }
                 break;
             }
+
+
+            // NOTE: Create a spawn point for player
+            // TODO: Improve it
+            /* var player = GameObject.Find("Main Player");
+
+            if (player != null)
+            {
+                Debug.Log("Player was found! Locating spawn point.");
+
+                var objects = Resources.FindObjectsOfTypeAll(typeof(ObjectDefinition));
+
+                foreach (ObjectDefinition obj in objects)
+                {
+                    if (obj.data.specialType == MafiaFormats.Scene2BINLoader.SpecialObjectType.Player)
+                    {
+                        var tr = obj.transform;
+
+                        player.transform.position = tr.position;
+                        player.transform.rotation = tr.rotation;
+                        tr.gameObject.SetActive(false);
+
+                        var rg = player.GetComponent<Rigidbody>();
+                        rg.velocity = new Vector3(0f, 0f, 0f);
+                        rg.angularVelocity = new Vector3(0f, 0f, 0f);
+                        break;
+                    }
+                }
+            } */
         }
 
         void SetUpSkybox(Transform skybox)
