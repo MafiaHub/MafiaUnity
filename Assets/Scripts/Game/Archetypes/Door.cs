@@ -87,10 +87,6 @@ namespace MafiaUnity
 			
 			isMoving = true;
 			
-			var vec = (user.transform.position - transform.position).normalized;
-
-			openDirection = (Vector3.Dot(vec, transform.forward) > 0f) ? 0 : 1;
-			
 			if (door.open > 0)
 			{
 				audioSource.clip = closeSound;
@@ -98,6 +94,9 @@ namespace MafiaUnity
 			else
 			{
                 audioSource.clip = openSound;
+
+                var vec = (user.transform.position - transform.position).normalized;
+                openDirection = (Vector3.Dot(vec, transform.forward) > 0f) ? 0 : 1;
 			}
 
 			audioSource.Play();
