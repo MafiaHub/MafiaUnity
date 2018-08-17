@@ -100,6 +100,14 @@ namespace MafiaUnity
             GameManager.instance.fileSystem.RemoveOptionalPath(modPath);
         }
 
+        /// <summary>
+        /// Returns Unity's AssetBundle. It follows Unity's API but handles the paths for user.
+        /// See https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromFile.html
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="crc"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         public AssetBundle LoadFromFile(string path, uint crc = 0, ulong offset = 0)
         {
             var bundlesPath = Path.Combine(modPath, "Bundles");
@@ -108,6 +116,33 @@ namespace MafiaUnity
                 return null;
 
             return AssetBundle.LoadFromFile(Path.Combine(bundlesPath, path), crc, offset);
+        }
+
+        /// <summary>
+        /// Async variant of LoadFromFile. It follows Unity's API but handles the paths for user.
+        /// See https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromFileAsync.html
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="crc"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public AssetBundleCreateRequest LoadFromFileAsync(string path, uint crc = 0, ulong offset = 0)
+        {
+            var bundlesPath = Path.Combine(modPath, "Bundles");
+
+            if (!Directory.Exists(bundlesPath))
+                return null;
+
+            return AssetBundle.LoadFromFileAsync(Path.Combine(bundlesPath, path), crc, offset);
+        }
+
+        /// <summary>
+        /// Returns the path to the mod.
+        /// </summary>
+        /// <returns></returns>
+        public string GetModPath()
+        {
+            return modPath;
         }
     }
 
