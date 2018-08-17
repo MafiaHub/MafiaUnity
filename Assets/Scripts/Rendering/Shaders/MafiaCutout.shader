@@ -17,7 +17,7 @@ Shader "Mafia/Cutout" {
         Cull Off
 
 		CGPROGRAM
-        #pragma surface surf Lambert
+        #pragma surface surf Lambert fullforwardshadows
 	
 		struct Input {
 			float2 uv_MainTex;
@@ -39,6 +39,6 @@ Shader "Mafia/Cutout" {
 		ENDCG
 
 	} 
-    Fallback "Diffuse"
+    Fallback "Transparent/Cutout/Diffuse"
 
 }
