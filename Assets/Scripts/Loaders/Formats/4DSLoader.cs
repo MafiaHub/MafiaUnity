@@ -809,7 +809,13 @@ namespace MafiaUnity
 
                 readMaterial(ref newModel, reader);
                 readMesh(ref newModel, reader);
-                newModel.use5DS = reader.ReadByte() > 0;
+
+                // TODO Investigate
+                try 
+                {
+                    newModel.use5DS = reader.ReadByte() > 0;
+                }
+                catch {}
 
                 return newModel;
             }
