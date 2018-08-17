@@ -65,7 +65,7 @@ namespace MafiaUnity
                     else if (mafiaMesh.meshType != MafiaFormats.MeshType.Standard)
                         continue;
 
-                    if (mafiaMesh.standard.instanced != 0)
+                    if (mafiaMesh.standard != null && mafiaMesh.standard.instanced != 0)
                         continue;
 
                     var def = child.AddComponent<ModelDefinition>();
@@ -183,6 +183,9 @@ namespace MafiaUnity
 
                                 foreach (var m in model.meshes)
                                 {
+                                    if (m.standard == null)
+                                        continue;
+                                        
                                     if (m.standard.lods == null)
                                         continue;
 
