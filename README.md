@@ -50,3 +50,4 @@ If you'd like to join us and contribute, feel free to connect to [our Discord se
 ![](https://i.imgur.com/A92V7mh.jpg)
 ![](https://i.imgur.com/6xSzE3O.jpg)
 ![](https://i.imgur.com/COocDgd.jpg)
+![](https://i.imgur.com/kUNizMw.jpg)
