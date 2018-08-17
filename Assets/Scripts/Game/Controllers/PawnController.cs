@@ -237,6 +237,11 @@ public class PawnController
 	{
         return movementMode == MovementMode.Crouch;
 	}
+
+    public bool IsRolling()
+    {
+        return isRolling;
+    }
 	
 	public bool IsMoving()
 	{

@@ -109,7 +109,7 @@ namespace MafiaUnity
             pairAnimation = anim;
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (GameManager.instance.isPaused)
                 return;

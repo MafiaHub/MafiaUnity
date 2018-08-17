@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour
     const float CROUCH_CAMERA_DOWN = 0.8f;
     const float CAMERA_DISTANCE = 1.46f;
 
+    // TEST ONLY
+    bool test_aim = false;
+    public float test_offset = -0.82f;
+
     public void Start()
     {
         characterController = new PawnController(playerPawn.GetComponent<ModelAnimationPlayer>(), transform);
@@ -132,7 +136,11 @@ public class PlayerController : MonoBehaviour
         var z = Input.GetAxisRaw("Vertical");
         var isRunning = !Input.GetButton("Run");
         var isCrouching = Input.GetButton("Crouch");
-        
+
+        // TEST ONLY
+        if (Input.GetKeyDown(KeyCode.P))
+            test_aim = !test_aim;
+
         if(!characterController.isRolling)
         {
             if (isCrouching)
@@ -176,5 +184,17 @@ public class PlayerController : MonoBehaviour
         characterController.Update();
         
         UpdateCameraMovement();
+
+        // TEST ONLY
+        if (test_aim && !characterController.IsRolling())
+        {
+            var look = playerCamera.transform.position;
+            var back1 = playerPawn.transform.Find("base/back1").transform;
+            look.y += test_offset;
+
+            back1.LookAt(look, back1.up);
+            back1.Rotate(new Vector3(0f,180f,0f), Space.Self);
+            characterController.stanceMode = AnimationStanceMode.Pistol;
+        }
     }
 }
