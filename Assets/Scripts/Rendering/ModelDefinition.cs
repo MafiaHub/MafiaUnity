@@ -5,7 +5,6 @@ using MafiaUnity;
 
 public class ModelDefinition : MonoBehaviour {
 
-    [SerializeField] public MafiaUnity.MafiaFormats.Model model;
-    [SerializeField] public MafiaUnity.MafiaFormats.Mesh mesh;
-
+    public MafiaUnity.MafiaFormats.Model model;
+    public MafiaUnity.MafiaFormats.Mesh mesh;
 }
