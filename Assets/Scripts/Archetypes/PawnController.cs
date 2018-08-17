@@ -300,7 +300,7 @@ public class PawnController
         
 		rootObject.transform.localRotation = Quaternion.Slerp(rootObject.transform.localRotation, rotToInterpolate, Time.deltaTime * 10f);
 			
-        movementAngle = 0;
+        movementAngle = 0f;
     }
 
     enum AnimationSlots : int

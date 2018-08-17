@@ -17,13 +17,21 @@ public class PlayerController : MonoBehaviour
     public void Start()
     {
         characterController = new PawnController(playerPawn.GetComponent<ModelAnimationPlayer>(), transform);
-        playerCamera.transform.parent = transform;
-        playerCamera.transform.localPosition = new Vector3(0f, cameraUpAndDown, -1.46f);
+        playerCamera.transform.position = CalculateCameraPosition();
 
         var playerNeckTrans = transform.FindDeepChild("neck");
         cameraOrbitPoint = new GameObject("cameraOrbitPoint").transform;
         cameraOrbitPoint.parent = transform;
         cameraOrbitPoint.position = playerNeckTrans.position;
+    }
+
+    private Vector3 CalculateCameraPosition(float turnAngle=0f)
+    {
+        var dir = transform.forward * -1.46f;
+        var pos = transform.position + dir;
+        pos.y += cameraUpAndDown;
+
+        return pos;
     }
 
     private void UpdateCameraMovement()
@@ -39,7 +47,7 @@ public class PlayerController : MonoBehaviour
         if (cameraUpAndDown > 3.5f)
             cameraUpAndDown = 3.5f;
 
-        playerCamera.transform.localPosition = Vector3.Lerp(playerCamera.transform.localPosition, new Vector3(0f, cameraUpAndDown, -1.46f), Time.deltaTime * 10f);
+        playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, CalculateCameraPosition(), Time.deltaTime * 10f);
         playerCamera.transform.LookAt(cameraOrbitPoint);
         characterController.TurnByAngle(x);
     }
