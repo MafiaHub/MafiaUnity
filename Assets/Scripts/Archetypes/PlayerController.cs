@@ -21,11 +21,9 @@ public class PlayerController : MonoBehaviour
         playerCamera.transform.localPosition = new Vector3(0f, cameraUpAndDown, -1.46f);
 
         var playerNeckTrans = transform.FindDeepChild("neck");
-        var newObject = GameObject.Instantiate(playerNeckTrans.gameObject);
-        newObject.transform.parent = transform;
-        newObject.transform.position = playerNeckTrans.position;
-        newObject.name = "cameraOrbitPoint";
-        cameraOrbitPoint = newObject.transform;
+        cameraOrbitPoint = new GameObject("cameraOrbitPoint").transform;
+        cameraOrbitPoint.parent = transform;
+        cameraOrbitPoint.position = playerNeckTrans.position;
     }
 
     private void UpdateCameraMovement()
