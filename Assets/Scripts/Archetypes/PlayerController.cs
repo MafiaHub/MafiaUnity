@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         cameraOrbitPoint.position = playerNeckTrans.position;
     }
 
-    private Vector3 CalculateCameraPosition(float turnAngle=0f)
+    private Vector3 CalculateCameraPosition()
     {
         var dir = transform.forward * -1.46f;
         var pos = transform.position + dir;
