@@ -84,7 +84,7 @@ namespace MafiaUnity
             } */
 		}
 
-		public void UseDoor(GameObject user, int doorSide)
+		public override void UseDoor(GameObject user, int doorSide)
 		{
 			if (door.locked > 0)
 			{
