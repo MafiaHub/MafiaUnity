@@ -115,6 +115,17 @@ public class ModManagerGUI : MonoBehaviour {
         }
     }
 
+    string GetModNameFromFolderName(string folderName)
+    {
+        var mod = modEntries.Find(x => x.modName == folderName);
+
+        if (mod != null)
+        {
+            return string.Format("{0} ({1})", mod.modMeta.name, mod.modName);
+        }
+        else return folderName;
+    }
+
     void SelectModInfo(ModEntry mod)
     {
         if (mod == null)
@@ -122,18 +133,18 @@ public class ModManagerGUI : MonoBehaviour {
 
         var entry = mod.modMeta;
 
-        modName.text = string.Format("Name: {0}", entry.name);
+        modName.text = string.Format("Name: {0} ({1})", entry.name, mod.modName);
         modAuthor.text = string.Format("Author: {0}", entry.author);
         modVersion.text = string.Format("Version: {0}", entry.version);
         modGameVersion.text = string.Format("Game Version: {0}", entry.gameVersion);
 
         if (entry.dependencies.Count > 0)
-            modDependencies.text = string.Format("Dependencies: {0}", string.Join(", ", entry.dependencies.ToArray()));
+            modDependencies.text = string.Format("Dependencies: {0}", string.Join(", ", entry.dependencies.Select(x => GetModNameFromFolderName(x)).ToArray()));
         else
             modDependencies.text = "Dependencies: None";
 
         if (mod.missingDependencies.Count > 0)
-            modMissingDeps.text = string.Format("Missing Dependencies: {0}", string.Join(", ", mod.missingDependencies.ToArray()));
+            modMissingDeps.text = string.Format("Missing Dependencies: {0}", string.Join(", ", mod.missingDependencies.Select(x => GetModNameFromFolderName(x)).ToArray()));
         else
         {
             if (mod.status == ModEntryStatus.Incomplete)
