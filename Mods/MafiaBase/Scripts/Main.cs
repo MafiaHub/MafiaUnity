@@ -44,30 +44,6 @@ class MafiaGameMode : IGameMode
 	}
 }
 
-class PauseMenuState : MenuState
-{
-    MenuHub hub;
-
-    public PauseMenuState(MenuHub menuHub)
-    {
-        hub = menuHub;
-    }
-
-    public override void OnStateEnter()
-	{
-        MenuHelper.ToggleMouseCursor(true);
-        GameManager.instance.isPaused = true;
-	}
-
-	public override void OnStateUpdate()
-	{
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			hub.SwitchToPlay();
-		}
-	}
-}
-
 class MenuHub
 {
 	public PauseMenuState pauseMenu;
@@ -101,25 +77,19 @@ class PlayMenuState : MenuState
 {
 	MenuHub hub;
 
-	Texture2D hud;
-	Texture2D hud2;
-	
-	Texture2D hpTommy;
-
-	Texture2D ab;
-	Texture2D radar;
-
 	public PlayMenuState(MenuHub menuHub)
 	{
 		hub = menuHub;
 
-		hud = TGALoader.LoadTGA(GameManager.instance.fileSystem.GetStreamFromPath("maps/1int.tga"), true);
-        hud2 = TGALoader.LoadTGA(GameManager.instance.fileSystem.GetStreamFromPath("maps/2intmph.tga"), true);
-        
-		hpTommy = hud.CropTexture(new Rect(0, 73, 50, 22));
-		ab = hud2.CropTexture(new Rect(0, 112, 35, 36));
-        radar = hud2.CropTexture(new Rect(0, 147, 109, 109));
-	}
+        HUDManager.instance.LoadAtlas("1int", true);
+		HUDManager.instance.LoadAtlas("2intmph", true);
+
+		HUDManager.instance.LoadSprite("hpTommy", "1int", new Rect(0, 73, 50, 22));
+        HUDManager.instance.LoadSprite("abButton", "2intmph", new Rect(0, 112, 35, 36));
+        HUDManager.instance.LoadSprite("radar", "2intmph", new Rect(0, 147, 109, 109));
+
+		HUDManager.instance.scale = 1.5f;
+    }
 
 	public override void OnStateEnter()
 	{
@@ -135,14 +105,44 @@ class PlayMenuState : MenuState
 	}
 
     public override void OnStateGUI()
-    { 
-		if (hud == null)
-			return;
+    {
+		var scaling = HUDManager.instance.scale;
 
-        GUI.DrawTexture(new Rect(20, Screen.height - 20 - hpTommy.height, hpTommy.width, hpTommy.height), hpTommy);
-        GUI.DrawTexture(new Rect(20, 20, radar.width, radar.height), radar);
-        GUI.DrawTexture(new Rect(20, Screen.height - 20 - hpTommy.height - ab.height - 5, ab.width, ab.height), ab);
+		HUDManager.instance.DrawSprite("hpTommy", HUDAnchorMode.Bottom, new Vector2(20, 20));
+		HUDManager.instance.DrawNumber(100, HUDAnchorMode.Bottom, new Vector2(25, 22));
+
+        HUDManager.instance.DrawSprite("radar", HUDAnchorMode.None, new Vector2(20, 20));
+        HUDManager.instance.DrawSprite("abButton", HUDAnchorMode.Bottom, new Vector2(20, HUDManager.instance.GetSprite("hpTommy").height*scaling + 20));
     }
+}
+
+class PauseMenuState : MenuState
+{
+    MenuHub hub;
+
+    public PauseMenuState(MenuHub menuHub)
+    {
+        hub = menuHub;
+    }
+
+    public override void OnStateEnter()
+    {
+        MenuHelper.ToggleMouseCursor(true);
+        GameManager.instance.isPaused = true;
+    }
+
+    public override void OnStateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            hub.SwitchToPlay();
+        }
+    }
+
+	public override void OnStateGUI()
+	{
+		GUILayout.Label("Game is paused....");
+	}
 }
 
 class MenuHelper
