@@ -10,26 +10,43 @@ public class PlayerController : MonoBehaviour
     public GameObject playerCamera;
     public GameObject playerPawn;
     private Transform cameraOrbitPoint;
+    private Transform neckTransform;
     private float cameraUpAndDown = 2.01f;
     private CustomButton leftButton = new CustomButton("a");
     private CustomButton rightButton = new CustomButton("d");
+    Vector3 neckStandPosition, neckCrouchPosition;
+    const float CROUCH_CAMERA_DOWN = 0.8f;
 
     public void Start()
     {
         characterController = new PawnController(playerPawn.GetComponent<ModelAnimationPlayer>(), transform);
-        playerCamera.transform.position = CalculateCameraPosition();
+        playerCamera.transform.position = CalculateAndUpdateCameraPosition();
 
-        var playerNeckTrans = transform.FindDeepChild("neck");
+        neckTransform = transform.FindDeepChild("neck");
         cameraOrbitPoint = new GameObject("cameraOrbitPoint").transform;
         cameraOrbitPoint.parent = transform;
-        cameraOrbitPoint.position = playerNeckTrans.position;
+        cameraOrbitPoint.position = neckTransform.position;
+        neckCrouchPosition = neckStandPosition = cameraOrbitPoint.localPosition;
+        neckCrouchPosition.y -= CROUCH_CAMERA_DOWN;
     }
 
-    private Vector3 CalculateCameraPosition()
+    private Vector3 CalculateAndUpdateCameraPosition()
     {
         var dir = transform.forward * -1.46f;
         var pos = transform.position + dir;
         pos.y += cameraUpAndDown;
+
+        if (characterController.IsCrouched())
+        {
+            pos.y -= CROUCH_CAMERA_DOWN;
+
+            if (cameraOrbitPoint != null)
+                cameraOrbitPoint.localPosition = Vector3.Lerp(cameraOrbitPoint.localPosition, neckCrouchPosition, Time.deltaTime * 10f);
+        }
+        else if (cameraOrbitPoint != null)
+        {
+            cameraOrbitPoint.localPosition = Vector3.Lerp(cameraOrbitPoint.localPosition, neckStandPosition, Time.deltaTime * 10f);
+        }
 
         return pos;
     }
@@ -47,7 +64,7 @@ public class PlayerController : MonoBehaviour
         if (cameraUpAndDown > 3.5f)
             cameraUpAndDown = 3.5f;
 
-        playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, CalculateCameraPosition(), Time.deltaTime * 10f);
+        playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, CalculateAndUpdateCameraPosition(), Time.deltaTime * 10f);
         playerCamera.transform.LookAt(cameraOrbitPoint);
         characterController.TurnByAngle(x);
     }
