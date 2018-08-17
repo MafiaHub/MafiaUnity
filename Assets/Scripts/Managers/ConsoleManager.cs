@@ -8,6 +8,9 @@ using CommandTerminal;
 
 namespace MafiaUnity
 {
+    /// <summary>
+    /// Handles execution of config/console commands.
+    /// </summary>
     public class ConsoleManager
     {
         public Dictionary<string, Func<string, string>> commands = new Dictionary<string, Func<string, string>>();
@@ -124,6 +127,12 @@ namespace MafiaUnity
             return "Value for \"" + cvar + "\" set to" + " \"" + value + "\".";
         }
 
+        /// <summary>
+        /// Registers a console command to the system.
+        /// </summary>
+        /// <param name="name">Command name</param>
+        /// <param name="help">Help text displayed in the console</param>
+        /// <param name="cb">Method to execute</param>
         public void AddCommand(string name, string help, Func<string, string> cb)
         {
             commands.Add(name, cb);
