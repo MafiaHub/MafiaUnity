@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         if (GameManager.instance.isPaused)
             return;
