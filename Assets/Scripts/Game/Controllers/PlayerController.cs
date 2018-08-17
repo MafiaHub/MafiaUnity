@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private CustomButton rightButton = new CustomButton("d");
     Vector3 neckStandPosition, neckCrouchPosition;
     const float CROUCH_CAMERA_DOWN = 0.8f;
+    const float CAMERA_DISTANCE = 1.46f;
 
     public void Start()
     {
@@ -32,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 CalculateAndUpdateCameraPosition()
     {
-        var dir = transform.forward * -1.46f;
+        var dir = transform.forward * -CAMERA_DISTANCE;
         var pos = transform.position + dir;
         pos.y += cameraUpAndDown;
 
