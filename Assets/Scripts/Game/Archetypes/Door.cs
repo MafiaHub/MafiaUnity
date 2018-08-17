@@ -7,10 +7,10 @@ namespace MafiaUnity
 	public class Door : IUsable
     {
         public MafiaFormats.Scene2BINLoader.DoorProp door;
+		public int openDirection = 0;
 		Quaternion startRotation, openRotation, openInvRotation, closeRotation, currentRotation;
 		float delta = 0f;
 		bool isMoving = false;
-		int openDirection = 0;
 
 		AudioClip openSound, closeSound, lockedSound;
 
@@ -70,21 +70,10 @@ namespace MafiaUnity
 					door.open = (byte)(1 - door.open);
                     currentRotation = transform.localRotation;
 				}
-			}	
-
-			// debug
-			/* if (Input.GetKeyDown(KeyCode.O))
-			{
-				UseDoor(gameObject, 0);
 			}
-
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                UseDoor(gameObject, 1);
-            } */
 		}
 
-		public override void UseDoor(GameObject user, int doorSide)
+		public override void Use(GameObject user)
 		{
 			if (door.locked > 0)
 			{
@@ -97,7 +86,10 @@ namespace MafiaUnity
 				return;
 			
 			isMoving = true;
-			openDirection = doorSide;
+			
+			var vec = (user.transform.position - transform.position).normalized;
+
+			openDirection = (Vector3.Dot(vec, transform.forward) > 0f) ? 0 : 1;
 			
 			if (door.open > 0)
 			{

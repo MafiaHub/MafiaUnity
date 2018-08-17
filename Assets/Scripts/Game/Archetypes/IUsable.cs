@@ -6,9 +6,4 @@ public abstract class IUsable : MonoBehaviour
 	{
 		
 	}
-
-    public virtual void UseDoor(GameObject user, int doorSide)
-	{
-
-	}
 }
