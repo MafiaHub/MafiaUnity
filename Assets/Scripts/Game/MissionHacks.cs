@@ -12,193 +12,214 @@ namespace MafiaUnity
     {
         public MissionHacks(string missionName, MafiaFormats.Scene2BINLoader data)
         {
-            // Fix backdrop sector
-            var backdrop = GameObject.Find("Backdrop sector");
+            try
             {
-                if (backdrop != null)
+                // Fix backdrop sector
+                var backdrop = GameObject.Find("Backdrop sector");
                 {
-                    backdrop.AddComponent<BackdropManipulator>();
+                    if (backdrop != null)
+                    {
+                        backdrop.AddComponent<BackdropManipulator>();
+                    }
                 }
-            }
 
-            // Change view distance
-            {
-                var mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
-
-                var viewDistance = data.viewDistance;
-
-                mainCamera.farClipPlane = viewDistance;
-            }
-
-            switch (missionName.ToLower())
-            {
-                case "00menu":
+                // Change view distance
                 {
-                    var projectorRay = GameObject.Find("9promitac/Cylinder18");
-                    var projectorIDontCarePart = GameObject.Find("9promitac/Cylinder05");
+                    var mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
 
-                    if (projectorRay != null && projectorIDontCarePart != null)
-                    {
-                        var meshRenderer = projectorRay.GetComponent<MeshRenderer>();
-                        var mat = meshRenderer.sharedMaterial;
+                    var viewDistance = data.viewDistance;
 
-                        mat.shader = Shader.Find("Unlit/Transparent");
-                        var oldTex = mat.GetTexture("_MainTex");
-                        var tex = ModelGenerator.LoadTexture(oldTex.name, false, true, true);
-                        mat.SetTexture("_MainTex", tex);
-
-                        projectorIDontCarePart.SetActive(false);
-                    }
-
-                    var lampRay = GameObject.Find("svetlo");
-
-                    if (lampRay != null)
-                    {
-                        var meshRenderer = lampRay.GetComponent<MeshRenderer>();
-                        var mat = meshRenderer.sharedMaterial;
-
-                        mat.shader = Shader.Find("Unlit/Transparent");
-                        var oldTex = mat.GetTexture("_MainTex");
-                        var tex = ModelGenerator.LoadTexture(oldTex.name, false, true, true);
-                        mat.SetTexture("_MainTex", tex);
-                        //mat.SetColor("_Color", new Color(1f, 244/255f, 112/255f, 62/255f));
-                    }
-
-                    var photoFrame = GameObject.Find("foto");
-
-                    if (photoFrame != null)
-                    {
-                        var s = photoFrame.transform.localScale;
-                        photoFrame.transform.localScale = new Vector3(2.304092f, s.y, s.z);
-                    }
-/* 
-                    var menugl = GameObject.Find("menugl/Rectangle04");
-
-                    if (menugl != null)
-                    {
-                        var meshRenderer = menugl.GetComponent<MeshRenderer>();
-                        var mat = meshRenderer.sharedMaterial;
-
-                        mat.shader = Shader.Find("Mafia/Unlit Transparent");
-                        mat.SetColor("_Color", new Color(1f, 252 / 255f, 218 / 255f, 2 / 255f));
-                    } */
+                    mainCamera.farClipPlane = viewDistance;
                 }
-                break;
 
-                case "tutorial":
+                switch (missionName.ToLower())
                 {
-                    var skybox = GameObject.Find("o_m_");
-
-                    if (skybox != null)
+                    case "00menu":
                     {
-                        SetUpSkybox(skybox.transform.Find("Box02"));
-                        SetUpSkybox(skybox.transform.Find("Box03"));
+                        var projectorRay = GameObject.Find("9promitac/Cylinder18");
+                        var projectorIDontCarePart = GameObject.Find("9promitac/Cylinder05");
 
-                        var slunko = skybox.transform.Find("slunko");
+                        if (projectorRay != null && projectorIDontCarePart != null)
+                        {
+                            var meshRenderer = projectorRay.GetComponent<MeshRenderer>();
+                            var mat = meshRenderer.sharedMaterial;
+
+                            mat.shader = Shader.Find("Unlit/Transparent");
+                            var oldTex = mat.GetTexture("_MainTex");
+                            var tex = ModelGenerator.LoadTexture(oldTex.name, false, true, true);
+                            mat.SetTexture("_MainTex", tex);
+
+                            projectorIDontCarePart.SetActive(false);
+                        }
+
+                        var lampRay = GameObject.Find("svetlo");
+
+                        if (lampRay != null)
+                        {
+                            var meshRenderer = lampRay.GetComponent<MeshRenderer>();
+                            var mat = meshRenderer.sharedMaterial;
+
+                            mat.shader = Shader.Find("Unlit/Transparent");
+                            var oldTex = mat.GetTexture("_MainTex");
+                            var tex = ModelGenerator.LoadTexture(oldTex.name, false, true, true);
+                            mat.SetTexture("_MainTex", tex);
+                            //mat.SetColor("_Color", new Color(1f, 244/255f, 112/255f, 62/255f));
+                        }
+
+                        var photoFrame = GameObject.Find("foto");
+
+                        if (photoFrame != null)
+                        {
+                            var s = photoFrame.transform.localScale;
+                            photoFrame.transform.localScale = new Vector3(2.304092f, s.y, s.z);
+                        }
+    /* 
+                        var menugl = GameObject.Find("menugl/Rectangle04");
+
+                        if (menugl != null)
+                        {
+                            var meshRenderer = menugl.GetComponent<MeshRenderer>();
+                            var mat = meshRenderer.sharedMaterial;
+
+                            mat.shader = Shader.Find("Mafia/Unlit Transparent");
+                            mat.SetColor("_Color", new Color(1f, 252 / 255f, 218 / 255f, 2 / 255f));
+                        } */
+                    }
+                    break;
+
+                    case "tutorial":
+                    {
+                        var skybox = GameObject.Find("o_m_");
+
+                        if (skybox != null)
+                        {
+                            SetUpSkybox(skybox.transform.Find("Box02"));
+                            SetUpSkybox(skybox.transform.Find("Box03"));
+
+                            var slunko = skybox.transform.Find("slunko");
+                            slunko.gameObject.SetActive(false);
+                        }
+
+                        var light22 = GameObject.Find("sector Box12/light22")?.GetComponent<Light>();
+                        if (light22 != null) light22.shadows = LightShadows.Soft;
+
+                        var light10 = GameObject.Find("sector Box12/light10")?.GetComponent<Light>();
+                        if (light10 != null) light10.shadows = LightShadows.Soft;
+                    }
+                    break;
+
+                    case "mise04-motorest":
+                    {
+                        var box01 = GameObject.Find("denjasno/Box01");
+                        var box02 = GameObject.Find("denjasno/Box02");
+
+                        if (box01 != null)
+                            SetUpSkybox(box01.transform);
+
+                        if (box02 != null)
+                            SetUpSkybox(box02.transform);
+                    }
+                    break;
+
+                    case "mise06-autodrom":
+                    {
+                        var box01 = GameObject.Find("oblohamirrored/Box01");
+                        var box02 = GameObject.Find("denjasno/Box02");
+
+                        if (box01 != null)
+                            SetUpSkybox(box01.transform);
+
+                        if (box02 != null)
+                            SetUpSkybox(box02.transform);
+                    }
+                    break;
+
+                    case "mise20-galery":
+                    {
+                        var obloha = GameObject.Find("obloha");
+                        var obloha01 = GameObject.Find("obloha01");
+
+                        if (obloha != null)
+                        {
+                            SetUpSkybox(obloha.transform);
+                            obloha.transform.parent = backdrop.transform;
+
+                            obloha.transform.localScale = new Vector3(2, 2, 2);
+                        }
+
+                        if (obloha01 != null)
+                        {
+                            obloha01.SetActive(false);
+                        }
+                    }
+                    break;
+
+                    case "freeride":
+                    {
+                        var box02 = GameObject.Find("zapad/Box02");
+
+                        SetUpSkybox(box02.transform);
+                    }
+                    break;
+
+                    case "freekrajina":
+                    {
+                        var box01 = GameObject.Find("denjasno00/Box01");
+                        var box02 = GameObject.Find("denjasno00/Box02");
+
+                        SetUpSkybox(box01.transform);
+                        SetUpSkybox(box02.transform);
+                    }
+                    break;
+
+
+                    case "mise16-letiste":
+                    {
+                        var box02 = GameObject.Find("denjasno/Box02");
+                        var box03 = GameObject.Find("denjasno/Box03");
+
+                        SetUpSkybox(box02.transform);
+                        SetUpSkybox(box03.transform);
+
+                        var slunko = GameObject.Find("denjasno/slunko");
                         slunko.gameObject.SetActive(false);
                     }
-
-                    var light22 = GameObject.Find("sector Box12/light22")?.GetComponent<Light>();
-                    if (light22 != null) light22.shadows = LightShadows.Soft;
-
-                    var light10 = GameObject.Find("sector Box12/light10")?.GetComponent<Light>();
-                    if (light10 != null) light10.shadows = LightShadows.Soft;
+                    break;
                 }
-                break;
 
-                case "mise04-motorest":
+
+                // NOTE: Create a spawn point for player
+                // TODO: Improve it
+                /* var player = GameObject.Find("Main Player");
+
+                if (player != null)
                 {
-                    var box01 = GameObject.Find("denjasno/Box01");
-                    var box02 = GameObject.Find("denjasno/Box02");
+                    Debug.Log("Player was found! Locating spawn point.");
 
-                    if (box01 != null)
-                        SetUpSkybox(box01.transform);
+                    var objects = Resources.FindObjectsOfTypeAll(typeof(ObjectDefinition));
 
-                    if (box02 != null)
-                        SetUpSkybox(box02.transform);
-                }
-                break;
-
-                case "mise06-autodrom":
-                {
-                    var box01 = GameObject.Find("oblohamirrored/Box01");
-                    var box02 = GameObject.Find("denjasno/Box02");
-
-                    if (box01 != null)
-                        SetUpSkybox(box01.transform);
-
-                    if (box02 != null)
-                        SetUpSkybox(box02.transform);
-                }
-                break;
-
-                case "mise20-galery":
-                {
-                    var obloha = GameObject.Find("obloha");
-                    var obloha01 = GameObject.Find("obloha01");
-
-                    if (obloha != null)
+                    foreach (ObjectDefinition obj in objects)
                     {
-                        SetUpSkybox(obloha.transform);
-                        obloha.transform.parent = backdrop.transform;
+                        if (obj.data.specialType == MafiaFormats.Scene2BINLoader.SpecialObjectType.Player)
+                        {
+                            var tr = obj.transform;
 
-                        obloha.transform.localScale = new Vector3(2, 2, 2);
+                            player.transform.position = tr.position;
+                            player.transform.rotation = tr.rotation;
+                            tr.gameObject.SetActive(false);
+
+                            var rg = player.GetComponent<Rigidbody>();
+                            rg.velocity = new Vector3(0f, 0f, 0f);
+                            rg.angularVelocity = new Vector3(0f, 0f, 0f);
+                            break;
+                        }
                     }
-
-                    if (obloha01 != null)
-                    {
-                        obloha01.SetActive(false);
-                    }
-                }
-                break;
-
-                case "freeride":
-                {
-                    var box02 = GameObject.Find("zapad/Box02");
-
-                    SetUpSkybox(box02.transform);
-                }
-                break;
-
-                case "freekrajina":
-                {
-                    var box01 = GameObject.Find("denjasno00/Box01");
-                    var box02 = GameObject.Find("denjasno00/Box02");
-
-                    SetUpSkybox(box01.transform);
-                    SetUpSkybox(box02.transform);
-                }
-                break;
+                } */
             }
-
-
-            // NOTE: Create a spawn point for player
-            // TODO: Improve it
-            /* var player = GameObject.Find("Main Player");
-
-            if (player != null)
+            catch (System.Exception ex)
             {
-                Debug.Log("Player was found! Locating spawn point.");
-
-                var objects = Resources.FindObjectsOfTypeAll(typeof(ObjectDefinition));
-
-                foreach (ObjectDefinition obj in objects)
-                {
-                    if (obj.data.specialType == MafiaFormats.Scene2BINLoader.SpecialObjectType.Player)
-                    {
-                        var tr = obj.transform;
-
-                        player.transform.position = tr.position;
-                        player.transform.rotation = tr.rotation;
-                        tr.gameObject.SetActive(false);
-
-                        var rg = player.GetComponent<Rigidbody>();
-                        rg.velocity = new Vector3(0f, 0f, 0f);
-                        rg.angularVelocity = new Vector3(0f, 0f, 0f);
-                        break;
-                    }
-                }
-            } */
+                Debug.LogErrorFormat("There was an issue applying patches to the mission. Make sure the loaded mission wasn't edited!\n{0}", ex.ToString());
+            }
         }
 
         void SetUpSkybox(Transform skybox)

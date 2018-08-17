@@ -117,6 +117,12 @@ namespace MafiaUnity
                     GameManager.instance.missionManager.LoadMission(missionName);
                 }
 
+                if (GUILayout.Button("Append Mission"))
+                {
+                    GameManager.instance.SetGamePath(gamePath);
+                    GameManager.instance.missionManager.LoadMission(missionName, true);
+                }
+
                 if (GUILayout.Button("Destroy Mission"))
                 {
                     GameManager.instance.missionManager.DestroyMission();

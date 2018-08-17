@@ -29,9 +29,10 @@ namespace MafiaUnity
         public delegate void OnMissionDestroyed(string missionName);
         public OnMissionDestroyed onMissionDestroyed;
 
-        public void LoadMission(string missionName)
+        public void LoadMission(string missionName, bool ignoreExistingMission=false)
         {
-            DestroyMission();
+            if (!ignoreExistingMission)
+                DestroyMission();
 
             if (onMissionLoading != null)
                 onMissionLoading.Invoke(missionName);
