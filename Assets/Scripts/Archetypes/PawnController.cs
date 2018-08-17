@@ -4,6 +4,9 @@ using UnityEngine;
 using System;
 using MafiaUnity;
 
+/// <summary>
+/// Describes the speed or movement mode pawn uses
+/// </summary>
 public enum MovementMode
 {
 	Walk,
@@ -11,6 +14,9 @@ public enum MovementMode
 	Crouch
 }
 
+/// <summary>
+/// Pawn can have multiple animations per same action based on the stance.
+/// </summary>
 public enum AnimationStanceMode : int
 {
     Empty,
@@ -23,6 +29,9 @@ public enum AnimationStanceMode : int
     CrouchAim
 }
 
+/// <summary>
+/// Handles character behavior, motion and visuals. It is controlled by external classes.
+/// </summary>
 public class PawnController
 {
 	public MovementMode movementMode = MovementMode.Run;
@@ -53,6 +62,10 @@ public class PawnController
         pawn.SetAnimation(animationSets[(int)stanceMode].idleAnimations[0]);
     }
 
+    /// <summary>
+    /// Get movement speed based on the movement mode.
+    /// </summary>
+    /// <returns></returns>
     public float GetSpeed()
     {
         switch(movementMode)
@@ -173,7 +186,7 @@ public class PawnController
 	
 	public void Jump()
 	{
-
+        // TODO
 	}
 
     public void ToggleCrouch(bool state)
@@ -210,17 +223,19 @@ public class PawnController
 	
 	public bool CanJump()
 	{
+        // TODO
         return false;
 	}
 	
 	public bool CanMove()
 	{
-        return true;
+        // TODO && !isJumping
+        return !isRolling;
 	}
 	
 	public bool IsCrouched()
 	{
-        return false;
+        return movementMode == MovementMode.Crouch;
 	}
 	
 	public bool IsMoving()
