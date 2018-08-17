@@ -8,15 +8,15 @@
     public static class TGALoader
     {
      
-        public static Texture2D LoadTGA(string fileName)
+        public static Texture2D LoadTGA(string fileName, bool blackIsTransparency=false)
         {
             using (var imageFile = File.OpenRead(fileName))
             {
-                return LoadTGA(imageFile);
+                return LoadTGA(imageFile, blackIsTransparency);
             }
         }
      
-        public static Texture2D LoadTGA(Stream TGAStream)
+        public static Texture2D LoadTGA(Stream TGAStream, bool blackIsTransparency = false)
         {
        
             using (BinaryReader r = new BinaryReader(TGAStream))
@@ -45,7 +45,16 @@
                         byte blue = r.ReadByte();
                         byte alpha = r.ReadByte();
      
-                        pulledColors [i] = new Color32(blue, green, red, alpha);
+                        if (blackIsTransparency)
+                        {
+                            if (red+green+blue == 0)
+                                pulledColors[i] = new Color32(blue, green, red, 0);
+                            else if (alpha == 0)
+                                pulledColors[i] = new Color32(blue, green, red, 255);
+                            else
+                                pulledColors[i] = new Color32(blue, green, red, alpha);
+                        }
+                        else pulledColors [i] = new Color32(blue, green, red, alpha);
                     }
                 } else if (bitDepth == 24)
                 {
@@ -55,7 +64,7 @@
                         byte green = r.ReadByte();
                         byte blue = r.ReadByte();
                        
-                        pulledColors [i] = new Color32(blue, green, red, 1);
+                        pulledColors[i] = new Color32(blue, green, red, 255);
                     }
                 } else
                 {

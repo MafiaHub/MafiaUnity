@@ -101,9 +101,24 @@ class PlayMenuState : MenuState
 {
 	MenuHub hub;
 
+	Texture2D hud;
+	Texture2D hud2;
+	
+	Texture2D hpTommy;
+
+	Texture2D ab;
+	Texture2D radar;
+
 	public PlayMenuState(MenuHub menuHub)
 	{
 		hub = menuHub;
+
+		hud = TGALoader.LoadTGA(GameManager.instance.fileSystem.GetStreamFromPath("maps/1int.tga"), true);
+        hud2 = TGALoader.LoadTGA(GameManager.instance.fileSystem.GetStreamFromPath("maps/2intmph.tga"), true);
+        
+		hpTommy = hud.CropTexture(new Rect(0, 73, 50, 22));
+		ab = hud2.CropTexture(new Rect(0, 112, 35, 36));
+        radar = hud2.CropTexture(new Rect(0, 147, 109, 109));
 	}
 
 	public override void OnStateEnter()
@@ -119,7 +134,15 @@ class PlayMenuState : MenuState
 		}
 	}
 
-    
+    public override void OnStateGUI()
+    { 
+		if (hud == null)
+			return;
+
+        GUI.DrawTexture(new Rect(20, Screen.height - 20 - hpTommy.height, hpTommy.width, hpTommy.height), hpTommy);
+        GUI.DrawTexture(new Rect(20, 20, radar.width, radar.height), radar);
+        GUI.DrawTexture(new Rect(20, Screen.height - 20 - hpTommy.height - ab.height - 5, ab.width, ab.height), ab);
+    }
 }
 
 class MenuHelper

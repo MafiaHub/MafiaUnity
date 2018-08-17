@@ -26,12 +26,18 @@ class MenuManager : MonoBehaviour
 
         state.OnStateUpdate();
     }
+
+    private void OnGUI()
+    {
+        if (state == null)
+            return;
+        
+        state.OnStateGUI();
+    }
 }
 
 abstract class MenuState
 {
-    public string name = "empty";
-
     public virtual void OnStateEnter()
     {}
 
@@ -39,5 +45,8 @@ abstract class MenuState
     {}
 
     public virtual void OnStateUpdate()
+    {}
+
+    public virtual void OnStateGUI()
     {}
 }
