@@ -67,6 +67,10 @@ namespace MafiaUnity
 
                     if (mafiaMesh.standard.instanced != 0)
                         continue;
+
+                    var def = child.AddComponent<ModelDefinition>();
+                    def.model = model;
+                    def.mesh = mafiaMesh;
                     
                     Material[] materials;
 
@@ -110,9 +114,6 @@ namespace MafiaUnity
                             meshRenderer.materials = materials;
                             meshRenderer.sharedMesh = meshFilter.sharedMesh;
                             meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
-
-                            var data = child.AddComponent<SkinnedMeshData>();
-                            data.mesh = mafiaMesh.singleMesh;
                         }
                         break;
 
@@ -123,9 +124,6 @@ namespace MafiaUnity
                             meshRenderer.materials = materials;
                             meshRenderer.sharedMesh = meshFilter.sharedMesh;
                             meshRenderer.shadowCastingMode = ShadowCastingMode.TwoSided;
-
-                            var data = child.AddComponent<SkinnedMeshData>();
-                            data.mesh = mafiaMesh.singleMorph.singleMesh;
                         }
                         break;
 
@@ -245,8 +243,15 @@ namespace MafiaUnity
 
                     if (skinnedMesh != null)
                     {
-                        var data = baseObject.GetComponent<SkinnedMeshData>();
-                        var boneData = data.mesh.LODs[0];
+                        var def = baseObject.GetComponent<ModelDefinition>();
+                        MafiaFormats.SingleMesh data;
+
+                        if (def.mesh.visualMeshType == MafiaFormats.VisualMeshType.Single_Mesh)
+                            data = def.mesh.singleMesh;
+                        else
+                            data = def.mesh.singleMorph.singleMesh;
+
+                        var boneData = data.LODs[0];
                         var bones = new List<Bone>(skinnedMesh.GetComponentsInChildren<Bone>());
                         var boneArray = new Transform[bones.Count];
                         
