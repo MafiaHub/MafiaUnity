@@ -39,6 +39,9 @@ namespace MafiaUnity
                 var modelLoader = new MafiaFormats.Reader4DS();
                 var model = modelLoader.loadModel(reader);
 
+                if (model == null)
+                    return null;
+
                 var meshId = 0;
 
                 var children = new List<KeyValuePair<int, Transform>>();

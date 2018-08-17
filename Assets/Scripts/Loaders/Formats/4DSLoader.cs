@@ -792,32 +792,40 @@ namespace MafiaUnity
 
             public Model loadModel(BinaryReader reader)
             {
-                Model newModel = new Model();
-                newModel.signature = new char[4];
-                for (var i = 0; i < 4; i++)
-                    newModel.signature[i] = reader.ReadChar();
-
-                string sig = new string(newModel.signature);
-                if (!sig.Contains("4DS"))
-                {
-                    Debug.Log("Not a valid 4DS model!");
-                    return newModel;
-                }
-
-                newModel.formatVersion = reader.ReadUInt16();
-                newModel.timestamp = reader.ReadUInt64();
-
-                readMaterial(ref newModel, reader);
-                readMesh(ref newModel, reader);
-
-                // TODO Investigate
                 try 
                 {
-                    newModel.use5DS = reader.ReadByte() > 0;
-                }
-                catch {}
+                    Model newModel = new Model();
+                    newModel.signature = new char[4];
+                    for (var i = 0; i < 4; i++)
+                        newModel.signature[i] = reader.ReadChar();
 
-                return newModel;
+                    string sig = new string(newModel.signature);
+                    if (!sig.Contains("4DS"))
+                    {
+                        Debug.Log("Not a valid 4DS model!");
+                        return newModel;
+                    }
+
+                    newModel.formatVersion = reader.ReadUInt16();
+                    newModel.timestamp = reader.ReadUInt64();
+
+                    readMaterial(ref newModel, reader);
+                    readMesh(ref newModel, reader);
+
+                    // TODO Investigate
+                    try 
+                    {
+                        newModel.use5DS = reader.ReadByte() > 0;
+                    }
+                    catch {}
+
+                    return newModel;
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogErrorFormat("There was an issue loading a model: {0}", ex.ToString());
+                    return null;
+                }
             }
         }
     }
