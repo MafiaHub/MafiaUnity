@@ -72,7 +72,7 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class Material
+        public struct Material
         {
             public MaterialFlag flags;
             public Vector3 ambient;
@@ -95,7 +95,7 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class Vertex
+        public struct Vertex
         {
             public Vector3 pos;
             public Vector3 normal;
@@ -104,7 +104,7 @@ namespace MafiaUnity
 
 
         [Serializable]
-        public class Face
+        public struct Face
         {
             public ushort a;
             public ushort b;
@@ -112,14 +112,14 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class FaceGroup
+        public struct FaceGroup
         {
             public List<Face> faces;
             public uint materialID;      // 1-based, 0 = default material
         }
 
         [Serializable]
-        public class LOD
+        public struct LOD
         {
             public float relativeDistance;
             public List<Vertex> vertices;
@@ -127,28 +127,28 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class Standard
+        public struct Standard
         {
             public ushort instanced;
             public List<LOD> lods;
         }
 
         [Serializable]
-        public class Target
+        public struct Target
         {
             public ushort unk0;
             public List<ushort> targets;
         }
 
         [Serializable]
-        public class Bone
+        public struct Bone
         {
             public Matrix4x4 transform;
             public uint boneID;
         }
 
         [Serializable]
-        public class Portal
+        public struct Portal
         {
             public uint unk0; // always 4.
             public uint[] unk1; //6 values
@@ -156,7 +156,7 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class Sector
+        public struct Sector
         {
             public uint unk0; // always 2049.
             public uint unk1; // always 0.
@@ -168,15 +168,15 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class Billboard
+        public struct Billboard
         {
-            public Standard standard = new Standard();
+            public Standard standard;
             public uint rotationAxis;  // 0 - X, 1 - Y, 2 - Z
             public bool ignoreCamera;  // 0 - rotate around center point, 1 - rotate around mRotationAxis
         }
 
         [Serializable]
-        public class Dummy
+        public struct Dummy
         {
             // bounding box
             public Vector3 minBox;
@@ -184,20 +184,20 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class GlowData
+        public struct GlowData
         {
             public float position;
             public ushort materialID;
         }
 
         [Serializable]
-        public class Glow
+        public struct Glow
         {
             public List<GlowData> glowData;
         }
 
         [Serializable]
-        public class Mirror
+        public struct Mirror
         {
             public Vector3 minBox;
             public Vector3 maxBox;
@@ -210,14 +210,14 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class MorphLODVertex
+        public struct MorphLODVertex
         {
             public Vector3 position;
             public Vector3 normals;
         }
 
         [Serializable]
-        public class MorphLOD
+        public struct MorphLOD
         {
             public List<MorphLODVertex> vertices;
             public byte unk0;
@@ -225,9 +225,9 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class Morph
+        public struct Morph
         {
-            public Standard standard = new Standard();
+            public Standard standard;
             public byte frameCount;
             //public byte LODLevel;      // should be equal to Standard.LODLevel
             public byte unk0;
@@ -238,7 +238,7 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class SingleMeshLODJoint
+        public struct SingleMeshLODJoint
         {
             public Matrix4x4 transform;
             public uint oneWeightedVertCount; // amount of vertices that should have a weight of 1.0f
@@ -249,7 +249,7 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class SingleMeshLOD
+        public struct SingleMeshLOD
         {
             public uint nonWeightedVertCount;
             public Vector3 minBox;
@@ -258,17 +258,17 @@ namespace MafiaUnity
         }
 
         [Serializable]
-        public class SingleMesh
+        public struct SingleMesh
         {
-            public Standard standard = new Standard();
+            public Standard standard;
             public List<SingleMeshLOD> LODs; // LODLevel == Standard.LODLevel.
         }
 
         [Serializable]
-        public class SingleMorph
+        public struct SingleMorph
         {
-            public SingleMesh singleMesh = new SingleMesh();
-            public Morph morph = new Morph();         // Morph without Standard Mesh!
+            public SingleMesh singleMesh;
+            public Morph morph;         // Morph without Standard Mesh!
         }
 
         [Serializable]

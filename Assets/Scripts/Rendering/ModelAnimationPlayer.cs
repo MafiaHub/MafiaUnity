@@ -262,7 +262,15 @@ namespace MafiaUnity
             if (loaderSequence == null)
                 return;
 
-            var boneTransform = rootObject.FindDeepChild(loaderSequence.objectName);
+            Transform boneTransform = null;
+
+            bool ok = boneTransforms.TryGetValue(loaderSequence.objectName, out boneTransform);
+
+            if (!ok) 
+            {
+                boneTransform = rootObject.FindDeepChild(loaderSequence.objectName);
+                boneTransforms.Add(loaderSequence.objectName, boneTransform);
+            }
 
             if (boneTransform == null)
                 return;
@@ -284,6 +292,8 @@ namespace MafiaUnity
                 boneTransform.localScale = Vector3.Lerp(tr.currentScale, tr.nextScale, deltaLerp);
             }
         }
+
+        Dictionary<string, Transform> boneTransforms = new Dictionary<string, Transform>();
     }
 
 #if UNITY_EDITOR
