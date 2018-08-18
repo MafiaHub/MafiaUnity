@@ -87,6 +87,16 @@ public class StartupGUI : MonoBehaviour {
         currentPath = selectedDrive;
         UpdateDirectoryList();
     }
+    public void CancelMenu()
+    {
+        if (GameManager.instance.GetInitialized())
+        {
+            canvas.mainMenu.SetActive(true);
+            gameObject.SetActive(false);
+            canvas.SetupDefaultBackground();   
+        }
+        else Application.Quit();
+    }
 
 	// Use this for initialization
 	void Start () {

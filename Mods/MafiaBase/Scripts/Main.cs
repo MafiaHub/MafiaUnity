@@ -142,6 +142,13 @@ class PauseMenuState : MenuState
 	public override void OnStateGUI()
 	{
 		GUILayout.Label("Game is paused....");
+
+		if (GUILayout.Button("Return to Startup scene."))
+		{
+			// TODO
+			GameManager.ResetGameManager();
+			Application.LoadLevel("StartupScene");
+		}
 	}
 }
 

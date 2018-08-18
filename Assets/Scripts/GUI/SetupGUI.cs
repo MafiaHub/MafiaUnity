@@ -10,6 +10,11 @@ public class SetupGUI : MonoBehaviour {
     public GameObject mainMenu;
     public GameObject startupLight;
 
+    public List<Transform> pointsOfInterest = new List<Transform>();
+    public int currentPOI = 0;
+
+    Transform mainCamera = null;
+
     public void StartGame()
     {
         // Revert settings back to default.
@@ -46,8 +51,9 @@ public class SetupGUI : MonoBehaviour {
         modManager.SetActive(true);
     }
 
-    // Use this for initialization
     void Start() {
+        mainCamera = GameObject.Find("Main Camera")?.transform;
+
         if (PlayerPrefs.HasKey("gamePath"))
         {
             if (!GameManager.instance.SetGamePath(PlayerPrefs.GetString("gamePath")))
@@ -58,6 +64,49 @@ public class SetupGUI : MonoBehaviour {
         else
             PathSelectionMenu();
 
+        CommandTerminal.Terminal.Shell.AddCommand("rgpnow", (CommandTerminal.CommandArg[] args) => {
+            PlayerPrefs.DeleteKey("gamePath");
+            PlayerPrefs.Save();
+            Debug.Log("Game path was removed from PlayerPrefs!");
+        }, 0, 0, "Resets the game path in PlayerPrefs");
+    }
+
+    void SetupPOIs()
+    {
+        pointsOfInterest.Add(GameObject.Find("Group01")?.transform);
+        pointsOfInterest.Add(GameObject.Find("fg")?.transform);
+        pointsOfInterest.Add(GameObject.Find("Line03cv")?.transform);
+        pointsOfInterest.Add(GameObject.Find("foto")?.transform);
+        pointsOfInterest.Add(GameObject.Find("Group01")?.transform);
+        pointsOfInterest.Add(GameObject.Find("Plane03")?.transform);
+        pointsOfInterest.Add(GameObject.Find("Obr1")?.transform);
+        pointsOfInterest.Add(GameObject.Find("bedna 02")?.transform);
+        pointsOfInterest.Add(GameObject.Find("Doutnik")?.transform);
+
+        pointsOfInterest.Shuffle();
+    }
+
+    private void Update()
+    {
+        if (pointsOfInterest.Count > 0 && mainCamera != null)
+        {
+            var poi = pointsOfInterest[currentPOI];
+            
+            if (poi == null)
+            {
+                currentPOI = (currentPOI >= pointsOfInterest.Count) ? 0 : currentPOI + 1;
+            }
+            else
+            {
+                var rot = Quaternion.LookRotation(poi.position - mainCamera.position);
+                mainCamera.rotation = Quaternion.Slerp(mainCamera.rotation, rot, 0.05f * Time.deltaTime);
+
+                if (Quaternion.Angle(mainCamera.rotation, rot) < 25f)
+                {
+                    currentPOI = (currentPOI >= pointsOfInterest.Count) ? 0 : currentPOI+1;
+                }   
+            }
+        }
     }
 
     bool bgWasSetup = false;
@@ -72,6 +121,13 @@ public class SetupGUI : MonoBehaviour {
             bgWasSetup = true;
 
             GameManager.instance.missionManager.LoadMission("00menu");
+
+            SetupPOIs();
         }
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

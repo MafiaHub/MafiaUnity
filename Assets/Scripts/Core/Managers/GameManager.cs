@@ -25,6 +25,11 @@ namespace MafiaUnity
                 return instanceObject;
             }
         }
+
+        public static void ResetGameManager()
+        {
+            instanceObject = new GameManager();
+        }
         #endregion
         
         /// <summary>
