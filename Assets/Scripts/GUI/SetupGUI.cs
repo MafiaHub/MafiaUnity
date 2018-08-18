@@ -94,16 +94,16 @@ public class SetupGUI : MonoBehaviour {
             
             if (poi == null)
             {
-                currentPOI = (currentPOI >= pointsOfInterest.Count) ? 0 : currentPOI + 1;
+                currentPOI = (currentPOI == pointsOfInterest.Count-1) ? 0 : currentPOI + 1;
             }
             else
             {
                 var rot = Quaternion.LookRotation(poi.position - mainCamera.position);
                 mainCamera.rotation = Quaternion.Slerp(mainCamera.rotation, rot, 0.05f * Time.deltaTime);
 
-                if (Quaternion.Angle(mainCamera.rotation, rot) < 25f)
+                if (Quaternion.Angle(mainCamera.rotation, rot) < 35f)
                 {
-                    currentPOI = (currentPOI >= pointsOfInterest.Count) ? 0 : currentPOI+1;
+                    currentPOI = (currentPOI == pointsOfInterest.Count-1) ? 0 : currentPOI+1;
                 }   
             }
         }
