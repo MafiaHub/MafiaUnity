@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using MafiaUnity;
 
 public class SetupGUI : MonoBehaviour {
@@ -9,6 +10,7 @@ public class SetupGUI : MonoBehaviour {
     public GameObject modManager;
     public GameObject mainMenu;
     public GameObject startupLight;
+    public Text gameVersion;
 
     public List<Transform> pointsOfInterest = new List<Transform>();
     public int currentPOI = 0;
@@ -69,6 +71,8 @@ public class SetupGUI : MonoBehaviour {
             PlayerPrefs.Save();
             Debug.Log("Game path was removed from PlayerPrefs!");
         }, 0, 0, "Resets the game path in PlayerPrefs");
+
+        gameVersion.text = GameManager.GAME_VERSION;
     }
 
     void SetupPOIs()

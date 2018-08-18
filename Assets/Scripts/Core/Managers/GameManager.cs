@@ -37,7 +37,7 @@ namespace MafiaUnity
         /// Minor part gets incremented each shipped update, while Major part has to be incremented only
         /// when framework's API radically changes.
         /// </summary>
-        public const string GAME_VERSION = "1.0";
+        public const string GAME_VERSION = "v1.0.0";
 
         public bool isPaused = false;
 
