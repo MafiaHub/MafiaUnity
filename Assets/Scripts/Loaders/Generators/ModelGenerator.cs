@@ -381,7 +381,7 @@ namespace MafiaUnity
                         mafiaMat.alphaMapName != null)
                     {
                         if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
-                            BMPLoader.useTransparencyKey = true;
+                            bmp.useTransparencyKey = true;
 
                         bool useColorKey = mafiaMat.flags.HasFlag(MafiaFormats.MaterialFlag.Colorkey);
 
@@ -413,7 +413,7 @@ namespace MafiaUnity
                                 fileName = mafiaMat.alphaMapName;
 
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
-                                BMPLoader.useTransparencyKey = true;
+                                bmp.useTransparencyKey = true;
 
                             if (fileName != null)
                             {
@@ -449,7 +449,7 @@ namespace MafiaUnity
                                 framePlayer.material = mat;
                             }
 
-                            BMPLoader.useTransparencyKey = false;
+                            bmp.useTransparencyKey = false;
                         }
                     }
                     
@@ -479,7 +479,7 @@ namespace MafiaUnity
             {
                 BMPImage image = null;
 
-                BMPLoader.useTransparencyKey = useColorKey;
+                bmp.useTransparencyKey = useColorKey;
 
                 try
                 {
@@ -516,7 +516,7 @@ namespace MafiaUnity
                 if (ignoreCachedTexture == false)
                     cachedTextures.Add(modMapName, tex);
 
-                BMPLoader.useTransparencyKey = false;
+                bmp.useTransparencyKey = false;
             }
 
             return tex;

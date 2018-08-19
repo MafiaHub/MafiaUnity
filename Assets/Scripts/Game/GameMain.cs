@@ -5,12 +5,10 @@ using System;
 using MafiaUnity;
 using CommandTerminal;
 
-class ScriptMain : IModScript
+class GameMain : MonoBehaviour
 {
-    void IModScript.Start(Mod mod)
+    void Start()
     {
-        Debug.Log("Initializing MafiaBase...");
-		
 		var gm = new MafiaGameMode();
 
 		GameModeManager.instance.RegisterGameMode("_MafiaBaseGameMode", gm);

@@ -449,17 +449,6 @@ namespace MafiaUnity
 
             projectTemplate = projectTemplate.Replace("[SOURCE_FILES]", includeFiles);
 
-            if (name != "MafiaBase")
-            {
-                solutionTemplate = solutionTemplate.Replace("[MAFIABASE_STUB]", solutionMafiaBase);
-                projectTemplate = projectTemplate.Replace("[MAFIABASE_STUB]", projectMafiaBase);
-            }
-            else 
-            {
-                solutionTemplate = solutionTemplate.Replace("[MAFIABASE_STUB]", "");
-                projectTemplate = projectTemplate.Replace("[MAFIABASE_STUB]", "");
-            }
-
             File.WriteAllText(Path.Combine(path, name + ".sln"), solutionTemplate);
             File.WriteAllText(Path.Combine(projectPath, name + ".csproj"), projectTemplate);
         }

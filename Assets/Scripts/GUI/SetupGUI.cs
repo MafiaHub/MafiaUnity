@@ -39,6 +39,8 @@ public class SetupGUI : MonoBehaviour {
         }
 
         modManager.InitializeMods();
+
+        new GameObject("Game Instance").AddComponent<GameMain>();
     }
 
     public void PathSelectionMenu()

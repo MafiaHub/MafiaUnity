@@ -121,8 +121,7 @@ namespace B83.Image.BMP
         public bool ReadPaletteAlpha = false;
         public bool ForceAlphaReadWhenPossible = false;
 
-        // TODO(zaklaus): This is unsafe, refactor it
-        public static bool useTransparencyKey = false;
+        public bool useTransparencyKey = false;
 
         public BMPImage LoadBMP(string aFileName)
         {
@@ -214,7 +213,7 @@ namespace B83.Image.BMP
         }
 
 
-        private static void Read32BitImage(BinaryReader aReader, BMPImage bmp)
+        private void Read32BitImage(BinaryReader aReader, BMPImage bmp)
         {
             int w = Mathf.Abs(bmp.info.width);
             int h = Mathf.Abs(bmp.info.height);
@@ -242,7 +241,7 @@ namespace B83.Image.BMP
         }
 
 
-        private static void Read24BitImage(BinaryReader aReader, BMPImage bmp)
+        private void Read24BitImage(BinaryReader aReader, BMPImage bmp)
         {
             int w = Mathf.Abs(bmp.info.width);
             int h = Mathf.Abs(bmp.info.height);
@@ -277,7 +276,7 @@ namespace B83.Image.BMP
             }
         }
 
-        private static void Read16BitImage(BinaryReader aReader, BMPImage bmp)
+        private void Read16BitImage(BinaryReader aReader, BMPImage bmp)
         {
             int w = Mathf.Abs(bmp.info.width);
             int h = Mathf.Abs(bmp.info.height);
@@ -312,7 +311,7 @@ namespace B83.Image.BMP
             }
         }
 
-        private static void ReadIndexedImage(BinaryReader aReader, BMPImage bmp)
+        private void ReadIndexedImage(BinaryReader aReader, BMPImage bmp)
         {
             int w = Mathf.Abs(bmp.info.width);
             int h = Mathf.Abs(bmp.info.height);
@@ -321,7 +320,7 @@ namespace B83.Image.BMP
             int count = rowLength * h;
             int pad = rowLength - (w * bitCount + 7) / 8;
 
-            if (BMPLoader.useTransparencyKey)
+            if (useTransparencyKey)
                 //bmp.palette[0] = new Color32(0, 0, 0, 0);
                 for (int i = 0; i < bmp.palette.Count; i++)
                 {
@@ -363,7 +362,7 @@ namespace B83.Image.BMP
                     aReader.ReadByte();
             }
         }
-        private static void ReadIndexedImageRLE4(BinaryReader aReader, BMPImage bmp)
+        private void ReadIndexedImageRLE4(BinaryReader aReader, BMPImage bmp)
         {
             int w = Mathf.Abs(bmp.info.width);
             int h = Mathf.Abs(bmp.info.height);
@@ -425,7 +424,7 @@ namespace B83.Image.BMP
                 }
             }
         }
-        private static void ReadIndexedImageRLE8(BinaryReader aReader, BMPImage bmp)
+        private void ReadIndexedImageRLE8(BinaryReader aReader, BMPImage bmp)
         {
             int w = Mathf.Abs(bmp.info.width);
             int h = Mathf.Abs(bmp.info.height);
@@ -476,7 +475,7 @@ namespace B83.Image.BMP
                 }
             }
         }
-        private static int GetShiftCount(uint mask)
+        private int GetShiftCount(uint mask)
         {
             for (int i = 0; i < 32; i++)
             {
@@ -486,7 +485,7 @@ namespace B83.Image.BMP
             }
             return -1;
         }
-        private static uint GetMask(int bitCount)
+        private uint GetMask(int bitCount)
         {
             uint mask = 0;
             for (int i = 0; i < bitCount; i++)
@@ -496,7 +495,7 @@ namespace B83.Image.BMP
             }
             return mask;
         }
-        private static bool ReadFileHeader(BinaryReader aReader, ref BMPFileHeader aFileHeader)
+        private bool ReadFileHeader(BinaryReader aReader, ref BMPFileHeader aFileHeader)
         {
             aFileHeader.magic = aReader.ReadUInt16();
             if (aFileHeader.magic != MAGIC)
@@ -506,7 +505,7 @@ namespace B83.Image.BMP
             aFileHeader.offset = aReader.ReadUInt32();
             return true;
         }
-        private static bool ReadInfoHeader(BinaryReader aReader, ref BitmapInfoHeader aHeader)
+        private bool ReadInfoHeader(BinaryReader aReader, ref BitmapInfoHeader aHeader)
         {
             aHeader.size = aReader.ReadUInt32();
             if (aHeader.size < 40)
@@ -526,7 +525,7 @@ namespace B83.Image.BMP
                 aReader.ReadBytes(pad);
             return true;
         }
-        public static List<Color32> ReadPalette(BinaryReader aReader, BMPImage aBmp, bool aReadAlpha)
+        public List<Color32> ReadPalette(BinaryReader aReader, BMPImage aBmp, bool aReadAlpha)
         {
             uint count = aBmp.info.nPaletteColors;
             if (count == 0u)
