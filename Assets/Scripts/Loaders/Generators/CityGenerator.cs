@@ -20,7 +20,7 @@ namespace MafiaUnity
 
             try
             {
-                fs = GameManager.instance.fileSystem.GetStreamFromPath(path);
+                fs = GameAPI.instance.fileSystem.GetStreamFromPath(path);
             }
             catch
             {
@@ -40,7 +40,7 @@ namespace MafiaUnity
 
                     foreach (var instance in obj.instances)
                     {
-                        var model = GameManager.instance.modelGenerator.LoadObject(Path.Combine("models", instance.modelName));
+                        var model = GameAPI.instance.modelGenerator.LoadObject(Path.Combine("models", instance.modelName));
 
                         if (model == null)
                             continue;
@@ -102,7 +102,7 @@ namespace MafiaUnity
 
             try
             {
-                fs = GameManager.instance.fileSystem.GetStreamFromPath(path);
+                fs = GameAPI.instance.fileSystem.GetStreamFromPath(path);
             }
             catch
             {

@@ -26,7 +26,7 @@ namespace MafiaUnity
         public string ExecuteString(string buffer)
         {
             // TODO improve the parser
-            var cvarManager = GameManager.instance.cvarManager;
+            var cvarManager = GameAPI.instance.cvarManager;
 
             var output = new StringBuilder();
 
@@ -63,7 +63,7 @@ namespace MafiaUnity
         /// <returns></returns>
         public string ExecuteConfig(string fileName)
         {
-            var fileSystem = GameManager.instance.fileSystem;
+            var fileSystem = GameAPI.instance.fileSystem;
 
             if (fileSystem.Exists(fileName))
             {
@@ -88,7 +88,7 @@ namespace MafiaUnity
             });
 
             AddCommand("get", "Get a value from a cvar", (string text) => {
-                return GameManager.instance.cvarManager.Get(text, "(null)");
+                return GameAPI.instance.cvarManager.Get(text, "(null)");
             });
 
             AddCommand("dbg", "Toggle console debug mode", (string text) => {
@@ -97,7 +97,7 @@ namespace MafiaUnity
             });
 
             AddCommand("loadMission", "Loads a mission", (string text) => {
-                GameManager.instance.missionManager.LoadMission(text);
+                GameAPI.instance.missionManager.LoadMission(text);
 
                 return "ok";
             });
@@ -120,9 +120,9 @@ namespace MafiaUnity
             var value = parts[1].Trim();
 
             if (mode == CvarManager.CvarMode.Archived)
-                GameManager.instance.cvarManager.ForceSet(cvar, value, mode);
+                GameAPI.instance.cvarManager.ForceSet(cvar, value, mode);
             else
-                GameManager.instance.cvarManager.Set(cvar, value);
+                GameAPI.instance.cvarManager.Set(cvar, value);
 
             return "Value for \"" + cvar + "\" set to" + " \"" + value + "\".";
         }
@@ -144,7 +144,7 @@ namespace MafiaUnity
             }
 
             Terminal.Shell.AddCommand(name, (CommandArg[] args) => {
-                GameManager.instance.consoleManager.ExecuteString(name + " " + string.Join(" ", args).Trim());
+                GameAPI.instance.consoleManager.ExecuteString(name + " " + string.Join(" ", args).Trim());
             }, 0, -1, help);
         }
     }

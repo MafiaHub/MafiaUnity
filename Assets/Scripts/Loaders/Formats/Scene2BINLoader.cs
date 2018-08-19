@@ -69,6 +69,7 @@ namespace MafiaUnity
                 Model = 0x09,
                 Occluder = 0x0C,
                 Sector = 0x99,
+                Lightmap = 0x9A,
                 Script = 0x9B
             }
 

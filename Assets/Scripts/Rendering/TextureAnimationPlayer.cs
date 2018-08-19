@@ -19,7 +19,7 @@ public class TextureAnimationPlayer : MonoBehaviour {
     }
 
     void Update () {
-        if (GameManager.instance.isPaused)
+        if (GameAPI.instance.isPaused)
             return;
 
         if (timeUntilNextFrame < 0)

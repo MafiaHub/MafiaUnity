@@ -33,13 +33,13 @@ namespace MafiaUnity
         public ObjectInjector(string missionName)
         {
             requestedMissionName = missionName;
-            GameManager.instance.missionManager.onMissionLoaded += InjectMissionLoaded;
+            GameAPI.instance.missionManager.onMissionLoaded += InjectMissionLoaded;
             tasks = new List<ObjectTask>();
         }
 
         ~ObjectInjector()
         {
-            GameManager.instance.missionManager.onMissionLoaded -= InjectMissionLoaded;
+            GameAPI.instance.missionManager.onMissionLoaded -= InjectMissionLoaded;
         }
 
         public void InjectMissionLoaded(string missionName)

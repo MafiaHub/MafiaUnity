@@ -48,14 +48,14 @@ namespace MafiaUnity
             SaveConfig("openmf.cfg");
 
             // execute config commands in autoexec.cfg as well
-            GameManager.instance.consoleManager.ExecuteConfig("autoexec.cfg");
+            GameAPI.instance.consoleManager.ExecuteConfig("autoexec.cfg");
 
             isInitialized = true;
         }
 
         private void InitDefaultValues()
         {
-            ForceSet("gameVersion", GameManager.GAME_VERSION.ToString(), CvarMode.Archived);
+            ForceSet("gameVersion", GameAPI.GAME_VERSION.ToString(), CvarMode.Archived);
         }
 
         public void SaveMainConfig()
@@ -97,7 +97,7 @@ namespace MafiaUnity
         {
             try
             {
-                GameManager.instance.consoleManager.ExecuteConfig(path);
+                GameAPI.instance.consoleManager.ExecuteConfig(path);
             }
             catch (FileNotFoundException ex)
             {

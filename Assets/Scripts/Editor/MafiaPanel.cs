@@ -31,16 +31,16 @@ namespace MafiaUnity
 
         void ReadConfig()
         {
-            gamePath = GameManager.instance.cvarManager.Get("gamePath", gamePath);
-            missionName = GameManager.instance.cvarManager.Get("editorMissionName", missionName);
+            gamePath = GameAPI.instance.cvarManager.Get("gamePath", gamePath);
+            missionName = GameAPI.instance.cvarManager.Get("editorMissionName", missionName);
         }
 
         private void OnGUI()
         {
-            if (!isInitialized && GameManager.instance.cvarManager.values != null)
+            if (!isInitialized && GameAPI.instance.cvarManager.values != null)
             {
                 ReadConfig();
-                GameManager.instance.SetGamePath(gamePath);
+                GameAPI.instance.SetGamePath(gamePath);
                 isInitialized = true;
             }
 
@@ -51,7 +51,7 @@ namespace MafiaUnity
 
                 if (GUILayout.Button("Set Path"))
                 {
-                    GameManager.instance.SetGamePath(gamePath);
+                    GameAPI.instance.SetGamePath(gamePath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -62,18 +62,18 @@ namespace MafiaUnity
                 
                 if (GUILayout.Button("+", GUILayout.Width(20)))
                 {
-                    GameManager.instance.fileSystem.AddOptionalPath(modPath);
+                    GameAPI.instance.fileSystem.AddOptionalPath(modPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
             
-            foreach (var p in GameManager.instance.fileSystem.GetAllPaths())
+            foreach (var p in GameAPI.instance.fileSystem.GetAllPaths())
             {
                 EditorGUILayout.BeginHorizontal();
                 {
                     if (GUILayout.Button("-", GUILayout.Width(20)))
                     {
-                        GameManager.instance.fileSystem.RemoveOptionalPath(p.Replace(Path.DirectorySeparatorChar+"Data", ""));
+                        GameAPI.instance.fileSystem.RemoveOptionalPath(p.Replace("/Data", ""));
                     }
 
                     GUILayout.Label(p);
@@ -87,9 +87,9 @@ namespace MafiaUnity
 
                 if (GUILayout.Button("Spawn Object"))
                 {
-                    GameManager.instance.SetGamePath(gamePath);
+                    GameAPI.instance.SetGamePath(gamePath);
 
-                    GameManager.instance.modelGenerator.LoadObject(modelPath);
+                    GameAPI.instance.modelGenerator.LoadObject(modelPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -100,9 +100,9 @@ namespace MafiaUnity
 
                 if (GUILayout.Button("Spawn City"))
                 {
-                    GameManager.instance.SetGamePath(gamePath);
+                    GameAPI.instance.SetGamePath(gamePath);
 
-                    GameManager.instance.cityGenerator.LoadObject(cityPath);
+                    GameAPI.instance.cityGenerator.LoadObject(cityPath);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -113,19 +113,19 @@ namespace MafiaUnity
 
                 if (GUILayout.Button("Spawn Mission"))
                 {
-                    GameManager.instance.SetGamePath(gamePath);
-                    GameManager.instance.missionManager.LoadMission(missionName);
+                    GameAPI.instance.SetGamePath(gamePath);
+                    GameAPI.instance.missionManager.LoadMission(missionName);
                 }
 
                 if (GUILayout.Button("Append Mission"))
                 {
-                    GameManager.instance.SetGamePath(gamePath);
-                    GameManager.instance.missionManager.LoadMission(missionName, true);
+                    GameAPI.instance.SetGamePath(gamePath);
+                    GameAPI.instance.missionManager.LoadMission(missionName, true);
                 }
 
                 if (GUILayout.Button("Destroy Mission"))
                 {
-                    GameManager.instance.missionManager.DestroyMission();
+                    GameAPI.instance.missionManager.DestroyMission();
 
                     var leftover = GameObject.Find(missionName);
 
@@ -147,7 +147,7 @@ namespace MafiaUnity
 
             if (GUILayout.Button("Save Game Config"))
             {
-                var cvars = GameManager.instance.cvarManager;
+                var cvars = GameAPI.instance.cvarManager;
                 cvars.ForceSet("gamePath", gamePath, CvarManager.CvarMode.Archived);
                 cvars.ForceSet("editorMissionName", missionName, CvarManager.CvarMode.Archived);
                 cvars.SaveMainConfig();
@@ -207,7 +207,7 @@ namespace MafiaUnity
 
         private void OnGUI()
         {
-            if (!GameManager.instance.GetInitialized())
+            if (!GameAPI.instance.GetInitialized())
             {
                 isInitialized = false;
                 GUILayout.Label("Game manager is not initialized yet.");
@@ -216,7 +216,7 @@ namespace MafiaUnity
 
             if (!isInitialized)
             {
-                modManager = GameManager.instance.modManager;
+                modManager = GameAPI.instance.modManager;
                 isInitialized = true;
 
                 var modNames = new List<string>(modManager.GetAllModNames());
@@ -538,7 +538,7 @@ namespace MafiaUnity
 
                 if (GUILayout.Button("Add Current Mission"))
                 {
-                    injectors.Add(new ObjectInjector(GameManager.instance.missionManager.mission.missionName));
+                    injectors.Add(new ObjectInjector(GameAPI.instance.missionManager.mission.missionName));
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -613,7 +613,7 @@ namespace MafiaUnity
 
             if (GUILayout.Button("Inject Now"))
             {
-                injector.InjectMissionLoaded(GameManager.instance.missionManager.mission.missionName);
+                injector.InjectMissionLoaded(GameAPI.instance.missionManager.mission.missionName);
             }
 
             objectsToRemove.ForEach(x => injector.tasks.Remove(x));

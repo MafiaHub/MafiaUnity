@@ -31,7 +31,7 @@ namespace MafiaUnity
 
             foreach (var dep in dependencies)
             {
-                if (GameManager.instance.modManager.GetActiveMod(dep) == null)
+                if (GameAPI.instance.modManager.GetActiveMod(dep) == null)
                 {
                     Debug.LogErrorFormat("Mod: '{0}' is missing a dependency '{1}'", name, dep);
                     isMissingDependency = true;
@@ -44,7 +44,7 @@ namespace MafiaUnity
                 return;
             }
 
-            GameManager.instance.fileSystem.AddOptionalPath(modPath);
+            GameAPI.instance.fileSystem.AddOptionalPath(modPath);
 
             var scriptsPath = Path.Combine(modPath, "Scripts");
 
@@ -97,7 +97,7 @@ namespace MafiaUnity
 
         public void Destroy()
         {
-            GameManager.instance.fileSystem.RemoveOptionalPath(modPath);
+            GameAPI.instance.fileSystem.RemoveOptionalPath(modPath);
         }
 
         /// <summary>

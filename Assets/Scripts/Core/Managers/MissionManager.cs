@@ -39,27 +39,27 @@ namespace MafiaUnity
 
             GameObject missionObject = new GameObject(missionName);
 
-            var gameManager = GameManager.instance;
+            var gameAPI = GameAPI.instance;
 
             var missionPath = "missions/" + missionName + "/";
 
-            gameManager.modelGenerator.LoadObject(missionPath + "scene.4ds").transform.parent = missionObject.transform;
+            gameAPI.modelGenerator.LoadObject(missionPath + "scene.4ds").transform.parent = missionObject.transform;
 
-            if (gameManager.fileSystem.Exists(missionPath + "cache.bin"))
-                gameManager.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
+            if (gameAPI.fileSystem.Exists(missionPath + "cache.bin"))
+                gameAPI.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
 
-            gameManager.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;
+            gameAPI.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;
 
-            if (gameManager.fileSystem.Exists(missionPath + "tree.klz"))
-                gameManager.cityGenerator.LoadCollisions(missionPath + "tree.klz").transform.parent = missionObject.transform;
+            if (gameAPI.fileSystem.Exists(missionPath + "tree.klz"))
+                gameAPI.cityGenerator.LoadCollisions(missionPath + "tree.klz").transform.parent = missionObject.transform;
 
-            new MissionHacks(missionName, gameManager.sceneGenerator.lastLoader);
+            new MissionHacks(missionName, gameAPI.sceneGenerator.lastLoader);
 
             mission = new Mission
             {
                 missionName = missionName,
                 rootObject = missionObject,
-                missionData = gameManager.sceneGenerator.lastLoader
+                missionData = gameAPI.sceneGenerator.lastLoader
             };
 
             if (onMissionLoaded != null)

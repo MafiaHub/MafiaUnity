@@ -14,7 +14,7 @@ class ScriptMain : IModScript
         var go = new GameObject("ExampleModObject");
         go.AddComponent<ExampleMonoBehaviourScript>();
     
-        var tommy = GameManager.instance.modelGenerator.LoadObject("models/Tommy.4ds");
+        var tommy = GameAPI.instance.modelGenerator.LoadObject("models/Tommy.4ds");
         
         var player = tommy.AddComponent<ModelAnimationPlayer>();
         player.LoadAndSetAnimation("anims/!!!Skakani.5ds");

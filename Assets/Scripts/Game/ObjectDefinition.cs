@@ -11,9 +11,24 @@ namespace MafiaUnity
 
         public void Init()
         {
+            bool tempDestroySelf = false;
+
             switch (data.type)
             {
                 case MafiaFormats.Scene2BINLoader.ObjectType.Model:
+                {
+                    
+                }
+                break;
+
+                case MafiaFormats.Scene2BINLoader.ObjectType.Lightmap:
+                {
+                    // TODO
+                    GameObject.DestroyImmediate(gameObject, true);
+                }
+                break;
+
+                case MafiaFormats.Scene2BINLoader.ObjectType.Sector:
                 {
                     
                 }
@@ -39,6 +54,7 @@ namespace MafiaUnity
                     var light = gameObject.AddComponent<Light>();
 
                     light.type = LightType.Point;
+                    light.shadows = LightShadows.Soft;
 
                     if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Directional)
                     {
@@ -51,6 +67,17 @@ namespace MafiaUnity
                     light.color = new Color(data.lightColour.x, data.lightColour.y, data.lightColour.z);
                 }
                 break;
+
+                default:
+                {
+                    tempDestroySelf = true;
+                }
+                break;
+            }
+
+            if (tempDestroySelf && data.specialType == MafiaFormats.Scene2BINLoader.SpecialObjectType.None)
+            {
+                GameObject.DestroyImmediate(gameObject, true);
             }
 
             switch (data.specialType)

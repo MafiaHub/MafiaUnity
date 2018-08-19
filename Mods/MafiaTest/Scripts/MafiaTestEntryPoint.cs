@@ -27,7 +27,7 @@ class MafiaTestGameMode : IGameMode
 	void IGameMode.Start()
 	{
         var go = new GameObject("Main Player");
-        var tommy = GameManager.instance.modelGenerator.LoadObject("models/Tommy.4ds");
+        var tommy = GameAPI.instance.modelGenerator.LoadObject("models/Tommy.4ds");
         var player = tommy.AddComponent<ModelAnimationPlayer>();
         tommy.transform.parent = go.transform;
 
@@ -50,7 +50,7 @@ class MafiaTestGameMode : IGameMode
 		sunLight.type = LightType.Directional;
         sunLight.shadows = LightShadows.Soft;
 
-		GameManager.instance.missionManager.LoadMission("tutorial");
+		GameAPI.instance.missionManager.LoadMission("tutorial");
 	}
 
 	// on game mode switch -- leaving primary

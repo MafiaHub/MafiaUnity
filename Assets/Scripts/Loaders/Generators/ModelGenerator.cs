@@ -25,7 +25,7 @@ namespace MafiaUnity
 
             try
             {
-                fs = GameManager.instance.fileSystem.GetStreamFromPath(path);
+                fs = GameAPI.instance.fileSystem.GetStreamFromPath(path);
             }
             catch (Exception ex)
             {
@@ -392,7 +392,7 @@ namespace MafiaUnity
                         {
                             mat.SetTexture("_MainTex", tex);
 
-                            if (GameManager.instance.cvarManager.Get("filterMode", "1") == "0")
+                            if (GameAPI.instance.cvarManager.Get("filterMode", "1") == "0")
                                 tex.filterMode = FilterMode.Point;
                         }
 
@@ -428,7 +428,7 @@ namespace MafiaUnity
                                     try
                                     {
                                         var animPath = Path.Combine("maps", baseName + k.ToString("D2") + "." + ext);
-                                        var frameImage = bmp.LoadBMP(GameManager.instance.fileSystem.GetStreamFromPath(animPath));
+                                        var frameImage = bmp.LoadBMP(GameAPI.instance.fileSystem.GetStreamFromPath(animPath));
 
                                         if (frameImage == null)
                                             continue;
@@ -471,7 +471,7 @@ namespace MafiaUnity
             if (name == null)
                 return null;
 
-            var modMapName = GameManager.instance.fileSystem.GetPath(Path.Combine("maps", name));
+            var modMapName = GameAPI.instance.fileSystem.GetPath(Path.Combine("maps", name));
 
             if (cachedTextures.ContainsKey(modMapName) && ignoreCachedTexture == false)
                 tex = cachedTextures[modMapName];
@@ -483,7 +483,7 @@ namespace MafiaUnity
 
                 try
                 {
-                    image = bmp.LoadBMP(GameManager.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", name)));
+                    image = bmp.LoadBMP(GameAPI.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", name)));
                 }
                 catch
                 {

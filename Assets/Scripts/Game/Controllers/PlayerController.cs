@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (GameManager.instance.isPaused)
+        if (GameAPI.instance.isPaused)
             return;
             
         if (characterController == null)

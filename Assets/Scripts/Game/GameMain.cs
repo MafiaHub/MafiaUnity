@@ -86,13 +86,13 @@ class PlayMenuState : MenuState
         HUDManager.instance.LoadSprite("abButton", "2intmph", new Rect(0, 112, 35, 36));
         HUDManager.instance.LoadSprite("radar", "2intmph", new Rect(0, 147, 109, 109));
 
-		HUDManager.instance.scale = 1.5f;
+		//HUDManager.instance.scale = 1.5f;
     }
 
 	public override void OnStateEnter()
 	{
         MenuHelper.ToggleMouseCursor(false);
-		GameManager.instance.isPaused = false;
+		GameAPI.instance.isPaused = false;
 	}
 	public override void OnStateUpdate()
 	{
@@ -126,7 +126,7 @@ class PauseMenuState : MenuState
     public override void OnStateEnter()
     {
         MenuHelper.ToggleMouseCursor(true);
-        GameManager.instance.isPaused = true;
+        GameAPI.instance.isPaused = true;
     }
 
     public override void OnStateUpdate()
@@ -144,7 +144,7 @@ class PauseMenuState : MenuState
 		if (GUILayout.Button("Return to Startup scene."))
 		{
 			// TODO
-			GameManager.ResetGameManager();
+			GameAPI.ResetGameAPI();
 			Application.LoadLevel("StartupScene");
 		}
 	}

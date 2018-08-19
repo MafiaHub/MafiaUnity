@@ -36,7 +36,7 @@ public class StartupGUI : MonoBehaviour {
     public void SelectPath()
     {
         var finalTextComponent = finalPath.GetComponent<InputField>();
-        if(GameManager.instance.SetGamePath(finalTextComponent.text))
+        if(GameAPI.instance.SetGamePath(finalTextComponent.text))
         {
             PlayerPrefs.SetString("gamePath", finalTextComponent.text);
             PlayerPrefs.Save();
@@ -89,7 +89,7 @@ public class StartupGUI : MonoBehaviour {
     }
     public void CancelMenu()
     {
-        if (GameManager.instance.GetInitialized())
+        if (GameAPI.instance.GetInitialized())
         {
             canvas.mainMenu.SetActive(true);
             gameObject.SetActive(false);

@@ -47,7 +47,7 @@ public class HUDManager
 
         var atlas = new UIAtlas();
 
-        atlas.atlas = TGALoader.LoadTGA(GameManager.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", name+".tga")), blackIsTransparency);
+        atlas.atlas = TGALoader.LoadTGA(GameAPI.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", name+".tga")), blackIsTransparency);
 
         atlases.Add(name, atlas);
     }

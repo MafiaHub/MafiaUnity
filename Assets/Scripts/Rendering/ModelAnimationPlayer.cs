@@ -44,7 +44,7 @@ namespace MafiaUnity
 
             try
             {
-                fs = GameManager.instance.fileSystem.GetStreamFromPath(animName);
+                fs = GameAPI.instance.fileSystem.GetStreamFromPath(animName);
             }
             catch
             {
@@ -111,7 +111,7 @@ namespace MafiaUnity
 
         void FixedUpdate()
         {
-            if (GameManager.instance.isPaused)
+            if (GameAPI.instance.isPaused)
                 return;
                 
             if (!isPlaying)

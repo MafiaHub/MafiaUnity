@@ -27,7 +27,7 @@ public class SetupGUI : MonoBehaviour {
         GameObject.Destroy(GameObject.Find("EventSystem"));
         GameObject.Destroy(gameObject);
         
-        var modManager = GameManager.instance.modManager;
+        var modManager = GameAPI.instance.modManager;
         var mods = GetComponent<ModManagerGUI>();
 
         foreach (var mod in mods.modEntries)
@@ -60,7 +60,7 @@ public class SetupGUI : MonoBehaviour {
 
         if (PlayerPrefs.HasKey("gamePath"))
         {
-            if (!GameManager.instance.SetGamePath(PlayerPrefs.GetString("gamePath")))
+            if (!GameAPI.instance.SetGamePath(PlayerPrefs.GetString("gamePath")))
                 PathSelectionMenu();
             else
                 SetupDefaultBackground();
@@ -74,7 +74,7 @@ public class SetupGUI : MonoBehaviour {
             Debug.Log("Game path was removed from PlayerPrefs!");
         }, 0, 0, "Resets the game path in PlayerPrefs");
 
-        gameVersion.text = GameManager.GAME_VERSION;
+        gameVersion.text = GameAPI.GAME_VERSION;
     }
 
     void SetupPOIs()
@@ -122,11 +122,11 @@ public class SetupGUI : MonoBehaviour {
         if (bgWasSetup)
             return;
 
-        if (GameManager.instance.GetInitialized())
+        if (GameAPI.instance.GetInitialized())
         {
             bgWasSetup = true;
 
-            GameManager.instance.missionManager.LoadMission("00menu");
+            GameAPI.instance.missionManager.LoadMission("00menu");
 
             SetupPOIs();
         }

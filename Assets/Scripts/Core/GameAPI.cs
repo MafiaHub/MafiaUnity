@@ -10,25 +10,25 @@ namespace MafiaUnity
 {
 
     [Serializable]
-    public class GameManager
+    public class GameAPI
     {
 
         #region Singleton
-        static GameManager instanceObject;
-        public static GameManager instance
+        static GameAPI instanceObject;
+        public static GameAPI instance
         {
             get
             {
                 if (instanceObject == null)
-                    instanceObject = new GameManager();
+                    instanceObject = new GameAPI();
                 
                 return instanceObject;
             }
         }
 
-        public static void ResetGameManager()
+        public static void ResetGameAPI()
         {
-            instanceObject = new GameManager();
+            instanceObject = new GameAPI();
         }
         #endregion
         

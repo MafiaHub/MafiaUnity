@@ -24,7 +24,7 @@ public class ModManagerGUI : MonoBehaviour {
     ModEntry selectedMod = null;
 
     void Start () {
-        modManager = GameManager.instance.modManager;
+        modManager = GameAPI.instance.modManager;
 
         var modNames = new List<string>(modManager.GetAllModNames());
         var mods = new List<ModEntry>();
