@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private CustomButton leftButton = new CustomButton("a");
     private CustomButton rightButton = new CustomButton("d");
     Vector3 neckStandPosition, neckCrouchPosition;
+    bool isStrafing = false;
     const float CROUCH_CAMERA_DOWN = 0.8f;
     const float CAMERA_DISTANCE = 1.46f;
 
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         var dir = transform.forward * -CAMERA_DISTANCE;
         var pos = transform.position + dir;
+        //pos += characterController.GetMovementDirection() * characterController.GetSpeed() * Time.deltaTime;
         pos.y += cameraUpAndDown;
 
         if (characterController.IsCrouched())
@@ -69,14 +71,15 @@ public class PlayerController : MonoBehaviour
         if (cameraUpAndDown > 3.5f)
             cameraUpAndDown = 3.5f;
 
-        playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, CalculateAndUpdateCameraPosition(), Time.deltaTime * 10f);
+        float factor = Time.deltaTime * 10f;
+
+        if (isStrafing)
+            factor = 1f;
+
+        playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, CalculateAndUpdateCameraPosition(), factor);
         playerCamera.transform.LookAt(cameraOrbitPoint);
         characterController.TurnByAngle(x);
     }
-
-    private int xCountPressed = 0;
-    private int zCountPressed = 0;
-
 
     public class CustomButton
     {
@@ -136,6 +139,7 @@ public class PlayerController : MonoBehaviour
         var z = Input.GetAxisRaw("Vertical");
         var isRunning = !Input.GetButton("Run");
         var isCrouching = Input.GetButton("Crouch");
+        isStrafing = false;
 
         // TEST ONLY
         if (Input.GetKeyDown(KeyCode.P))
@@ -174,10 +178,12 @@ public class PlayerController : MonoBehaviour
             if (x > 0f)
             {
                 characterController.MoveRight();
+                isStrafing = true;
             }
             else if (x < 0f)
             {
                 characterController.MoveLeft();
+                isStrafing = true;
             }
         }
 

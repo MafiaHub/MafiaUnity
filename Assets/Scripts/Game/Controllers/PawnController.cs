@@ -89,6 +89,16 @@ public class PawnController
         return 0f;
     }
 
+    public Vector3 GetMovementDirection()
+    {
+        return movementDirection;
+    }
+
+    public Vector3 GetOldMovementDirection()
+    {
+        return oldMovementDirection;
+    }
+
 	public void MoveForward()
 	{
         movementDirection.z = 1f;
