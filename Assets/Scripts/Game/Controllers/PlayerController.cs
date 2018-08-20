@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
 
         float factor = Time.deltaTime * 10f;
 
-        if (isStrafing)
+        if (isStrafing || characterController.IsRolling())
             factor = 1f;
 
         playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, CalculateAndUpdateCameraPosition(), factor);
