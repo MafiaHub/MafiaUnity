@@ -47,6 +47,11 @@ namespace MafiaUnity
             var length = reader.ReadByte();
             return System.Text.Encoding.ASCII.GetString(reader.ReadBytes(length));
         }
+
+        public static string ReadString(BinaryReader reader, int length)
+        {
+            return System.Text.Encoding.ASCII.GetString(reader.ReadBytes(length));
+        }
         
         public static string ReadTerminatedString(BinaryReader reader)
         {
