@@ -7,16 +7,19 @@ using UnityEngine;
 namespace MafiaUnity
 {
     [Serializable]
+    public class Mission
+    {
+        public string missionName;
+        public GameObject rootObject;
+        public MafiaFormats.Scene2BINLoader missionData;
+        public Dictionary<string, GameObject> referenceMap;
+        public Dictionary<string, GameObject> cacheReferenceMap;
+    }
+
+    [Serializable]
     public class MissionManager
     {
 
-        [Serializable]
-        public class Mission
-        {
-            public string missionName;
-            public GameObject rootObject;
-            public MafiaFormats.Scene2BINLoader missionData;
-        }
 
         [SerializeField] public Mission mission { get; private set; }
         
@@ -43,24 +46,27 @@ namespace MafiaUnity
 
             var missionPath = "missions/" + missionName + "/";
 
-            gameAPI.modelGenerator.LoadObject(missionPath + "scene.4ds").transform.parent = missionObject.transform;
-
-            if (gameAPI.fileSystem.Exists(missionPath + "cache.bin"))
-                gameAPI.cityGenerator.LoadObject(missionPath + "cache.bin").transform.parent = missionObject.transform;
-
-            gameAPI.sceneGenerator.LoadObject(missionPath + "scene2.bin").transform.parent = missionObject.transform;
-
-            if (gameAPI.fileSystem.Exists(missionPath + "tree.klz"))
-                gameAPI.cityGenerator.LoadCollisions(missionPath + "tree.klz").transform.parent = missionObject.transform;
-
-            new MissionHacks(missionName, gameAPI.sceneGenerator.lastLoader);
-
             mission = new Mission
             {
                 missionName = missionName,
                 rootObject = missionObject,
-                missionData = gameAPI.sceneGenerator.lastLoader
+                referenceMap = new Dictionary<string, GameObject>(),
+                cacheReferenceMap = new Dictionary<string, GameObject>(),
             };
+
+            gameAPI.modelGenerator.LoadObject(missionPath + "scene.4ds", mission).transform.parent = missionObject.transform;
+
+            if (gameAPI.fileSystem.Exists(missionPath + "cache.bin"))
+                gameAPI.cityGenerator.LoadObject(missionPath + "cache.bin", mission).transform.parent = missionObject.transform;
+
+            gameAPI.sceneGenerator.LoadObject(missionPath + "scene2.bin", mission).transform.parent = missionObject.transform;
+
+            if (gameAPI.fileSystem.Exists(missionPath + "tree.klz"))
+                gameAPI.cityGenerator.LoadCollisions(mission, missionPath + "tree.klz").transform.parent = missionObject.transform;
+
+            mission.missionData = gameAPI.sceneGenerator.lastLoader;
+
+            new MissionHacks(missionName, gameAPI.sceneGenerator.lastLoader);
 
             if (onMissionLoaded != null)
                 onMissionLoaded.Invoke(missionName);

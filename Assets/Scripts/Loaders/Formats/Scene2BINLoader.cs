@@ -254,7 +254,7 @@ namespace MafiaUnity
                                 }
                                 else
                                 {
-                                    var go = GameObject.Find(newObject.name);
+                                    var go = BaseGenerator.FetchCacheReference(GameAPI.instance.missionManager.mission, newObject.name)?.gameObject;
 
                                     if (go != null)
                                     {

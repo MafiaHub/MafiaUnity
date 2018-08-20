@@ -7,7 +7,7 @@ namespace MafiaUnity
 {
     public class CityGenerator : BaseGenerator
     {
-        public override GameObject LoadObject(string path)
+        public override GameObject LoadObject(string path, Mission mission)
         {
             GameObject rootObject = LoadCachedObject(path);
 
@@ -32,6 +32,7 @@ namespace MafiaUnity
                 var cacheBINLoader = new MafiaFormats.CacheBINLoader();
 
                 cacheBINLoader.ReadCache(reader);
+                fs.Close();
 
                 foreach (var obj in cacheBINLoader.objects)
                 {
@@ -40,7 +41,7 @@ namespace MafiaUnity
 
                     foreach (var instance in obj.instances)
                     {
-                        var model = GameAPI.instance.modelGenerator.LoadObject(Path.Combine("models", instance.modelName));
+                        var model = GameAPI.instance.modelGenerator.LoadObject(Path.Combine("models", instance.modelName), null);
 
                         if (model == null)
                             continue;
@@ -50,6 +51,7 @@ namespace MafiaUnity
                         model.transform.localPosition = instance.pos;
                         model.transform.localRotation = instance.rot;
                         model.transform.localScale = instance.scale;
+                        
                     }
                 }
             }
@@ -59,12 +61,12 @@ namespace MafiaUnity
             return rootObject;
         }
 
-        private void ApplyMeshColliderToMeshNode(string meshName)
+        private void ApplyMeshColliderToMeshNode(Mission mission, string meshName)
         {
-            var objectToBeColisioned = GameObject.Find(meshName);
+            var objectToBeColisioned = BaseGenerator.FetchReference(mission, meshName);
+
             if (objectToBeColisioned)
             {
-                //If finded object doesent have mesh filter search for childs
                 var objectFilter = objectToBeColisioned.GetComponent<MeshFilter>();
                 if (objectFilter)
                 {
@@ -86,10 +88,9 @@ namespace MafiaUnity
                     }
                 }
             }
-            
         }
 
-        public GameObject LoadCollisions(string path)
+        public GameObject LoadCollisions(Mission mission, string path)
         {
             GameObject rootObject = LoadCachedObject(path);
 
@@ -113,6 +114,7 @@ namespace MafiaUnity
             {
                 var newKlzLoader = new MafiaFormats.KLZLoader();
                 newKlzLoader.load(reader);
+                fs.Close();
 
                 //NOTE(DavoSK): All face colls are inside of mesh nodes not in tree.klz
                 //tree.klz node game object contains only primitive colliders.
@@ -125,7 +127,7 @@ namespace MafiaUnity
                     if (lastFaceColledMesh != newKlzLoader.linkTables[link].name)
                     {
                         lastFaceColledMesh = newKlzLoader.linkTables[link].name;
-                        ApplyMeshColliderToMeshNode(lastFaceColledMesh);
+                        ApplyMeshColliderToMeshNode(mission, lastFaceColledMesh);
                     }
                 }
 
@@ -133,7 +135,7 @@ namespace MafiaUnity
                 foreach (var cylCol in newKlzLoader.cylinderCols)
                 {
                     var linkName = newKlzLoader.linkTables[(int)cylCol.link].name;
-                    ApplyMeshColliderToMeshNode(linkName);
+                    ApplyMeshColliderToMeshNode(mission, linkName);
                 }
 
                 //Load spehere collisions
@@ -220,6 +222,8 @@ namespace MafiaUnity
                         boxCollider.center = center;
                     }
                 }
+
+                StoreChachedObject(path, rootObject);
 
                 return rootObject;
             }

@@ -10,9 +10,9 @@ namespace MafiaUnity
     {
         public MafiaFormats.Scene2BINLoader lastLoader;
 
-        public override GameObject LoadObject(string path)
+        public override GameObject LoadObject(string path, Mission mission)
         {
-            GameObject rootObject = null;
+            GameObject rootObject = LoadCachedObject(path);
 
             if (rootObject == null)
                 rootObject = new GameObject(path);
@@ -36,14 +36,17 @@ namespace MafiaUnity
                 lastLoader = sceneLoader;
 
                 sceneLoader.Load(reader);
+                fs.Close();
 
                 var objects = new List<KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>>();
 
                 var backdrop = new GameObject("Backdrop sector");
                 backdrop.transform.parent = rootObject.transform;
+                StoreReference(mission, backdrop.name, backdrop);
 
                 var primary = new GameObject("Primary sector");
                 primary.transform.parent = rootObject.transform;
+                StoreReference(mission, primary.name, primary);
 
                 foreach (var obj in sceneLoader.objects)
                 {
@@ -56,12 +59,14 @@ namespace MafiaUnity
                     if (obj.Value.modelName == null || (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model && obj.Value.specialType == 0))
                         newObject = new GameObject();
                     else
-                        newObject = GameAPI.instance.modelGenerator.LoadObject(Path.Combine("models", obj.Value.modelName));
+                        newObject = GameAPI.instance.modelGenerator.LoadObject(Path.Combine("models", obj.Value.modelName), null);
                     
                     if (newObject == null)
                         continue;
                         
                     newObject.name = obj.Value.name;
+
+                    StoreReference(mission, newObject.name, newObject);
 
                     newObject.transform.localPosition = obj.Value.pos;
                     newObject.transform.localRotation = obj.Value.rot;
@@ -76,7 +81,7 @@ namespace MafiaUnity
 
                     if (obj.Value.parentName != null)
                     {
-                        var parentObject = GameObject.Find(obj.Value.parentName);
+                        var parentObject = FetchReference(mission, obj.Value.parentName);
                         
                         if (parentObject != null)
                             newObject.transform.parent = parentObject.transform;
@@ -102,7 +107,7 @@ namespace MafiaUnity
             if (primarySector != null)
                 primarySector.transform.localScale = new Vector3(1,1,1);
 
-            //StoreChachedObject(path, rootObject);
+            StoreChachedObject(path, rootObject);
 
             return rootObject;
         }

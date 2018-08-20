@@ -12,7 +12,7 @@ namespace MafiaUnity
     {
         public static Dictionary<string, Texture2D> cachedTextures = new Dictionary<string, Texture2D>();
 
-        public override GameObject LoadObject(string path)
+        public override GameObject LoadObject(string path, Mission mission)
         {
             GameObject rootObject = LoadCachedObject(path);
             
@@ -38,6 +38,7 @@ namespace MafiaUnity
             {
                 var modelLoader = new MafiaFormats.Reader4DS();
                 var model = modelLoader.loadModel(reader);
+                fs.Close();
 
                 if (model == null)
                     return null;
@@ -50,6 +51,8 @@ namespace MafiaUnity
                 {
                     var child = new GameObject(mafiaMesh.meshName, typeof(MeshFilter));
                     var meshFilter = child.GetComponent<MeshFilter>();
+
+                    StoreReference(mission, child.name, child);
                     
                     children.Add(new KeyValuePair<int, Transform>(mafiaMesh.parentID, child.transform));
 
@@ -304,8 +307,6 @@ namespace MafiaUnity
             }
             
             StoreChachedObject(path, rootObject);
-            
-            fs.Close();
 
             return rootObject;
         }

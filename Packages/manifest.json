@@ -2,6 +2,7 @@
   "dependencies": {
     "com.unity.ads": "2.0.8",
     "com.unity.analytics": "2.0.16",
+    "com.unity.entities": "0.0.12-preview.8",
     "com.unity.package-manager-ui": "1.9.11",
     "com.unity.postprocessing": "2.0.10-preview",
     "com.unity.purchasing": "2.0.3",

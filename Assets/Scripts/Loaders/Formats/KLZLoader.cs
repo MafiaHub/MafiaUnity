@@ -151,21 +151,6 @@ namespace MafiaUnity
             public List<OBBCol> OBBCols             = new List<OBBCol>();
             public List<SphereCol> sphereCols       = new List<SphereCol>();
 
-            private int peekLength(BinaryReader reader)
-            {
-                int currentSize = 0;
-                long currentPos = reader.BaseStream.Position;
-                byte curentChar = 1;
-
-                while (curentChar != 0)
-                {
-                    curentChar = reader.ReadByte();
-                    currentSize++;
-                }
-                reader.BaseStream.Seek(currentPos, SeekOrigin.Begin);
-                return currentSize;
-            }
-
             public Header ReadHeader(BinaryReader reader)
             {
                 Header newHeader = new Header();
@@ -319,8 +304,7 @@ namespace MafiaUnity
                     Link newLink = new Link();
                     reader.BaseStream.Seek(linkNameOffsetTable[i], SeekOrigin.Begin);
                     newLink.flags = reader.ReadUInt32();
-                    var stringLength = peekLength(reader);
-                    newLink.name = new string(reader.ReadChars(stringLength));
+                    newLink.name = ReadTerminatedString(reader);
                     linkTables.Add(newLink);
                 }
 

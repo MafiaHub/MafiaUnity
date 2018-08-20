@@ -11,20 +11,11 @@ namespace MafiaUnity
 
         public void Init()
         {
-            bool tempDestroySelf = false;
-
             switch (data.type)
             {
                 case MafiaFormats.Scene2BINLoader.ObjectType.Model:
                 {
                     
-                }
-                break;
-
-                case MafiaFormats.Scene2BINLoader.ObjectType.Lightmap:
-                {
-                    // TODO
-                    GameObject.DestroyImmediate(gameObject, true);
                 }
                 break;
 
@@ -37,7 +28,7 @@ namespace MafiaUnity
                 case MafiaFormats.Scene2BINLoader.ObjectType.Light:
                 {
                     //NOTE(zaklaus): Re-parent the light
-                    var parent = GameObject.Find(data.lightSectors);
+                    var parent = BaseGenerator.FetchCacheReference(GameAPI.instance.missionManager.mission, data.lightSectors == null ? "" : data.lightSectors)?.gameObject;
 
                     if (parent != null)
                     {
@@ -67,17 +58,6 @@ namespace MafiaUnity
                     light.color = new Color(data.lightColour.x, data.lightColour.y, data.lightColour.z);
                 }
                 break;
-
-                default:
-                {
-                    tempDestroySelf = true;
-                }
-                break;
-            }
-
-            if (tempDestroySelf && data.specialType == MafiaFormats.Scene2BINLoader.SpecialObjectType.None)
-            {
-                GameObject.DestroyImmediate(gameObject, true);
             }
 
             switch (data.specialType)

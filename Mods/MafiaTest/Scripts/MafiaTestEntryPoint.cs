@@ -27,7 +27,7 @@ class MafiaTestGameMode : IGameMode
 	void IGameMode.Start()
 	{
         var go = new GameObject("Main Player");
-        var tommy = GameAPI.instance.modelGenerator.LoadObject("models/Tommy.4ds");
+        var tommy = GameAPI.instance.modelGenerator.LoadObject("models/Tommy.4ds", null);
         var player = tommy.AddComponent<ModelAnimationPlayer>();
         tommy.transform.parent = go.transform;
 

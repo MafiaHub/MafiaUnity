@@ -89,7 +89,7 @@ namespace MafiaUnity
                 {
                     GameAPI.instance.SetGamePath(gamePath);
 
-                    GameAPI.instance.modelGenerator.LoadObject(modelPath);
+                    GameAPI.instance.modelGenerator.LoadObject(modelPath, null);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -102,7 +102,7 @@ namespace MafiaUnity
                 {
                     GameAPI.instance.SetGamePath(gamePath);
 
-                    GameAPI.instance.cityGenerator.LoadObject(cityPath);
+                    GameAPI.instance.cityGenerator.LoadObject(cityPath, null);
                 }
             }
             EditorGUILayout.EndHorizontal();
