@@ -233,7 +233,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 550
+  far clip plane: 280
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -281,7 +281,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   stopNaNPropagation: 1
-  antialiasingMode: 1
+  antialiasingMode: 0
   temporalAntialiasing:
     jitterSpread: 0.75
     sharpness: 0.25

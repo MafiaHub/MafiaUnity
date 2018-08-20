@@ -20,7 +20,7 @@ public class SetupGUI : MonoBehaviour {
     public void StartGame()
     {
         // Revert settings back to default.
-        RenderSettings.ambientLight = new Color(54, 58, 66);
+        RenderSettings.ambientLight = new Color32(54, 58, 66, 1);
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Custom;
         RenderSettings.fog = false;
 
