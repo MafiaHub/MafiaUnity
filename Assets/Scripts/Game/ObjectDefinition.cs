@@ -39,7 +39,8 @@ namespace MafiaUnity
                         transform.localScale = data.scale;
                     }
 
-                    if (data.lightType != MafiaFormats.Scene2BINLoader.LightType.Directional && data.lightType != MafiaFormats.Scene2BINLoader.LightType.Point)
+                    if (data.lightType != MafiaFormats.Scene2BINLoader.LightType.Spot && data.lightType != MafiaFormats.Scene2BINLoader.LightType.Point 
+                        && data.lightType != MafiaFormats.Scene2BINLoader.LightType.Fog)
                         break;
 
                     var light = gameObject.AddComponent<Light>();
@@ -47,10 +48,16 @@ namespace MafiaUnity
                     light.type = LightType.Point;
                     light.shadows = LightShadows.Soft;
 
-                    if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Directional)
+                    if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Spot)
                     {
                         light.type = LightType.Spot;
                         light.spotAngle = Mathf.Rad2Deg * data.lightAngle;
+                    }
+
+                    if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Fog)
+                    {
+                        GameObject.DestroyImmediate(light);
+                        break;
                     }
 
                     light.intensity = data.lightPower;

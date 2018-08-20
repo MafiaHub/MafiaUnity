@@ -94,7 +94,7 @@ namespace MafiaUnity
             public enum LightType : int
             {
                 Point = 0x01,
-                Directional = 0x03,
+                Spot = 0x03,
                 Ambient = 0x04,
                 Fog = 0x05,
                 Point_Ambient = 0x06,
@@ -406,7 +406,7 @@ namespace MafiaUnity
                             newObject.lightType = (LightType)reader.ReadInt32();
 
                             if ((int)newObject.lightType == 2)
-                                newObject.lightType = LightType.Directional;
+                                newObject.lightType = LightType.Spot;
                         }
                         break;
 

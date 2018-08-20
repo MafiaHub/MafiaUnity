@@ -21,7 +21,8 @@ public class SetupGUI : MonoBehaviour {
     {
         // Revert settings back to default.
         RenderSettings.ambientLight = new Color(54, 58, 66);
-        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
+        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Custom;
+        RenderSettings.fog = false;
 
         GameObject.Destroy(startupLight);
         GameObject.Destroy(GameObject.Find("EventSystem"));

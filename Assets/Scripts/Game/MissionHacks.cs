@@ -105,6 +105,9 @@ namespace MafiaUnity
 
                         var light10 = GameObject.Find("sector Box12/light10")?.GetComponent<Light>();
                         if (light10 != null) light10.shadows = LightShadows.Soft;
+
+                        var fog = GameObject.Find("light5")?.GetComponent<ObjectDefinition>();
+                        SetUpFog(fog);
                     }
                     break;
 
@@ -233,6 +236,17 @@ namespace MafiaUnity
             {
                 mat.shader = Shader.Find("Unlit/Texture");
             }
+        }
+
+        void SetUpFog(ObjectDefinition obj)
+        {
+            if (obj == null) return;
+            var data = obj.data;
+            RenderSettings.fog = true;
+            RenderSettings.fogMode = FogMode.Linear;
+            RenderSettings.fogColor = new Color(data.lightColour.x, data.lightColour.y, data.lightColour.z, 1f) * data.lightPower;
+            RenderSettings.fogStartDistance = data.lightNear * 1000f;
+            RenderSettings.fogEndDistance = data.lightFar * 50f;
         }
     }
 
