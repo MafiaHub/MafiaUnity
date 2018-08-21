@@ -94,11 +94,20 @@ namespace MafiaUnity
             public enum LightType : int
             {
                 Point = 0x01,
-                Spot = 0x03,
+                Spot = 0x02,
+                Directional = 0x03,
                 Ambient = 0x04,
                 Fog = 0x05,
                 Point_Ambient = 0x06,
                 Layered_Fog = 0x08,
+            }
+
+            [Flags]
+            [Serializable]
+            public enum LightFlags : int
+            {
+                DynamicShadows = (1 << 3),
+                LightmapShadows = (1 << 5)
             }
 
             public class Header
@@ -153,7 +162,7 @@ namespace MafiaUnity
                 // Light properties
                 public LightType lightType;
                 public Vector3 lightColour;
-                public int lightFlags;
+                public LightFlags lightFlags;
                 public float lightPower;           // 1.0 = 100% (can be even over 1.0)
                 public float lightUnk0;
                 public float lightAngle;
@@ -404,9 +413,6 @@ namespace MafiaUnity
                     case ObjectProperty.Light_Type:
                         {
                             newObject.lightType = (LightType)reader.ReadInt32();
-
-                            if ((int)newObject.lightType == 2)
-                                newObject.lightType = LightType.Spot;
                         }
                         break;
 
@@ -439,7 +445,7 @@ namespace MafiaUnity
 
                     case ObjectProperty.Light_Flags:
                         {
-                            newObject.lightFlags = reader.ReadInt32();
+                            newObject.lightFlags = (LightFlags)reader.ReadInt32();
                         }
                         break;
 

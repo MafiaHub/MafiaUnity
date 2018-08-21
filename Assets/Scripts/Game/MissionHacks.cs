@@ -21,6 +21,11 @@ namespace MafiaUnity
                     {
                         backdrop.AddComponent<BackdropManipulator>();
                     }
+
+                    foreach (Transform child in backdrop.transform)
+                    {
+                        SetUpSkybox(child);
+                    }
                 }
 
                 // Change view distance
@@ -89,51 +94,8 @@ namespace MafiaUnity
 
                     case "tutorial":
                     {
-                        var skybox = GameObject.Find("o_m_");
-
-                        if (skybox != null)
-                        {
-                            SetUpSkybox(skybox.transform.Find("Box02"));
-                            SetUpSkybox(skybox.transform.Find("Box03"));
-
-                            var slunko = skybox.transform.Find("slunko");
-                            slunko.gameObject.SetActive(false);
-                        }
-
-                        var light22 = GameObject.Find("sector Box12/light22")?.GetComponent<Light>();
-                        if (light22 != null) light22.shadows = LightShadows.Soft;
-
-                        var light10 = GameObject.Find("sector Box12/light10")?.GetComponent<Light>();
-                        if (light10 != null) light10.shadows = LightShadows.Soft;
-
                         var fog = GameObject.Find("light5")?.GetComponent<ObjectDefinition>();
                         SetUpFog(fog);
-                    }
-                    break;
-
-                    case "mise04-motorest":
-                    {
-                        var box01 = GameObject.Find("denjasno/Box01");
-                        var box02 = GameObject.Find("denjasno/Box02");
-
-                        if (box01 != null)
-                            SetUpSkybox(box01.transform);
-
-                        if (box02 != null)
-                            SetUpSkybox(box02.transform);
-                    }
-                    break;
-
-                    case "mise06-autodrom":
-                    {
-                        var box01 = GameObject.Find("oblohamirrored/Box01");
-                        var box02 = GameObject.Find("denjasno/Box02");
-
-                        if (box01 != null)
-                            SetUpSkybox(box01.transform);
-
-                        if (box02 != null)
-                            SetUpSkybox(box02.transform);
                     }
                     break;
 
@@ -157,33 +119,8 @@ namespace MafiaUnity
                     }
                     break;
 
-                    case "freeride":
-                    {
-                        var box02 = GameObject.Find("zapad/Box02");
-
-                        SetUpSkybox(box02.transform);
-                    }
-                    break;
-
-                    case "freekrajina":
-                    {
-                        var box01 = GameObject.Find("denjasno00/Box01");
-                        var box02 = GameObject.Find("denjasno00/Box02");
-
-                        SetUpSkybox(box01.transform);
-                        SetUpSkybox(box02.transform);
-                    }
-                    break;
-
-
                     case "mise16-letiste":
                     {
-                        var box02 = GameObject.Find("denjasno/Box02");
-                        var box03 = GameObject.Find("denjasno/Box03");
-
-                        SetUpSkybox(box02.transform);
-                        SetUpSkybox(box03.transform);
-
                         var slunko = GameObject.Find("denjasno/slunko");
                         slunko.gameObject.SetActive(false);
                     }
@@ -230,12 +167,19 @@ namespace MafiaUnity
             skybox.gameObject.layer = LayerMask.NameToLayer("Backdrop");
 
             var meshRenderer = skybox.GetComponent<MeshRenderer>();
-            meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
 
-            foreach (var mat in meshRenderer.sharedMaterials)
+            if (meshRenderer != null)
             {
-                mat.shader = Shader.Find("Unlit/Texture");
+                meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
+
+                foreach (var mat in meshRenderer.sharedMaterials)
+                {
+                    mat.shader = Shader.Find("Unlit/Texture");
+                }
             }
+
+            foreach (Transform child in skybox)
+                SetUpSkybox(child);
         }
 
         void SetUpFog(ObjectDefinition obj)
