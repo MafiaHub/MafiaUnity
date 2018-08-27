@@ -381,8 +381,8 @@ public class PawnController
             runAnimations[(int)AnimationSlots.Left] = pawn.LoadAnimation("anims/strafL" + slot + ".5ds");
             runAnimations[(int)AnimationSlots.Right] = pawn.LoadAnimation("anims/strafR" + slot + ".5ds");
 
-			turnAnimations[(int)AnimationSlots.Left] = pawn.LoadAnimation("anims/left" + slot + ".5ds");
-            turnAnimations[(int)AnimationSlots.Right] = pawn.LoadAnimation("anims/left" + slot + ".5ds"); // temp fix
+			turnAnimations[(int)AnimationSlots.Left] = pawn.LoadAnimation("anims/left" + slot + ".5ds", 0, 1);
+            turnAnimations[(int)AnimationSlots.Right] = pawn.LoadAnimation("anims/left" + slot + ".5ds", 0, 1); // temp fix
 			
 			jumpAnimations[(int)AnimationSlots.Left] = pawn.LoadAnimation("anims/jumpL1.5ds");
             jumpAnimations[(int)AnimationSlots.Right] = pawn.LoadAnimation("anims/jumpR1.5ds");

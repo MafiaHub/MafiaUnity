@@ -13,6 +13,24 @@ namespace MafiaUnity
     {
         public List<AnimationSequence> animationSequences;
 
+        /// <summary>
+        /// How many frames to skip at the beginning.
+        /// </summary>
+        public int startFrame = 0;
+
+        /// <summary>
+        /// How many frames to skip at the end, leading to cut out animation.
+        /// Note: endFrame doesn't actually present absolute index when to end an animation, but
+        /// an offset from the animation end at which we consider animation finished. (count - endFrame) == lastFrameIndex
+        /// </summary>
+        public int endFrame = 0;
+
+        public MafiaAnimation(int startFrame, int endFrame)
+        {
+            this.startFrame = startFrame;
+            this.endFrame = endFrame;
+        }
+
         public void Reset()
         {
             if (animationSequences == null)
@@ -38,15 +56,15 @@ namespace MafiaUnity
         private float frameTime;
         private float blendTime;
 
-        public MafiaAnimation LoadAndSetAnimation(string animName)
+        public MafiaAnimation LoadAndSetAnimation(string animName, int startFrame = 0, int endFrame = 0)
         {
-            mafiaAnimation = LoadAnimation(animName);
+            mafiaAnimation = LoadAnimation(animName, startFrame, endFrame);
             return mafiaAnimation;
         }
 
-        public MafiaAnimation LoadAnimation(string animName)
+        public MafiaAnimation LoadAnimation(string animName, int startFrame=0, int endFrame=0)
         {
-            var animation = new MafiaAnimation();
+            var animation = new MafiaAnimation(startFrame, endFrame);
             animation.animationSequences = new List<AnimationSequence>();
 
             Stream fs;
@@ -69,6 +87,7 @@ namespace MafiaUnity
                 {
                     var newAnimationSequence = new AnimationSequence();
                     newAnimationSequence.loaderSequence = seq;
+                    newAnimationSequence.rootAnimation = animation;
                     animation.animationSequences.Add(newAnimationSequence);
                 }
             }
@@ -254,22 +273,32 @@ namespace MafiaUnity
         public int rotationKeyFrameId;
         public int scaleKeyFrameId;
 
+        public MafiaAnimation rootAnimation;
+
         public void Reset()
         {
-            positionKeyFrameId = 0;
-            rotationKeyFrameId = 0;
-            scaleKeyFrameId = 0;
+            int movementFrameSkip = (loaderSequence.positions.Count - rootAnimation.startFrame > 0) ? rootAnimation.startFrame : loaderSequence.positions.Count;
+            int rotationFrameSkip = (loaderSequence.rotations.Count - rootAnimation.startFrame > 0) ? rootAnimation.startFrame : loaderSequence.rotations.Count;
+            int scaleFrameSkip = (loaderSequence.scales.Count - rootAnimation.startFrame > 0) ? rootAnimation.startFrame : loaderSequence.scales.Count;
+
+            positionKeyFrameId = movementFrameSkip;
+            rotationKeyFrameId = rotationFrameSkip;
+            scaleKeyFrameId = scaleFrameSkip;
         }
 
         public void NextFrame()
         {
-            if (loaderSequence.hasMovement() && positionKeyFrameId + 1 < loaderSequence.positions.Count)
+            int movementFrameSkip = (loaderSequence.positions.Count - rootAnimation.endFrame > 0) ? rootAnimation.endFrame : loaderSequence.positions.Count;
+            int rotationFrameSkip = (loaderSequence.rotations.Count - rootAnimation.endFrame > 0) ? rootAnimation.endFrame : loaderSequence.rotations.Count;
+            int scaleFrameSkip = (loaderSequence.scales.Count - rootAnimation.endFrame > 0) ? rootAnimation.endFrame : loaderSequence.scales.Count;
+
+            if (loaderSequence.hasMovement() && positionKeyFrameId + 1 + movementFrameSkip < loaderSequence.positions.Count)
                 positionKeyFrameId++;
 
-            if (loaderSequence.hasRotation() && rotationKeyFrameId + 1 < loaderSequence.rotations.Count)
+            if (loaderSequence.hasRotation() && rotationKeyFrameId + 1 + rotationFrameSkip < loaderSequence.rotations.Count)
                 rotationKeyFrameId++;
 
-            if (loaderSequence.hasScale() && scaleKeyFrameId + 1 < loaderSequence.scales.Count)
+            if (loaderSequence.hasScale() && scaleKeyFrameId + 1 + scaleFrameSkip < loaderSequence.scales.Count)
                 scaleKeyFrameId++;
         }
 
@@ -278,17 +307,21 @@ namespace MafiaUnity
             if (loaderSequence == null)
                 return true;
 
+            int movementFrameSkip = (loaderSequence.positions.Count - rootAnimation.endFrame > 0) ? rootAnimation.endFrame : loaderSequence.positions.Count;
+            int rotationFrameSkip = (loaderSequence.rotations.Count - rootAnimation.endFrame > 0) ? rootAnimation.endFrame : loaderSequence.rotations.Count;
+            int scaleFrameSkip = (loaderSequence.scales.Count - rootAnimation.endFrame > 0) ? rootAnimation.endFrame : loaderSequence.scales.Count;
+
             bool movementResult = true;
             if (loaderSequence.positionFrames.Count > 0)
-                movementResult = (positionKeyFrameId + 1 == loaderSequence.positionFrames.Count);
+                movementResult = (positionKeyFrameId + 1 + movementFrameSkip == loaderSequence.positionFrames.Count);
 
             bool rotationResult = true;
             if (loaderSequence.rotationFrames.Count > 0)
-                rotationResult = (rotationKeyFrameId + 1 == loaderSequence.rotationFrames.Count);
+                rotationResult = (rotationKeyFrameId + 1 + rotationFrameSkip == loaderSequence.rotationFrames.Count);
 
             bool scaleResult = true;
             if (loaderSequence.scaleFrames.Count > 0)
-                scaleResult = (scaleKeyFrameId + 1 == loaderSequence.scaleFrames.Count);
+                scaleResult = (scaleKeyFrameId + 1 + scaleFrameSkip == loaderSequence.scaleFrames.Count);
 
             return movementResult && rotationResult && scaleResult;
         }
