@@ -68,6 +68,17 @@ namespace MafiaUnity
                         child.AddComponent<MeshCollider>().sharedMesh = GenerateMesh(mafiaMesh, child, mafiaMesh.standard.lods[0], model, out temp);
                         continue;
                     }
+                    else if (mafiaMesh.meshType == MafiaFormats.MeshType.Sector)
+                    {
+                        // NOTE: Set up dummy data for this sector.
+                        MafiaFormats.Scene2BINLoader.Object dummySectorData = new MafiaFormats.Scene2BINLoader.Object();
+                        dummySectorData.type = MafiaFormats.Scene2BINLoader.ObjectType.Sector;
+                        var objDef = child.AddComponent<ObjectDefinition>();
+                        objDef.data = dummySectorData;
+                        objDef.sectorBounds.SetMinMax(mafiaMesh.sector.minBox, mafiaMesh.sector.maxBox);
+                        objDef.Init();
+                        continue;
+                    }
                     else if (mafiaMesh.meshType != MafiaFormats.MeshType.Standard)
                         continue;
 

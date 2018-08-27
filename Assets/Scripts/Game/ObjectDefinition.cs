@@ -8,6 +8,11 @@ namespace MafiaUnity
     {
 
         [SerializeField] public MafiaFormats.Scene2BINLoader.Object data;
+        public static List<ObjectDefinition> fogLights = new List<ObjectDefinition>();
+
+        public Bounds sectorBounds;
+
+        private static GameObject mainPlayer = null;
 
         public void Init()
         {
@@ -57,17 +62,21 @@ namespace MafiaUnity
 
                     if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Fog)
                     {
-                        GameObject.DestroyImmediate(light);
+                        light.intensity = 0f;
+                        fogLights.Add(this);
                         break;
                     }
 
                     if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Directional)
                     {
                         light.type = LightType.Directional;
+                        //Debug.Log(gameObject.name + ": " + (int)data.lightFlags);
                         
-                        if (data.lightFlags.HasFlag(MafiaFormats.Scene2BINLoader.LightFlags.LightmapShadows))
+                        // TODO
+                        if ((int)data.lightFlags != 107)
                         {
-                            //light.shadows = LightShadows.None;
+                            GameObject.DestroyImmediate(light);
+                            break;
                         }
                     }
 
@@ -100,6 +109,42 @@ namespace MafiaUnity
                 }
                 break;
             }
+        }
+
+        public void Start()
+        {
+            switch (data.type)
+            {
+                case MafiaFormats.Scene2BINLoader.ObjectType.Sector:
+                {
+                    if (sectorBounds.size.magnitude == 0f)
+                        sectorBounds = GetMaxBounds();
+                }
+                break;
+            }
+        }
+
+        public void Update()
+        {
+            if (mainPlayer == null)
+                mainPlayer = GameObject.Find("Main Player");
+
+            switch (data.type)
+            {
+
+            }
+        }
+
+        Bounds GetMaxBounds()
+        {
+            var b = new Bounds(transform.position, Vector3.zero);
+
+            foreach (Renderer r in gameObject.GetComponentsInChildren<Renderer>())
+            {
+                b.Encapsulate(r.bounds);
+            }
+
+            return b;
         }
     }
 }

@@ -44,17 +44,9 @@ namespace MafiaUnity
                 backdrop.transform.parent = rootObject.transform;
                 StoreReference(mission, backdrop.name, backdrop);
 
-                var primary = new GameObject("Primary sector");
-                primary.transform.parent = rootObject.transform;
-                StoreReference(mission, primary.name, primary);
-
                 foreach (var obj in sceneLoader.objects)
                 {
                     GameObject newObject;
-
-                    if (obj.Value.name == "Primary sector")
-                        continue;
-
 
                     if (obj.Value.modelName == null || (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model && obj.Value.specialType == 0))
                         newObject = new GameObject();
@@ -74,6 +66,9 @@ namespace MafiaUnity
                     
                     objects.Add(new KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>(newObject, obj.Value));
                 }
+
+                var primary = FetchReference(mission, "Primary sector");
+                primary.transform.parent = rootObject.transform;
 
                 foreach (var obj in objects)
                 {
@@ -99,6 +94,7 @@ namespace MafiaUnity
                     specObject.data = obj.Value;
                     specObject.Init();
                 }
+                
             }
 
             // NOTE(zaklaus): Hardcode 'Primary sector' scale to (1,1,1)

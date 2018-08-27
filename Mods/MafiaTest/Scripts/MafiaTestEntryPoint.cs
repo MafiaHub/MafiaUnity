@@ -41,7 +41,7 @@ class MafiaTestGameMode : IGameMode
         collider.center = new Vector3(0, 1f, 0);
         collider.height = 2f;
         go.transform.position = new Vector3(40.39561f, 20.25f, -1.018f);
-
+/* 
 		var sun = new GameObject("Sun");
 		sun.transform.rotation = Quaternion.Euler(50, -30, 0);
 
@@ -49,7 +49,7 @@ class MafiaTestGameMode : IGameMode
 		sunLight.color = new Color(1f, 0.9030898f, 0.7028302f);
 		sunLight.type = LightType.Directional;
         sunLight.shadows = LightShadows.Soft;
-
+ */
 		GameAPI.instance.missionManager.LoadMission("tutorial");
 	}
 

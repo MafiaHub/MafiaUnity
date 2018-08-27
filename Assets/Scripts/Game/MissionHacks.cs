@@ -95,7 +95,7 @@ namespace MafiaUnity
                     case "tutorial":
                     {
                         var fog = GameObject.Find("light5")?.GetComponent<ObjectDefinition>();
-                        SetUpFog(fog);
+                        //SetUpFog(fog);
                     }
                     break;
 

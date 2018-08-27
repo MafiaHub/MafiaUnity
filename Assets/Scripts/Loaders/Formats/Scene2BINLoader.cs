@@ -103,7 +103,6 @@ namespace MafiaUnity
             }
 
             [Flags]
-            [Serializable]
             public enum LightFlags : int
             {
                 DynamicShadows = (1 << 3),
