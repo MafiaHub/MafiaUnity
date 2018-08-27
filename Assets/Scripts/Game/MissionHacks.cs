@@ -201,8 +201,9 @@ namespace MafiaUnity
 
         private void Start()
         {
-            mainCamera = GameObject.Find("Main Camera").transform;
-            skyboxCamera = new GameObject("Backdrop camera").transform;
+            /* mainCamera = GameObject.Find("Main Camera").transform;
+            skyboxCamera = GameObject.Instantiate(mainCamera);
+            skyboxCamera.name = "Backdrop Camera";
 
             skyboxCamera.parent = mainCamera;
 
@@ -214,7 +215,7 @@ namespace MafiaUnity
             cam.farClipPlane = 5000f;
             cam.cullingMask = (1 << LayerMask.NameToLayer("Backdrop"));
             cam.depth = 1 + mainCamera.GetComponent<Camera>().depth;
-            cam.clearFlags = CameraClearFlags.Nothing;
+            cam.clearFlags = CameraClearFlags.Nothing; */
 
             gameObject.layer = LayerMask.NameToLayer("Backdrop");
         }
