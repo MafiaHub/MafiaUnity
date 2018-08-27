@@ -456,7 +456,7 @@ namespace MafiaUnity
         const string SOLUTION_TPL = @"Assets/Resources/Solution.tpl";
         const string PROJECT_TPL = @"Assets/Resources/Project.tpl";
 
-        string unityPath = @"F:/Unity/2018.2.2f1";
+        string unityPath = @"F:/Unity/2018.2.5f1";
         string solutionPath = @"Mods/ExampleMod/Temp";
         string solutionName = @"ExampleMod";
 
