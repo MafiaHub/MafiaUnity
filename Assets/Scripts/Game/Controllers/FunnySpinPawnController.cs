@@ -9,10 +9,12 @@ namespace MafiaUnity
 		PawnController characterController = null;
 
 		public GameObject pawn = null;
+		public MovementMode mode = MovementMode.Walk;
+		public float turnAngle = 60f;
 
 		private void Start()
 		{
-			characterController = new PawnController(pawn.GetComponent<ModelAnimationPlayer>(), transform);
+			
 		}
 
 		private void FixedUpdate()
@@ -21,11 +23,16 @@ namespace MafiaUnity
                 return;
 
 			if (characterController == null)
-				return;
+			{
+				if (pawn == null)
+					return; 
+					
+                characterController = new PawnController(pawn.GetComponent<ModelAnimationPlayer>(), transform);
+			}
 
-			characterController.movementMode = MovementMode.Walk;
+			characterController.movementMode = mode;
 			characterController.MoveForward();
-			characterController.TurnByAngle(60f);
+			characterController.TurnByAngle(turnAngle);
 				
 			characterController.Update();
 		}
