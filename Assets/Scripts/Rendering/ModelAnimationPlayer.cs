@@ -16,19 +16,25 @@ namespace MafiaUnity
         /// <summary>
         /// How many frames to skip at the beginning.
         /// </summary>
-        public int startFrame = 0;
+        public int startFrame;
 
         /// <summary>
         /// How many frames to skip at the end, leading to cut out animation.
         /// Note: endFrame doesn't actually present absolute index when to end an animation, but
         /// an offset from the animation end at which we consider animation finished. (count - endFrame) == lastFrameIndex
         /// </summary>
-        public int endFrame = 0;
+        public int endFrame;
 
-        public MafiaAnimation(int startFrame, int endFrame)
+        /// <summary>
+        /// If used to blend with current animation, this specifies the duration of blending.
+        /// </summary>
+        public float blendDuration;
+
+        public MafiaAnimation(int startFrame, int endFrame, float blendDuration)
         {
             this.startFrame = startFrame;
             this.endFrame = endFrame;
+            this.blendDuration = blendDuration;
         }
 
         public void Reset()
@@ -45,7 +51,6 @@ namespace MafiaUnity
     {
         public bool isPlaying = false;
         public AnimationPlaybackMode playbackMode;
-        public float blendDuration = 0.25f;
         public float playbackCompletion;
         
         private Action onAnimationFinished = null;
@@ -62,9 +67,9 @@ namespace MafiaUnity
             return mafiaAnimation;
         }
 
-        public MafiaAnimation LoadAnimation(string animName, int startFrame=0, int endFrame=0)
+        public MafiaAnimation LoadAnimation(string animName, int startFrame=0, int endFrame=0, float blendDuration = 0.25f)
         {
-            var animation = new MafiaAnimation(startFrame, endFrame);
+            var animation = new MafiaAnimation(startFrame, endFrame, blendDuration);
             animation.animationSequences = new List<AnimationSequence>();
 
             Stream fs;
@@ -133,7 +138,7 @@ namespace MafiaUnity
             mafiaAnimation.Reset();
         }
 
-        public void BlendAnimation(MafiaAnimation anim, int startFrame = 0, int endFrame = 0)
+        public void BlendAnimation(MafiaAnimation anim, int startFrame = 0, int endFrame = 0, float blendDuration = 0.25f)
         {
             if (anim == null)
                 return;
@@ -152,6 +157,7 @@ namespace MafiaUnity
             }
 
             pairAnimation = anim;
+            pairAnimation.blendDuration = blendDuration;
             pairAnimation.startFrame = startFrame;
             pairAnimation.endFrame = endFrame;
         }
@@ -178,12 +184,12 @@ namespace MafiaUnity
             if (mafiaAnimation == null || mafiaAnimation.animationSequences == null)
                 return;
 
-            if (blendDuration > 0f && pairAnimation != null && mafiaAnimation != pairAnimation && blendTime == 0f)
+            if (pairAnimation != null && pairAnimation.blendDuration > 0f && mafiaAnimation != pairAnimation && blendTime == 0f)
             {
-                blendTime = blendDuration;
+                blendTime = pairAnimation.blendDuration;
             }
 
-            if (blendTime > 0f && blendDuration > 0f && pairAnimation != null)
+            if (blendTime > 0f && pairAnimation != null && pairAnimation.blendDuration > 0f)
             {
                 foreach (var seq in pairAnimation.animationSequences)
                 {
@@ -202,7 +208,7 @@ namespace MafiaUnity
                     var primaryTr = primarySeq.GetCurrentMotion();
                     var secondaryTr = seq.GetCurrentMotion();
 
-                    float blendDelta = 1f - blendTime / blendDuration;
+                    float blendDelta = 1f - blendTime / pairAnimation.blendDuration;
 
                     if (seq.loaderSequence.hasMovement())
                     {
