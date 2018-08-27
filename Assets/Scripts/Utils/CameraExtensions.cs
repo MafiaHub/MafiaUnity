@@ -124,7 +124,7 @@ public static class CameraExtension {
 
         if (keyAmbient)
         {
-            RenderSettings.ambientLight = Color.Lerp(RenderSettings.ambientLight, new Color(keyAmbient.data.lightColour.x, keyAmbient.data.lightColour.y, keyAmbient.data.lightColour.z, 1f) * keyAmbient.data.lightPower, 0.8f * Time.deltaTime);
+            RenderSettings.ambientLight = Color.Lerp(RenderSettings.ambientLight, new Color(keyAmbient.data.lightColour.x, keyAmbient.data.lightColour.y, keyAmbient.data.lightColour.z, 1f) * keyAmbient.data.lightPower, 0.9f * Time.deltaTime);
             RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
         }
     }
