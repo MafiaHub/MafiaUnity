@@ -95,7 +95,7 @@ namespace MafiaUnity
             return animation;
         }
 
-        public void SetAnimation(MafiaAnimation anim)
+        public void SetAnimation(MafiaAnimation anim, int startFrame = 0, int endFrame = 0)
         {
             if (mafiaAnimation == anim)
                 return;
@@ -104,6 +104,8 @@ namespace MafiaUnity
                 anim.Reset();
 
             mafiaAnimation = anim;
+            mafiaAnimation.startFrame = startFrame;
+            mafiaAnimation.endFrame = endFrame;
         }
         
         public void OnAnimationFinish(Action finishAction)
@@ -131,7 +133,7 @@ namespace MafiaUnity
             mafiaAnimation.Reset();
         }
 
-        public void BlendAnimation(MafiaAnimation anim)
+        public void BlendAnimation(MafiaAnimation anim, int startFrame = 0, int endFrame = 0)
         {
             if (anim == null)
                 return;
@@ -144,10 +146,14 @@ namespace MafiaUnity
             if (mafiaAnimation == null)
             {
                 mafiaAnimation = anim;
+                mafiaAnimation.startFrame = startFrame;
+                mafiaAnimation.endFrame = endFrame;
                 return;
             }
 
             pairAnimation = anim;
+            pairAnimation.startFrame = startFrame;
+            pairAnimation.endFrame = endFrame;
         }
 
         public void FinishAnimation()
