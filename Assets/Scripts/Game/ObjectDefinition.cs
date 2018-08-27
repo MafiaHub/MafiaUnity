@@ -117,8 +117,8 @@ namespace MafiaUnity
                 case MafiaFormats.Scene2BINLoader.SpecialObjectType.Character:
                 {
                     var player = gameObject.AddComponent<ModelAnimationPlayer>();
-                    //var idlePawn = gameObject.AddComponent<IdlePawnController>();
-                    var idlePawn = gameObject.AddComponent<FunnySpinPawnController>();
+                    var idlePawn = gameObject.AddComponent<IdlePawnController>();
+                    //var idlePawn = gameObject.AddComponent<FunnySpinPawnController>();
                     idlePawn.pawn = gameObject;
 
                     ObjectFactory.SetUpPawnPhysics(gameObject);
