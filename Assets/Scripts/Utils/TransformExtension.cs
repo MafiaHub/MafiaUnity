@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class TransformDeepChildExtension
+public static class TransformExtension
 {
     //Breadth-first search
     public static Transform FindDeepChild(this Transform aParent, string aName)
@@ -16,6 +16,20 @@ public static class TransformDeepChildExtension
                 return result;
         }
         return null;
+    }
+
+    // TODO: Move to utils
+    public static int CalculateChildLevel(this Transform t)
+    {
+        int r = 0;
+
+        while (t != null)
+        {
+            t = t.parent;
+            r++;
+        }
+
+        return r;
     }
 
 

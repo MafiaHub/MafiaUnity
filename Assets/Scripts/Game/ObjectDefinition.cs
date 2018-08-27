@@ -9,10 +9,17 @@ namespace MafiaUnity
 
         [SerializeField] public MafiaFormats.Scene2BINLoader.Object data;
         public static List<ObjectDefinition> fogLights = new List<ObjectDefinition>();
+        public static List<ObjectDefinition> ambientLights = new List<ObjectDefinition>();
 
         public Bounds sectorBounds;
 
         private static GameObject mainPlayer = null;
+
+        public static void ResetLightCache()
+        {
+            fogLights = new List<ObjectDefinition>();
+            ambientLights = new List<ObjectDefinition>();
+        }
 
         public void Init()
         {
@@ -46,6 +53,7 @@ namespace MafiaUnity
 
                     if (data.lightType != MafiaFormats.Scene2BINLoader.LightType.Spot && data.lightType != MafiaFormats.Scene2BINLoader.LightType.Point
                         && data.lightType != MafiaFormats.Scene2BINLoader.LightType.Directional
+                        && data.lightType != MafiaFormats.Scene2BINLoader.LightType.Ambient
                         && data.lightType != MafiaFormats.Scene2BINLoader.LightType.Fog)
                         break;
 
@@ -63,7 +71,20 @@ namespace MafiaUnity
                     if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Fog)
                     {
                         light.intensity = 0f;
+                        light.color = Color.blue;
+                        light.type = LightType.Area; // Just to distinguish it easily
+                        light.shadows = LightShadows.None;
                         fogLights.Add(this);
+                        break;
+                    }
+
+                    if (data.lightType == MafiaFormats.Scene2BINLoader.LightType.Ambient)
+                    {
+                        light.intensity = 0f;
+                        light.color = Color.red;
+                        light.type = LightType.Area; // Just to distinguish it easily
+                        light.shadows = LightShadows.None;
+                        ambientLights.Add(this);
                         break;
                     }
 

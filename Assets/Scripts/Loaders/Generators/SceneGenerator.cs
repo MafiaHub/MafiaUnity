@@ -68,6 +68,10 @@ namespace MafiaUnity
                 }
 
                 var primary = FetchReference(mission, "Primary sector");
+                var objDef = primary.AddComponent<ObjectDefinition>();
+                var dummySectorData = new MafiaFormats.Scene2BINLoader.Object();
+                dummySectorData.type = MafiaFormats.Scene2BINLoader.ObjectType.Sector;
+                objDef.data = dummySectorData;
                 primary.transform.parent = rootObject.transform;
 
                 foreach (var obj in objects)

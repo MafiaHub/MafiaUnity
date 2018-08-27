@@ -436,9 +436,7 @@ namespace MafiaUnity
 
                     case ObjectProperty.Light_Sector:
                         {
-                            var charName = reader.ReadBytes((int)header.size - 6);
-
-                            newObject.lightSectors = System.Text.Encoding.ASCII.GetString(charName);
+                            newObject.lightSectors = ReadTerminatedString(reader);
                         }
                         break;
 

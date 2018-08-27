@@ -127,76 +127,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // TODO: Move to utils
-    int CalculateChildLevel(Transform t)
-    {
-        int r = 0;
-
-        while (t != null)
-        {
-            t = t.parent;
-            r++;
-        }
-
-        return r;
-    }
-
-    void UpdateFog()
-    {
-        var lights = ObjectDefinition.fogLights;
-
-        ObjectDefinition keyFog = null;
-        int keyLevel = 9999;
-
-        foreach (var fog in lights)
-        {
-            var sector = fog.transform.parent;
-
-            if (sector != null && sector.name == fog.data.lightSectors)
-            {
-                var sectorData = sector.GetComponent<ObjectDefinition>();
-
-                if (sectorData != null)
-                {
-                    if (sectorData.sectorBounds.Contains(playerCamera.transform.position))
-                    {
-                        int c = CalculateChildLevel(fog.transform);
-
-                        if (keyLevel > c)
-                        {
-                            keyFog = fog;
-                            keyLevel = c;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                int c = CalculateChildLevel(fog.transform);
-                if (keyLevel > c)
-                {
-                    keyLevel = c;
-                    keyFog = fog;
-                }
-            }
-        }
-
-        if (keyFog != null)
-        {
-            Debug.Log("OK");
-            RenderSettings.fogColor = new Color(keyFog.data.lightColour.x, keyFog.data.lightColour.y, keyFog.data.lightColour.z, 1f) * keyFog.data.lightPower;
-            RenderSettings.fogStartDistance = keyFog.data.lightNear * 1000f;
-            RenderSettings.fogEndDistance = keyFog.data.lightFar * 50f;
-            RenderSettings.fogMode = FogMode.Linear;
-        }
-    }
-
     public void FixedUpdate()
     {
         if (GameAPI.instance.isPaused)
             return;
 
-        UpdateFog();
+        playerCamera.transform.UpdateRenderSettings();
             
         if (characterController == null)
             return;

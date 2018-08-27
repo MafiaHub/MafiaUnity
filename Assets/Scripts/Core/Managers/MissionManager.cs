@@ -78,6 +78,8 @@ namespace MafiaUnity
             {
                 GameObject.DestroyImmediate(mission.rootObject, true);
 
+                ObjectDefinition.ResetLightCache();
+
                 mission = null;
 
                 if (onMissionDestroyed != null)
