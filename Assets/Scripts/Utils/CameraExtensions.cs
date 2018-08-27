@@ -115,6 +115,7 @@ public static class CameraExtension {
             RenderSettings.fogStartDistance = Mathf.Lerp(RenderSettings.fogStartDistance, keyFog.data.lightNear * 1000f, 0.4f * Time.deltaTime);
             RenderSettings.fogEndDistance = Mathf.Lerp(RenderSettings.fogEndDistance, keyFog.data.lightFar * 50f, 0.4f * Time.deltaTime);
             RenderSettings.fogMode = FogMode.Linear;
+			RenderSettings.fog = true;
         }
     }
 

@@ -6,16 +6,13 @@ namespace MafiaUnity
     // This is a helper script and should be only used in editor for dev purposes!
     class PlayerSpawner : MonoBehaviour
     {
-        bool isInitialized = false;
         void Update() 
         {
-            if (isInitialized == true)
-                return;
-
             if (!GameAPI.instance.GetInitialized())
                 return;
 
-            var go = new GameObject("playerController");
+            gameObject.name = "Main Player";
+
             var tommy = GameAPI.instance.modelGenerator.LoadObject("models/Tommy.4ds", null);
             var player = tommy.AddComponent<ModelAnimationPlayer>();
             tommy.transform.parent = transform;
@@ -31,7 +28,7 @@ namespace MafiaUnity
             collider.center = new Vector3(0, 1f, 0);
             collider.height = 2f;
 
-            isInitialized = true;
+            GameObject.DestroyImmediate(this);
         }
     }
 }

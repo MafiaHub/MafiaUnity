@@ -74,7 +74,6 @@ namespace MafiaUnity
                         light.color = Color.blue;
                         light.type = LightType.Area; // Just to distinguish it easily
                         light.shadows = LightShadows.None;
-                        fogLights.Add(this);
                         break;
                     }
 
@@ -84,7 +83,6 @@ namespace MafiaUnity
                         light.color = Color.red;
                         light.type = LightType.Area; // Just to distinguish it easily
                         light.shadows = LightShadows.None;
-                        ambientLights.Add(this);
                         break;
                     }
 
@@ -142,10 +140,30 @@ namespace MafiaUnity
                         sectorBounds = GetMaxBounds();
                 }
                 break;
+
+                case MafiaFormats.Scene2BINLoader.ObjectType.Light:
+                {
+                    switch (data.lightType)
+                    {
+                        case MafiaFormats.Scene2BINLoader.LightType.Fog:
+                        {
+                            fogLights.Add(this);
+                        }
+                        break;
+                        
+                        case MafiaFormats.Scene2BINLoader.LightType.Ambient:
+                        {
+                            ambientLights.Add(this);
+                        }
+                        break;
+                        
+                    }
+                }
+                break;
             }
         }
 
-        public void Update()
+        /* public void FixedUpdate()
         {
             if (mainPlayer == null)
                 mainPlayer = GameObject.Find("Main Player");
@@ -154,7 +172,7 @@ namespace MafiaUnity
             {
 
             }
-        }
+        } */
 
         Bounds GetMaxBounds()
         {
