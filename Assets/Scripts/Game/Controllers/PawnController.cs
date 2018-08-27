@@ -59,7 +59,7 @@ public class PawnController
         
         pawn.isPlaying = true;
         pawn.playbackMode = ModelAnimationPlayer.AnimationPlaybackMode.Repeat;
-        pawn.SetAnimation(animationSets[(int)stanceMode].idleAnimations[0]);
+        pawn.BlendAnimation(animationSets[(int)stanceMode].idleAnimations[0]);
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ public class PawnController
             movementMode = MovementMode.Run;
         });
         
-        pawn.SetAnimation(animationSets[(int)stanceMode].jumpAnimations[(int)AnimationSlots.Left]);
+        pawn.BlendAnimation(animationSets[(int)stanceMode].jumpAnimations[(int)AnimationSlots.Left]);
         pawn.AnimReset();
     }
 
@@ -169,7 +169,7 @@ public class PawnController
             movementMode = MovementMode.Run;
         });
 
-        pawn.SetAnimation(animationSets[(int)stanceMode].jumpAnimations[(int)AnimationSlots.Right]);
+        pawn.BlendAnimation(animationSets[(int)stanceMode].jumpAnimations[(int)AnimationSlots.Right]);
         pawn.AnimReset();
     }
 
@@ -179,11 +179,11 @@ public class PawnController
         {
             case MovementMode.Crouch:
             case MovementMode.Walk:
-                pawn.SetAnimation(animationSets[(int)stanceMode].walkAnimations[(int)slot]);
+                pawn.BlendAnimation(animationSets[(int)stanceMode].walkAnimations[(int)slot]);
                 break;
 
             case MovementMode.Run:
-                pawn.SetAnimation(animationSets[(int)stanceMode].runAnimations[(int)slot]);
+                pawn.BlendAnimation(animationSets[(int)stanceMode].runAnimations[(int)slot]);
                 break;
         }
     }
@@ -297,7 +297,7 @@ public class PawnController
         {
             if (movementAngle > 0f)
             {
-				pawn.SetAnimation(animationSets[(int)stanceMode].turnAnimations[(int)AnimationSlots.Left]);
+				pawn.BlendAnimation(animationSets[(int)stanceMode].turnAnimations[(int)AnimationSlots.Left]);
 				
 				if(lastRotationState == (int)AnimationSlots.Right || lastRotationState == -1) {
 					lastRotationState = (int)AnimationSlots.Left;
@@ -306,7 +306,7 @@ public class PawnController
 			}
             else if(movementAngle < 0f)
             {
-				pawn.SetAnimation(animationSets[(int)stanceMode].turnAnimations[(int)AnimationSlots.Right]);
+				pawn.BlendAnimation(animationSets[(int)stanceMode].turnAnimations[(int)AnimationSlots.Right]);
 				
 				if(lastRotationState == (int)AnimationSlots.Left || lastRotationState == -1) {
 					lastRotationState = (int)AnimationSlots.Right;
@@ -320,7 +320,7 @@ public class PawnController
 					pawn.AnimReset();
 				}
 				
-				pawn.SetAnimation(animationSets[(int)stanceMode].idleAnimations[0]);
+				pawn.BlendAnimation(animationSets[(int)stanceMode].idleAnimations[0]);
 			}
         }
 

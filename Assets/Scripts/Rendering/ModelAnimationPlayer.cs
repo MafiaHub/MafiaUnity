@@ -18,16 +18,16 @@ namespace MafiaUnity
     {
         public bool isPlaying = false;
         public AnimationPlaybackMode playbackMode;
-        public float blendBeginPercentage;
-        public float blendEndPercentage;
+        public float blendDuration = 0.25f;
         public float playbackCompletion;
         
         private Action onAnimationFinished = null;
-        [SerializeField] public MafiaAnimation mafiaAnimation = new MafiaAnimation();
+        [SerializeField] public MafiaAnimation mafiaAnimation;
 
         [SerializeField] public MafiaAnimation pairAnimation;
         private const float frameStep = 1f / 25f;
         private float frameTime;
+        private float blendTime;
 
         public MafiaAnimation LoadAndSetAnimation(string animName)
         {
@@ -103,10 +103,27 @@ namespace MafiaUnity
 
         public void BlendAnimation(MafiaAnimation anim)
         {
-            if (anim == null || mafiaAnimation == null)
+            if (anim == null)
                 return;
 
+            if (mafiaAnimation == null)
+            {
+                mafiaAnimation = anim;
+                return;
+            }
+
             pairAnimation = anim;
+        }
+
+        public void FinishAnimation()
+        {
+            if (mafiaAnimation != null && onAnimationFinished != null)
+                onAnimationFinished.Invoke();
+
+            if (playbackMode == AnimationPlaybackMode.Repeat)
+                AnimReset();
+            else if (playbackMode == AnimationPlaybackMode.Once)
+                isPlaying = false;
         }
 
         void FixedUpdate()
@@ -120,18 +137,66 @@ namespace MafiaUnity
             if (mafiaAnimation == null || mafiaAnimation.animationSequences == null)
                 return;
 
+            if (blendDuration > 0f && pairAnimation != null && mafiaAnimation != pairAnimation && blendTime == 0f)
+            {
+                blendTime = blendDuration;
+            }
+
+            if (blendTime > 0f && blendDuration > 0f && pairAnimation != null)
+            {
+                foreach (var seq in pairAnimation.animationSequences)
+                {
+                    var bone = seq.FetchBoneTransform(transform);
+
+                    if (bone == null)
+                        continue;
+
+                    var primarySeq = mafiaAnimation.animationSequences.Find(x => x.loaderSequence.objectName == seq.loaderSequence.objectName);
+
+                    if (primarySeq == null)
+                        continue;
+
+                    seq.Reset();
+
+                    var primaryTr = primarySeq.GetCurrentMotion();
+                    var secondaryTr = seq.GetCurrentMotion();
+
+                    float blendDelta = 1f - blendTime / blendDuration;
+
+                    if (seq.loaderSequence.hasMovement())
+                    {
+                        bone.localPosition = Vector3.Lerp(primaryTr.currentPosition, secondaryTr.currentPosition, blendDelta);
+                    }
+
+                    if (seq.loaderSequence.hasRotation())
+                    {
+                        bone.localRotation = Quaternion.Slerp(primaryTr.currentRotation, secondaryTr.currentRotation, blendDelta);
+                    }
+
+                    if (seq.loaderSequence.hasScale())
+                    {
+                        bone.localScale = Vector3.Lerp(primaryTr.currentScale, secondaryTr.currentScale, blendDelta);
+                    }
+                }
+
+                blendTime -= Time.deltaTime;
+
+                if (blendTime <= 0f)
+                {
+                    blendTime = 0f;
+                    mafiaAnimation = pairAnimation;
+                    pairAnimation = null;
+                    AnimReset();
+                }
+                else return;
+            }
+
             if (IsFinished())
             {
-                if (mafiaAnimation != null && onAnimationFinished != null)
-                    onAnimationFinished.Invoke();
+                FinishAnimation();
 
-                if (playbackMode == AnimationPlaybackMode.Repeat)
-                    AnimReset();
-                else if (playbackMode == AnimationPlaybackMode.Once)
-                {
-                    isPlaying = false;
+                if (playbackMode == AnimationPlaybackMode.Once)
                     return;
-                }
             }
 
             float frameDelta = frameTime / frameStep;
@@ -228,7 +293,6 @@ namespace MafiaUnity
         {
             var motion = new AnimationTransform();
 
-
             if (loaderSequence.hasMovement() && loaderSequence.positions.Count > positionKeyFrameId + 1)
             {
                 motion.currentPosition = loaderSequence.positions[positionKeyFrameId];
@@ -238,9 +302,9 @@ namespace MafiaUnity
             if (loaderSequence.hasRotation() && loaderSequence.rotations.Count > rotationKeyFrameId + 1)
             {
                 motion.currentRotation = new Quaternion(loaderSequence.rotations[rotationKeyFrameId].y,
-                    loaderSequence.rotations[rotationKeyFrameId].z,
-                    loaderSequence.rotations[rotationKeyFrameId].w,
-                    -1 * loaderSequence.rotations[rotationKeyFrameId].x);
+                        loaderSequence.rotations[rotationKeyFrameId].z,
+                        loaderSequence.rotations[rotationKeyFrameId].w,
+                        -1 * loaderSequence.rotations[rotationKeyFrameId].x);
 
                 motion.nextRotation = new Quaternion(loaderSequence.rotations[rotationKeyFrameId + 1].y,
                     loaderSequence.rotations[rotationKeyFrameId + 1].z,
@@ -257,20 +321,30 @@ namespace MafiaUnity
             return motion;
         }
 
-        public void Update(float deltaLerp, Transform rootObject)
+        public Transform FetchBoneTransform(Transform rootObject)
         {
             if (loaderSequence == null)
-                return;
+                return null;
 
             Transform boneTransform = null;
 
             bool ok = boneTransforms.TryGetValue(loaderSequence.objectName, out boneTransform);
 
-            if (!ok) 
+            if (!ok)
             {
                 boneTransform = rootObject.FindDeepChild(loaderSequence.objectName);
                 boneTransforms.Add(loaderSequence.objectName, boneTransform);
             }
+
+            return boneTransform;
+        }
+
+        public void Update(float deltaLerp, Transform rootObject)
+        {
+            if (loaderSequence == null)
+                return;
+
+            Transform boneTransform = FetchBoneTransform(rootObject);
 
             if (boneTransform == null)
                 return;
@@ -320,6 +394,22 @@ namespace MafiaUnity
                 }
             }
             GUILayout.EndHorizontal();
+
+            if (GUILayout.Button("Load Pair Animation"))
+            {
+                var animPlayer = target as ModelAnimationPlayer;
+
+                var anim = animPlayer.LoadAnimation("anims/" + animName + ".5ds");
+                animPlayer.BlendAnimation(anim);
+                animPlayer.isPlaying = true;
+            }
+
+            if (GUILayout.Button("Clear Pair Animation"))
+            {
+                var animPlayer = target as ModelAnimationPlayer;
+
+                animPlayer.pairAnimation = null;
+            }
 
             if (GUILayout.Button("Reset Animation"))
             {
