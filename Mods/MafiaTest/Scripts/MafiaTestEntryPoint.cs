@@ -26,20 +26,7 @@ class MafiaTestGameMode : IGameMode
 	// on game mode switch -- being primary
 	void IGameMode.Start()
 	{
-        var go = new GameObject("Main Player");
-        var tommy = GameAPI.instance.modelGenerator.LoadObject("models/Tommy.4ds", null);
-        var player = tommy.AddComponent<ModelAnimationPlayer>();
-        tommy.transform.parent = go.transform;
-
-        var playerController = go.AddComponent<PlayerController>();
-        playerController.playerCamera = GameObject.Find("Main Camera");
-        playerController.playerPawn = tommy;
-
-        var rigidBody = go.AddComponent<Rigidbody>();
-        rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        var collider = go.AddComponent<CapsuleCollider>();
-        collider.center = new Vector3(0, 1f, 0);
-        collider.height = 2f;
+        var go = ObjectFactory.CreatePlayer("models/Tommy.4ds");
         go.transform.position = new Vector3(40.39561f, 20.25f, -1.018f);
 /* 
 		var sun = new GameObject("Sun");

@@ -36,25 +36,25 @@ MonoBehaviour:
     value: 1
   preset:
     overrideState: 1
-    value: 5
+    value: 4
   maximumIterationCount:
-    overrideState: 0
-    value: 16
+    overrideState: 1
+    value: 139
   resolution:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1
   thickness:
-    overrideState: 0
-    value: 8
+    overrideState: 1
+    value: 13.7
   maximumMarchDistance:
-    overrideState: 1
-    value: 310.66
+    overrideState: 0
+    value: 8.44
   distanceFade:
-    overrideState: 1
-    value: 0.782
+    overrideState: 0
+    value: 0.714
   vignette:
     overrideState: 0
-    value: 0.5
+    value: 0.707
 --- !u!114 &114247207265470988
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -72,7 +72,7 @@ MonoBehaviour:
     value: 1
   filtering:
     overrideState: 1
-    value: {x: 40.732777, y: 65.86638}
+    value: {x: 12.009719, y: 73.264015}
   minLuminance:
     overrideState: 1
     value: -0.9
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
   m_Name: ChromaticAberration
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -136,9 +136,9 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.77
+    value: 1.06
   color:
-    overrideState: 0
+    overrideState: 1
     value: {r: 0, g: 0, b: 0, a: 1}
   ambientOnly:
     overrideState: 1

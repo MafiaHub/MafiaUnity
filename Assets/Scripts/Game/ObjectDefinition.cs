@@ -113,6 +113,17 @@ namespace MafiaUnity
 
                 }
                 break;
+
+                case MafiaFormats.Scene2BINLoader.SpecialObjectType.Character:
+                {
+                    var player = gameObject.AddComponent<ModelAnimationPlayer>();
+                    //var idlePawn = gameObject.AddComponent<IdlePawnController>();
+                    var idlePawn = gameObject.AddComponent<FunnySpinPawnController>();
+                    idlePawn.pawn = gameObject;
+
+                    ObjectFactory.SetUpPawnPhysics(gameObject);
+                }
+                break;
                 
                 case MafiaFormats.Scene2BINLoader.SpecialObjectType.Door:
                 {
