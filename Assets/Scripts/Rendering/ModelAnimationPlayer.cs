@@ -12,6 +12,15 @@ namespace MafiaUnity
     public class MafiaAnimation
     {
         public List<AnimationSequence> animationSequences;
+
+        public void Reset()
+        {
+            if (animationSequences == null)
+                return;
+
+            foreach (var animationSeq in animationSequences)
+                animationSeq.Reset();
+        }
     }
 
     public class ModelAnimationPlayer : MonoBehaviour
@@ -72,6 +81,9 @@ namespace MafiaUnity
             if (mafiaAnimation == anim)
                 return;
 
+            if (anim != null)
+                anim.Reset();
+
             mafiaAnimation = anim;
         }
         
@@ -97,14 +109,18 @@ namespace MafiaUnity
             if (mafiaAnimation == null || mafiaAnimation.animationSequences == null)
                 return;
 
-            foreach (var animationSeq in mafiaAnimation.animationSequences)
-                animationSeq.Reset();
+            mafiaAnimation.Reset();
         }
 
         public void BlendAnimation(MafiaAnimation anim)
         {
             if (anim == null)
                 return;
+
+            if (mafiaAnimation == anim)
+                return;
+
+            anim.Reset();
 
             if (mafiaAnimation == null)
             {
