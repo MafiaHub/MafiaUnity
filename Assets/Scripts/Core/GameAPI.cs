@@ -31,13 +31,18 @@ namespace MafiaUnity
             instanceObject = new GameAPI();
         }
         #endregion
-        
+
         /// <summary>
         /// This constant is a version string we bump up each time we ship a new build.
         /// Minor part gets incremented each shipped update, while Major part has to be incremented only
         /// when framework's API radically changes.
         /// </summary>
+
+#if MAFIAUNITY_RELEASE
         public const string GAME_VERSION = "v1.0.0";
+#else
+        public const string GAME_VERSION = "INDEV";
+#endif
 
         public bool isPaused = false;
 

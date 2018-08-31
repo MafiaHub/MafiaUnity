@@ -389,8 +389,8 @@ namespace MafiaUnity
                         mat = new Material(Shader.Find("Mafia/Diffuse"));
                     }
 
-                    if (mafiaMat.diffuseMapName != null ||
-                        mafiaMat.alphaMapName != null)
+                    if ((mafiaMat.diffuseMapName != null && mafiaMat.diffuseMapName.Trim().Length > 0) ||
+                        (mafiaMat.alphaMapName != null && mafiaMat.alphaMapName.Trim().Length > 0))
                     {
                         if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                             bmp.useTransparencyKey = true;
@@ -413,7 +413,7 @@ namespace MafiaUnity
                             mat.SetTexture("_MainTex", alphaTex);
                         }
 
-                        if ((mafiaMat.flags & (MafiaFormats.MaterialFlag.Animated_Texture_Diffuse | MafiaFormats.MaterialFlag.Animated_Texture_Alpha)) != 0)
+                        if (mafiaMat.flags.HasFlag(MafiaFormats.MaterialFlag.Animated_Texture_Diffuse) || mafiaMat.flags.HasFlag(MafiaFormats.MaterialFlag.Animated_Texture_Alpha))
                         {
                             List<Texture2D> frames = new List<Texture2D>();
 
@@ -427,7 +427,7 @@ namespace MafiaUnity
                             if ((mafiaMat.flags & MafiaFormats.MaterialFlag.Colorkey) != 0)
                                 bmp.useTransparencyKey = true;
 
-                            if (fileName != null)
+                            if (fileName != null && fileName.Trim().Length > 0)
                             {
                                 var path = fileName.Split('.');
                                 string baseName = path[0];
@@ -549,9 +549,9 @@ namespace MafiaUnity
 
             if (flarePrefab == null)
             {
-                Debug.LogWarningFormat("Flare {0} couldn't be found!", glowName);
-                GameObject.DestroyImmediate(flareObject);
-                return;
+                Debug.LogWarningFormat("Flare {0} couldn't be found! Using 00GLOW instead!", glowName);
+                
+                flarePrefab = (Flare)Resources.Load("Flares/00GLOW_FLARE");
             }
 
             var flare = (Flare)GameObject.Instantiate(flarePrefab);

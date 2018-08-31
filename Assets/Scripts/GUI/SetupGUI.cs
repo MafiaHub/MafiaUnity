@@ -11,6 +11,7 @@ public class SetupGUI : MonoBehaviour {
     public GameObject mainMenu;
     public GameObject startupLight;
     public Text gameVersion;
+    public Text buildTime;
 
     public List<Transform> pointsOfInterest = new List<Transform>();
     public int currentPOI = 0;
@@ -75,6 +76,7 @@ public class SetupGUI : MonoBehaviour {
         }, 0, 0, "Resets the game path in PlayerPrefs");
 
         gameVersion.text = GameAPI.GAME_VERSION;
+        buildTime.text = string.Format("Build Time: {0}", BuildInfo.BuildTime());
     }
 
     void SetupPOIs()
