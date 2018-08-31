@@ -33,6 +33,13 @@ As a tribute to our favorite game, we've decided to bring the soul a new skeleto
 
 We aim to create open-source tools for the game [Mafia](https://en.wikipedia.org/wiki/Mafia_(video_game)). The ultimate goal is to recreate the original game engine using Unity, to build up our framework thanks to which we can enjoy playing Mafia once more and also simplify modding process.
 
+## Development
+
+We are currently using Unity version: **2018.2.6f1**.
+
+Actual development takes place in **develop** branch and therefore is covering more features and possible fixes. We highly recommend to use **develop** branch until we reach the time once our project gets more stable
+(and starts using versioning semantics). **master** branch is considered stable but less developed and might also lack certain features which might introduce importing bugs or issues.
+
 ## Progress so far
 
 We recommend to visit [our Discord server](https://discord.gg/eBQ4QHX) to be up-to-date about current status. The research on Mafia's native formats takes place [here](https://github.com/OpenMafia/OpenMF/blob/master/Docs/DataFiles.md)

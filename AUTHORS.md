@@ -7,3 +7,6 @@ This page lists all contributors improving this project over time, since the cre
 * Dominik Madarasz (zaklaus)
 * Dávid Svitana (davosk)
 * Roman Dobiáš (romop5)
+
+## Contributors
+* ASM
