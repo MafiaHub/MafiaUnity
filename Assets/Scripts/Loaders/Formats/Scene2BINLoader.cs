@@ -59,10 +59,10 @@ namespace MafiaUnity
                 SpecialData = 0xAE24,
             }
 
-            [Flags]
             [Serializable]
             public enum ObjectType : uint
             {
+                None = 0x00,
                 Light = 0x02,
                 Camera = 0x03,
                 Sound = 0x04,
@@ -73,11 +73,10 @@ namespace MafiaUnity
                 Script = 0x9B
             }
 
-            [Flags]
             [Serializable]
             public enum SpecialObjectType : uint
             {
-                None = 0,
+                None = 0x00,
                 Physical = 0x23,
                 Player = 0x02,
                 Character = 0x1B,
@@ -148,6 +147,7 @@ namespace MafiaUnity
             [Serializable]
             public class Object
             {
+                public bool isPatch=true;
                 public ObjectType type;
                 public SpecialObjectType specialType;
                 public Vector3 pos;
@@ -296,6 +296,7 @@ namespace MafiaUnity
                     case ObjectProperty.TypeNormal:
                     {
                         newObject.type = (ObjectType)reader.ReadUInt32();
+                        newObject.isPatch = false;
                     }
                     break;
 

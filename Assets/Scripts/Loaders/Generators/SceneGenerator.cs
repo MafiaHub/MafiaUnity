@@ -38,6 +38,9 @@ namespace MafiaUnity
                 sceneLoader.Load(reader);
                 fs.Close();
 
+                // TODO: Check if refs are null, clear then
+                ModelGenerator.cachedTextures.Clear();
+
                 var objects = new List<KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>>();
 
                 var backdrop = new GameObject("Backdrop sector");
@@ -78,17 +81,38 @@ namespace MafiaUnity
                 {
                     var newObject = obj.Key;
 
-                    if (obj.Value.parentName != null)
+                    if (obj.Value.isPatch)
                     {
-                        var parentObject = FetchReference(mission, obj.Value.parentName);
-                        
-                        if (parentObject != null)
-                            newObject.transform.parent = parentObject.transform;
-                        else
-                            newObject.transform.parent = rootObject.transform;
+                        var sumMag = obj.Value.pos.magnitude+obj.Value.rot.eulerAngles.magnitude+obj.Value.pos.magnitude;
+
+                        if (sumMag == 0f)
+                        {
+                            GameObject.DestroyImmediate(newObject, true);
+                            continue;
+                        }
+
+                        var redefObject = FetchReference(mission, newObject.name);
+
+                        if (redefObject != null)
+                        {
+                            if (obj.Value.parentName != null)
+                            {
+                                var parent = FindParent(mission, obj.Value.parentName);
+
+                                if (parent != null)
+                                    redefObject.transform.parent = parent.transform;
+                            }
+
+                            redefObject.transform.localPosition = obj.Value.pos;
+                            redefObject.transform.localRotation = obj.Value.rot;
+                            //redefObject.transform.localScale = obj.Value.scale;
+
+                            GameObject.DestroyImmediate(newObject, true);
+                            continue;
+                        }
                     }
-                    else
-                        newObject.transform.parent = rootObject.transform;
+
+                    newObject.transform.parent = FindParent(mission, obj.Value.parentName, rootObject).transform;
 
                     newObject.transform.localPosition = obj.Value.pos;
                     newObject.transform.localRotation = obj.Value.rot;
@@ -110,6 +134,21 @@ namespace MafiaUnity
             StoreChachedObject(path, rootObject);
 
             return rootObject;
+        }
+
+        GameObject FindParent(Mission mission, string name, GameObject defaultObject=null)
+        {
+            if (name != null)
+            {
+                var parentObject = FetchReference(mission, name);
+
+                if (parentObject != null)
+                    return parentObject;
+                else
+                    return defaultObject;
+            }
+            else
+                return defaultObject;
         }
     }
 }
