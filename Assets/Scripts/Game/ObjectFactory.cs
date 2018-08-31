@@ -19,7 +19,7 @@ namespace MafiaUnity
 		{
 			var go = new GameObject("Main Player");
 			var tommy = GameAPI.instance.modelGenerator.LoadObject(modelName, null);
-			var player = tommy.AddComponent<ModelAnimationPlayer>();
+			tommy.AddComponent<ModelAnimationPlayer>();
 			tommy.transform.parent = go.transform;
 
 			var playerController = go.AddComponent<PlayerController>();
@@ -35,7 +35,7 @@ namespace MafiaUnity
 		{
             var go = new GameObject(objectName);
             var pawn = GameAPI.instance.modelGenerator.LoadObject(modelName, null);
-            var player = pawn.AddComponent<ModelAnimationPlayer>();
+            pawn.AddComponent<ModelAnimationPlayer>();
             pawn.transform.parent = go.transform;
 
             var idlePawnController = go.AddComponent<IdlePawnController>();

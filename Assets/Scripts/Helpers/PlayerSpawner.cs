@@ -14,7 +14,7 @@ namespace MafiaUnity
             gameObject.name = "Main Player";
 
             var tommy = GameAPI.instance.modelGenerator.LoadObject("models/Tommy.4ds", null);
-            var player = tommy.AddComponent<ModelAnimationPlayer>();
+            tommy.AddComponent<ModelAnimationPlayer>();
             tommy.transform.parent = transform;
             tommy.transform.localPosition = Vector3.zero;
 

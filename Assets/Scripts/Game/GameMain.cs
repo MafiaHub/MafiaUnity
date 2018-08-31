@@ -17,16 +17,14 @@ class GameMain : MonoBehaviour
 }
 
 class MafiaGameMode : IGameMode
-{
-	MenuHub menu;
-	
+{	
 	// on gm registration
 	void IGameMode.Register()
 	{
 		var menuManagerObject = new GameObject("MenuManager");
         var menuManager = menuManagerObject.AddComponent<MenuManager>();
 		
-		menu = new MenuHub(menuManager);
+		/* TODO: Do we need to store it? */ new MenuHub(menuManager);
 	}
 
 	// on game mode switch -- being primary
@@ -145,7 +143,7 @@ class PauseMenuState : MenuState
 		{
 			// TODO
 			GameAPI.ResetGameAPI();
-			Application.LoadLevel("StartupScene");
+			//Application.LoadLevel("StartupScene");
 		}
 	}
 }

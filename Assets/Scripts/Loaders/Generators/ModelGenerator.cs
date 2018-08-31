@@ -277,7 +277,7 @@ namespace MafiaUnity
                             boneArray[b.data.boneID] = b.transform;
                         }
                         
-                        var boneTransforms = new List<Transform>(boneArray);
+                        /* TODO: var boneTransforms = new List<Transform>(boneArray); */
                         var bindPoses = new Matrix4x4[bones.Count];
                         var boneWeights = new BoneWeight[skinnedMesh.sharedMesh.vertexCount];
 

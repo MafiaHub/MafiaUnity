@@ -170,7 +170,7 @@ namespace MafiaUnity
                         objectToBeColisioned.transform.position = center;
                     
                         var boxCollider = objectToBeColisioned.AddComponent<BoxCollider>();
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner*2;
                     } 
                 }
                
@@ -194,7 +194,7 @@ namespace MafiaUnity
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner*2;
                         boxCollider.center = center;
                     }
                 }
@@ -218,7 +218,7 @@ namespace MafiaUnity
                         Vector3 center = (p1 + p2) / 2.0f;
                         Vector3 bboxCorner = p2 + center;
 
-                        boxCollider.extents = bboxCorner;
+                        boxCollider.size = bboxCorner*2;
                         boxCollider.center = center;
                     }
                 }

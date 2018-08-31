@@ -20,6 +20,9 @@ namespace MafiaUnity
 		{
 			audioSource = gameObject.AddComponent<AudioSource>();
 
+			// TODO: Load sounds
+			openSound = closeSound = lockedSound = null;
+
 			// TODO Use WAVLoader to load audio clips
 
 			startRotation = transform.localRotation;

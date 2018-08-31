@@ -321,7 +321,8 @@ namespace MafiaUnity
                     cellBoundariesY[i] = reader.ReadSingle();
 
 
-                uint collisionDataMagic = reader.ReadUInt32();
+                //uint collisionDataMagic = reader.ReadUInt32();
+                reader.ReadUInt32();
 
                 for (var i = 0; i < newDataHeader.numFaces; i++)
                     faceCols.Add(ReadFaceCol(reader));

@@ -449,7 +449,7 @@ namespace MafiaUnity
                 {
                     var animPlayer = target as ModelAnimationPlayer;
 
-                    var anim = animPlayer.LoadAndSetAnimation("anims/" + animName + ".5ds");
+                    animPlayer.LoadAndSetAnimation("anims/" + animName + ".5ds");
                     animPlayer.AnimReset();
                     animPlayer.isPlaying = true;
                 }

@@ -18,7 +18,6 @@ namespace MafiaUnity
         public string missionName = "freeride";
 
         bool isInitialized = false;
-        int modPathSel = 0;
         string modPath = "";
 
         public static void Init()
@@ -461,8 +460,6 @@ namespace MafiaUnity
         string solutionName = @"ExampleMod";
 
         string fileInclude = "<Compile Include=\"..\\..\\Scripts\\[INCLUDE_NAME]\" Link=\"[INCLUDE_NAME]\" />";
-        string solutionMafiaBase = "Project(\"{9A19103F-16F7-4668-BE54-9A1E7A4F7556}\") = \"MafiaBase\", \"..\\..\\MafiaBase\\Temp\\MafiaBase\\MafiaBase.csproj\", \"{021E1AD1-69A2-4B96-9B81-1CB1B91C0C47}\"\nEndProject";
-        string projectMafiaBase = "<ProjectReference Include=\"..\\..\\..\\MafiaBase\\Temp\\MafiaBase\\MafiaBase.csproj\" />";
     }
     
     [Serializable]
