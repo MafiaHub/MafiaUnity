@@ -8,9 +8,9 @@ namespace MafiaUnity
 {
     namespace MafiaFormats
     {
-        public class OGGLoader
+        public static class OGGLoader
         {
-            public AudioClip ToAudioClip(string name)
+            public static AudioClip ToAudioClip(string name)
             {
                 var vorbis = new NVorbis.VorbisReader(GameAPI.instance.fileSystem.GetStreamFromPath(Path.Combine("sounds", name + ".ogg")), true);
 

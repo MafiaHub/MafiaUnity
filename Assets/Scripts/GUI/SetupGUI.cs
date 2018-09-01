@@ -168,7 +168,7 @@ public class SetupGUI : MonoBehaviour {
 
             SetupPOIs();
 
-            bgMusic.clip = MafiaUnity.MafiaFormats.WAVLoader.ToAudioClip("14_Coucou");
+            bgMusic.clip = MafiaUnity.MafiaFormats.OGGLoader.ToAudioClip("music/Lake of Fire");
             bgMusic.Play();
         }
     }
