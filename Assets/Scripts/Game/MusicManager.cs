@@ -16,9 +16,9 @@ namespace MafiaUnity
 
 		public bool repeatTrack = false;
 
-		public void AddEntry(string name, AudioClip clip)
+		public void AddEntry(string name, AudioEntry.LoadTrackToAudioClip cb)
 		{
-			audioEntries.Add(new AudioEntry{name = name, clip = clip});
+			audioEntries.Add(new AudioEntry{name = name, loadCallback = cb, clip = null});
 		}
 
 		public void PlayAt(int index)
@@ -32,18 +32,34 @@ namespace MafiaUnity
 		public void Play()
 		{
 			if (audioEntries.Count == 0) return;
+            
+			var entry = audioEntries[selectedIndex];
+            var clip = entry?.clip;
 
-            player.clip = audioEntries[selectedIndex].clip;
+            if (clip == null && entry != null)
+            {
+                entry.loadCallback(entry);
+                clip = entry.clip;
+            }
+
+            player.clip = clip;
             player.Play();
 		}
 
 		public void Play(string name)
 		{
-			var entry = audioEntries.First(x => x.name == name)?.clip;
+			var entry = audioEntries.First(x => x.name == name);
+			var clip = entry?.clip;
 
-			Debug.Assert(entry != null, "MusicManager:Play() specified track not found.");
+			if (clip == null && entry != null)
+			{
+				entry.loadCallback(entry);
+				clip = entry.clip;
+			}
 
-			player.clip = entry;
+			Debug.Assert(clip != null, "MusicManager:Play() specified track not found.");
+
+			player.clip = clip;
 			player.Play();
 		}
 
@@ -77,6 +93,8 @@ namespace MafiaUnity
 		[Serializable]
 		public class AudioEntry
 		{
+			public delegate void LoadTrackToAudioClip(AudioEntry self);
+			public LoadTrackToAudioClip loadCallback;
 			public AudioClip clip;
 			public string name;
 		}
