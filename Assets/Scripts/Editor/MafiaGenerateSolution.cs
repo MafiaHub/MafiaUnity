@@ -21,7 +21,7 @@ namespace MafiaUnity
         {
             GUILayout.BeginHorizontal();
             {
-                unityPath = GUILayout.TextField(unityPath);
+                unityPath = GUILayout.TextField(unityPath, GUILayout.Width(320));
 
                 if (GUILayout.Button("Browse"))
                 {
@@ -32,7 +32,7 @@ namespace MafiaUnity
 
             GUILayout.BeginHorizontal();
             {
-                solutionPath = GUILayout.TextField(solutionPath);
+                solutionPath = GUILayout.TextField(solutionPath, GUILayout.Width(320));
 
                 if (GUILayout.Button("Browse"))
                 {
@@ -44,20 +44,21 @@ namespace MafiaUnity
 
             GUILayout.BeginHorizontal();
             {
-                solutionName = GUILayout.TextField(solutionName);
+                solutionName = GUILayout.TextField(solutionName, GUILayout.Width(320));
 
                 if (GUILayout.Button("Generate"))
                 {
                     Debug.Log("Generating .sln file...");
 
-                    // NOTE: We need to generate files for MafiaBase mod first...
-                    GenerateSolution("Mods/MafiaBase/Temp", "MafiaBase");
-
-                    if (solutionName != "MafiaBase")
-                        GenerateSolution(solutionPath, solutionName);
+                    GenerateSolution(solutionPath, solutionName);
                 }
             }
             GUILayout.EndHorizontal();
+
+            if (GUILayout.Button("Open solution"))
+            {
+                System.Diagnostics.Process.Start(Path.Combine(solutionPath, solutionName + ".sln"));
+            }
 
             GUILayout.TextArea("IMPORTANT: Output directory must be contained inside a mod folder, preferably in a folder called \"Temp\". Your mod MUST be located inside of Mods folder, otherwise the generator will fail to work!");
         }
