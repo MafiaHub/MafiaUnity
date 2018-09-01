@@ -25,27 +25,13 @@ namespace MafiaUnity
             modPath = Path.Combine("Mods", name);
         }
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="modEntries"></param>
-        public void Init(List<ModEntry> modEntries)
+        public void Init()
         {
             bool isMissingDependency = false;
 
             foreach (var dep in dependencies)
             {
-                Mod pkg = null;
-                if (modEntries == null)
-                {
-                    pkg = GameAPI.instance.modManager.GetActiveMod(dep);
-                }
-                else
-                {
-                    pkg = modEntries.First(x => x.modName == dep && x.status == ModEntryStatus.Active)?.modMeta;
-                }
-
-                if (pkg == null)
+                if (GameAPI.instance.modManager.GetLoadableMod(dep) == null)
                 {
                     Debug.LogErrorFormat("Mod: '{0}' is missing a dependency '{1}'", name, dep);
                     isMissingDependency = true;

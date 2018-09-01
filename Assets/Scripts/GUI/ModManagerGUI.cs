@@ -244,6 +244,7 @@ public class ModManagerGUI : MonoBehaviour {
         foreach (var mod in modEntries)
         {
             newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.status == ModEntryStatus.Active ? "1" : "0"));
+            modManager.loadableMods.Add(mod.modName, mod.modMeta);
         }
 
         modManager.StoreLoadOrder(newLoadOrder.ToArray());

@@ -41,7 +41,7 @@ public class SetupGUI : MonoBehaviour {
         {
             if (mod.status == ModEntryStatus.Active)
             {
-                modManager.LoadMod(mod.modName, mods.modEntries);
+                modManager.LoadMod(mod.modName);
             }
         }
 

@@ -158,7 +158,7 @@ namespace MafiaUnity
                     {
                         if (mod.status != 0)
                         {
-                            modManager.LoadMod(mod.modName, null);
+                            modManager.LoadMod(mod.modName);
                         }
                     }
 
@@ -172,10 +172,12 @@ namespace MafiaUnity
         void ApplyChanges()
         {
             var newLoadOrder = new List<KeyValuePair<string, string>>();
+            modManager.loadableMods.Clear();
 
             foreach (var mod in modEntries)
             {
                 newLoadOrder.Add(new KeyValuePair<string, string>(mod.modName, mod.status == ModEntryStatus.Active ? "1" : "0"));
+                modManager.loadableMods.Add(mod.modName, mod.modMeta);
             }
 
             modManager.StoreLoadOrder(newLoadOrder.ToArray());

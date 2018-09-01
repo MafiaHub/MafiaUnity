@@ -16,14 +16,14 @@ namespace MafiaUnity
         private const string MODS_PATH = "Mods/";
 
         Dictionary<string, Mod> mods = new Dictionary<string, Mod>();
+        public Dictionary<string, Mod> loadableMods = new Dictionary<string, Mod>();
 
         /// <summary>
         /// Load mod into the game, which makes it active.
         /// </summary>
         /// <param name="modName"></param>
-        /// <param name="modEntries"></param>
         /// <returns></returns>
-        public Mod LoadMod(string modName, List<ModEntry> modEntries)
+        public Mod LoadMod(string modName)
         {
             if (mods.ContainsKey(modName))
                 return mods[modName];
@@ -33,7 +33,7 @@ namespace MafiaUnity
             if (newMod == null)
                 return null;
             
-            newMod.Init(modEntries);
+            newMod.Init();
             mods.Add(modName, newMod);
 
             return newMod;
@@ -109,6 +109,19 @@ namespace MafiaUnity
         {
             if (mods.ContainsKey(modName))
                 return mods[modName];
+
+            return null;
+        }
+
+        /// <summary>
+        /// Retrieves loadable mod from the dictionary.
+        /// </summary>
+        /// <param name="modName"></param>
+        /// <returns></returns>
+        public Mod GetLoadableMod(string modName)
+        {
+            if (loadableMods.ContainsKey(modName))
+                return loadableMods[modName];
 
             return null;
         }
