@@ -139,7 +139,6 @@ namespace MafiaUnity
 
             if (Terminal.Shell == null)
             {
-                Debug.LogWarning("No Terminal is available. Falling back to internal routine!");
                 return;
             }
 

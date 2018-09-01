@@ -13,19 +13,35 @@ namespace MafiaUnity
         [MenuItem("Mafia SDK/Open Editor")]
         static void SpawnDevObject()
         {
-            MafiaEditor.Init();
+            var mafiaEditor = GetEditorHandle<MafiaEditor>();
+            mafiaEditor.Init();
         }
 
         [MenuItem("Mafia SDK/Mod Manager")]
         static void SpawnModManager()
         {
-            MafiaModManager.Init();
+            var mafiaModManager = GetEditorHandle<MafiaModManager>();
+            mafiaModManager.Init();
+        }
+
+        [MenuItem("Mafia SDK/Object Injector")]
+        static void SpawnObjectInjector()
+        {
+            var mafiaObjectInjector = GetEditorHandle<MafiaObjectInjector>();
+            mafiaObjectInjector.Init();
         }
 
         [MenuItem("Mafia SDK/Solution Generator")]
         static void SpawnSolutionGenerator()
         {
-            MafiaGenerateSolution.Init();
+            var mafiaGenerateSolution = GetEditorHandle<MafiaGenerateSolution>();
+            mafiaGenerateSolution.Init();
+        }
+
+        private static T GetEditorHandle<T>() where T : EditorWindow
+        {
+            T hwnd = (T)ScriptableObject.CreateInstance(typeof(T).ToString());
+            return hwnd;
         }
     }
 #endif
