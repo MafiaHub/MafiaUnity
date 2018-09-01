@@ -72,6 +72,11 @@ namespace MafiaUnity
         public MissionManager missionManager = new MissionManager();
         public ModManager modManager = new ModManager();
 
+        /// <summary>
+        /// An instance of a `Game Instance` game object. This is set from SetupGUI for use in the game.
+        /// </summary>
+        public GameObject gameInstance = null;
+
         public ModelGenerator modelGenerator = new ModelGenerator();
         public CityGenerator cityGenerator = new CityGenerator();
         public SceneGenerator sceneGenerator = new SceneGenerator();

@@ -9,6 +9,8 @@ class GameMain : MonoBehaviour
 {
     void Start()
     {
+		gameObject.AddComponent<MusicManager>();
+		
 		var gm = new MafiaGameMode();
 
 		GameModeManager.instance.RegisterGameMode("_MafiaBaseGameMode", gm);

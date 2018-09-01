@@ -56,6 +56,7 @@ namespace MafiaUnity
         private void InitDefaultValues()
         {
             ForceSet("gameVersion", GameAPI.GAME_VERSION.ToString(), CvarMode.Archived);
+            Set("musicVolume", "0.35", CvarMode.Archived);
         }
 
         public void SaveMainConfig()

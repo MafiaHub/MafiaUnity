@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MafiaUnity;
+using System.Globalization;
 
 public class SetupGUI : MonoBehaviour {
 
@@ -53,7 +54,8 @@ public class SetupGUI : MonoBehaviour {
 
         modManager.InitializeMods();
 
-        new GameObject("Game Instance").AddComponent<GameMain>();
+        GameAPI.instance.gameInstance = new GameObject("Game Instance");
+        GameAPI.instance.gameInstance.AddComponent<GameMain>();
 
         gameWasLoaded = true;
     }
@@ -141,6 +143,13 @@ public class SetupGUI : MonoBehaviour {
                     currentPOI = (currentPOI == pointsOfInterest.Count-1) ? 0 : currentPOI+1;
                 }   
             }
+        }
+
+        if (bgMusic.isPlaying)
+        {
+            float volume = float.Parse(GameAPI.instance.cvarManager.Get("musicVolume", "0.35"), CultureInfo.InvariantCulture);
+
+            bgMusic.volume = volume;
         }
     }
 
