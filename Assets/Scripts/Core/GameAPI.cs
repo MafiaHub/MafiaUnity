@@ -46,6 +46,12 @@ namespace MafiaUnity
 
         public bool isPaused = false;
 
+        /// <summary>
+        /// Specifies whether to skip loading the main base game (main menu, Mafia game modes, etc).
+        /// This is useful for mods that override the startup sequence with their own scripts.
+        /// </summary>
+        public bool skipLoadingMainGame = false;
+
         #region Public Fields
         public FileSystem fileSystem = new FileSystem();
         public CvarManager cvarManager = new CvarManager();
@@ -59,6 +65,7 @@ namespace MafiaUnity
         #endregion
 
         private bool isInitialized = false;
+        private bool modHadErrors = false;
 
         /// <summary>
         /// Returns whether the Game Manager was already initialized or not
@@ -67,6 +74,24 @@ namespace MafiaUnity
         public bool GetInitialized()
         {
             return isInitialized;
+        }
+
+        /// <summary>
+        /// Returns whether any of loaded mods had script errors detected.
+        /// </summary>
+        /// <returns></returns>
+        public bool GetModErrorStatus()
+        {
+            return modHadErrors;
+        }
+
+        /// <summary>
+        /// Setter for modHadErrors
+        /// </summary>
+        /// <param name="state"></param>
+        public void SetModErrorStatus(bool state)
+        {
+            modHadErrors = true;
         }
 
         /// <summary>

@@ -62,7 +62,7 @@ namespace MafiaUnity
                 if (sources.Count < 1)
                     return;
 
-                assembly = Compiler.CompileSource(sources.ToArray(), true);
+                assembly = Compiler.CompileSource(modName, sources.ToArray(), true);
 
                 if (assembly == null)
                 {

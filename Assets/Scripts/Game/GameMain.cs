@@ -12,7 +12,9 @@ class GameMain : MonoBehaviour
 		var gm = new MafiaGameMode();
 
 		GameModeManager.instance.RegisterGameMode("_MafiaBaseGameMode", gm);
-		GameModeManager.instance.SwitchGameMode("_MafiaBaseGameMode");
+
+		if (!GameAPI.instance.skipLoadingMainGame)
+			GameModeManager.instance.SwitchGameMode("_MafiaBaseGameMode");
 	}
 }
 
@@ -21,15 +23,18 @@ class MafiaGameMode : IGameMode
 	// on gm registration
 	void IGameMode.Register()
 	{
-		var menuManagerObject = new GameObject("MenuManager");
-        var menuManager = menuManagerObject.AddComponent<MenuManager>();
 		
-		/* TODO: Do we need to store it? */ new MenuHub(menuManager);
 	}
 
 	// on game mode switch -- being primary
 	void IGameMode.Start()
 	{
+        var menuManagerObject = new GameObject("MenuManager");
+        var menuManager = menuManagerObject.AddComponent<MenuManager>();
+
+        /* TODO: Do we need to store it? */
+        new MenuHub(menuManager);
+		
 		Debug.Log("MafiaGameMode WIP.");
 	}
 

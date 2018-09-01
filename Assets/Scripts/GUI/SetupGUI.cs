@@ -12,9 +12,13 @@ public class SetupGUI : MonoBehaviour {
     public GameObject startupLight;
     public Text gameVersion;
     public Text buildTime;
+    public GameObject buildBadge;
+    public GameObject copyrightDisclaimer;
+    public GameObject modErrorWarning;
 
     public List<Transform> pointsOfInterest = new List<Transform>();
     public int currentPOI = 0;
+    bool gameWasLoaded = false;
 
     Transform mainCamera = null;
 
@@ -25,8 +29,10 @@ public class SetupGUI : MonoBehaviour {
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
 
         GameObject.Destroy(startupLight);
-        GameObject.Destroy(GameObject.Find("EventSystem"));
-        GameObject.Destroy(gameObject);
+        mainMenu.SetActive(false);
+        buildBadge.SetActive(false);
+        copyrightDisclaimer.SetActive(false);
+        GameAPI.instance.missionManager.DestroyMission();
         
         var modManager = GameAPI.instance.modManager;
         var mods = GetComponent<ModManagerGUI>();
@@ -39,9 +45,14 @@ public class SetupGUI : MonoBehaviour {
             }
         }
 
+        mainCamera.position = Vector3.zero;
+        mainCamera.rotation = Quaternion.identity;
+
         modManager.InitializeMods();
 
         new GameObject("Game Instance").AddComponent<GameMain>();
+
+        gameWasLoaded = true;
     }
 
     public void PathSelectionMenu()
@@ -96,6 +107,12 @@ public class SetupGUI : MonoBehaviour {
 
     private void Update()
     {
+        if (GameAPI.instance.GetModErrorStatus())
+            modErrorWarning.SetActive(true);
+
+        if (gameWasLoaded)
+            return;
+
         if (pointsOfInterest.Count > 0 && mainCamera != null)
         {
             var poi = pointsOfInterest[currentPOI];

@@ -27,7 +27,7 @@ namespace MafiaUnity
             }
         }
 
-        public static Assembly CompileSource(string[] sources, bool isSource, bool GenerateInMemory = true)
+        public static Assembly CompileSource(string modName, string[] sources, bool isSource, bool GenerateInMemory = true)
         {
             if (codeCompiler == null)
                 codeCompiler = new CSharpCompiler.CodeCompiler();
@@ -84,8 +84,10 @@ namespace MafiaUnity
                 foreach (CompilerError error in result.Errors)
                 {
                     msg.AppendFormat("Error ({0}, {2}) in {3} : {1}\n",
-                        error.ErrorNumber, error.ErrorText, error.Line, error.FileName);
+                        -1, error.ErrorText, error.Line, modName);
                 }
+
+                GameAPI.instance.SetModErrorStatus(true);
 
                 throw new Exception(msg.ToString());
             }
