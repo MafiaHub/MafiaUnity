@@ -21,8 +21,9 @@ namespace MafiaUnity
         /// Load mod into the game, which makes it active.
         /// </summary>
         /// <param name="modName"></param>
+        /// <param name="modEntries"></param>
         /// <returns></returns>
-        public Mod LoadMod(string modName)
+        public Mod LoadMod(string modName, List<ModEntry> modEntries)
         {
             if (mods.ContainsKey(modName))
                 return mods[modName];
@@ -32,7 +33,7 @@ namespace MafiaUnity
             if (newMod == null)
                 return null;
             
-            newMod.Init();
+            newMod.Init(modEntries);
             mods.Add(modName, newMod);
 
             return newMod;

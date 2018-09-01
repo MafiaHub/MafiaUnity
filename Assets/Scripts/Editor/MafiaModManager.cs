@@ -158,7 +158,7 @@ namespace MafiaUnity
                     {
                         if (mod.status != 0)
                         {
-                            modManager.LoadMod(mod.modName);
+                            modManager.LoadMod(mod.modName, null);
                         }
                     }
 
