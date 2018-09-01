@@ -240,6 +240,7 @@ public class ModManagerGUI : MonoBehaviour {
     void ApplyChanges()
     {
         var newLoadOrder = new List<KeyValuePair<string, string>>();
+        modManager.loadableMods.Clear();
 
         foreach (var mod in modEntries)
         {
