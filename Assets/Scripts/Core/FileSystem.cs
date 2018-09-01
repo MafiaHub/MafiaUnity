@@ -55,17 +55,18 @@ namespace MafiaUnity
         /// the list of registered paths.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="isNotMafiaFile">This file is not part of Mafia.</param>
         /// <returns></returns>
-        public bool Exists(string path)
+        public bool Exists(string path, bool isNotMafiaFile=false)
         {
             path = FixPath(path, true);
 
-            if (GameAPI.instance.blockMods)
+            if (!GameAPI.instance.blockMods)
                     foreach (var mod in paths)
                     if (File.Exists(Path.Combine(mod, path)))
                         return true;
 
-            if (GameAPI.instance.avoidLooseFiles)
+            if (!GameAPI.instance.avoidLooseFiles || isNotMafiaFile)
                 if (File.Exists(Path.Combine(gamePath, path)))
                     return true;
 
@@ -167,17 +168,18 @@ namespace MafiaUnity
         /// USE THIS AT 100% when accessing native Mafia files.
         /// </summary>
         /// <param name="path">Postfix path to check against.</param>
+        /// <param name="isNotMafiaFile">This file is not part of Mafia.</param>
         /// <returns></returns>
-        public string GetPath(string path)
+        public string GetPath(string path, bool isNotMafiaFile=false)
         {
             path = FixPath(path, true);
 
-            if (GameAPI.instance.blockMods)
+            if (!GameAPI.instance.blockMods)
                 foreach (var mod in paths)
                     if (File.Exists(Path.Combine(mod, path)))
                         return Path.Combine(mod, path);
 
-            if (GameAPI.instance.avoidLooseFiles)
+            if (!GameAPI.instance.avoidLooseFiles || isNotMafiaFile)
                 if (File.Exists(Path.Combine(gamePath, path)))
                     return Path.Combine(gamePath, path);
 
@@ -189,18 +191,19 @@ namespace MafiaUnity
         /// USE THIS AT 100% when accessing native Mafia files.
         /// </summary>
         /// <param name="path">Postfix path to check against.</param>
+        /// <param name="isNotMafiaFile">This file is not part of Mafia.</param>
         /// <returns></returns>
-        public Stream GetStreamFromPath(string path)
+        public Stream GetStreamFromPath(string path, bool isNotMafiaFile=false)
         {
             path = FixPath(path, true);
 
             //Check files in normal file system
-            if (GameAPI.instance.blockMods)
+            if (!GameAPI.instance.blockMods)
                 foreach (var mod in paths)
                     if (File.Exists(Path.Combine(mod, path)))
                         return new FileStream(Path.Combine(mod, path), FileMode.Open);
 
-            if (GameAPI.instance.avoidLooseFiles)
+            if (!GameAPI.instance.avoidLooseFiles || isNotMafiaFile)
                 if (File.Exists(Path.Combine(gamePath, path)))
                     return new FileStream(Path.Combine(gamePath, path), FileMode.Open);
 

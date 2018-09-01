@@ -67,11 +67,15 @@ namespace MafiaUnity
 
             if (fileSystem.Exists(fileName))
             {
-                var content = File.ReadAllText(fileSystem.GetPath(fileName));
+                var content = File.ReadAllText(fileSystem.GetPath(fileName, true));
 
                 ExecuteString(content.Trim());
 
                 Debug.Log("Config file " + fileName + " has been executed!");
+            }
+            else
+            {
+                Debug.LogWarning("Config file was not found! " + fileName);
             }
 
             return "ok";

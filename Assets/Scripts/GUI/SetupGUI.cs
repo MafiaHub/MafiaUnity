@@ -67,11 +67,16 @@ public class SetupGUI : MonoBehaviour {
         modManager.SetActive(true);
     }
 
-    void Start() {
+    void Start() 
+    {
+        GameAPI.ResetGameAPI();
+
         mainCamera = GameObject.Find("Main Camera")?.transform;
 
         if (PlayerPrefs.HasKey("gamePath"))
         {
+            Debug.Log("Game path was detected: " + PlayerPrefs.GetString("gamePath"));
+
             if (!GameAPI.instance.SetGamePath(PlayerPrefs.GetString("gamePath")))
                 PathSelectionMenu();
             else
