@@ -16,6 +16,8 @@ public class SetupGUI : MonoBehaviour {
     public GameObject copyrightDisclaimer;
     public GameObject modErrorWarning;
 
+    public AudioSource bgMusic;
+
     public List<Transform> pointsOfInterest = new List<Transform>();
     public int currentPOI = 0;
     bool gameWasLoaded = false;
@@ -27,6 +29,7 @@ public class SetupGUI : MonoBehaviour {
         // Revert settings back to default.
         RenderSettings.ambientLight = new Color32(54, 58, 66, 1);
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+        bgMusic.Stop();
 
         GameObject.Destroy(startupLight);
         mainMenu.SetActive(false);
@@ -70,6 +73,8 @@ public class SetupGUI : MonoBehaviour {
     void Start() 
     {
         GameAPI.ResetGameAPI();
+
+        bgMusic = GetComponent<AudioSource>();
 
         mainCamera = GameObject.Find("Main Camera")?.transform;
 
@@ -153,6 +158,9 @@ public class SetupGUI : MonoBehaviour {
             GameAPI.instance.missionManager.LoadMission("00menu");
 
             SetupPOIs();
+
+            bgMusic.clip = MafiaUnity.MafiaFormats.WAVLoader.ToAudioClip("14_Coucou");
+            bgMusic.Play();
         }
     }
 
