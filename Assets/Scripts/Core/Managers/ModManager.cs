@@ -42,6 +42,9 @@ namespace MafiaUnity
         {
             foreach (var mod in mods)
             {
+                if (GameAPI.instance.blockMods)
+                    break;
+
                 mod.Value.Start();
             }
         }

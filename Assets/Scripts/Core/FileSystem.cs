@@ -60,12 +60,14 @@ namespace MafiaUnity
         {
             path = FixPath(path, true);
 
-            foreach (var mod in paths)
-                if (File.Exists(Path.Combine(mod, path)))
-                    return true;
+            if (GameAPI.instance.blockMods)
+                    foreach (var mod in paths)
+                    if (File.Exists(Path.Combine(mod, path)))
+                        return true;
 
-            if (File.Exists(Path.Combine(gamePath, path)))
-                return true;
+            if (GameAPI.instance.avoidLooseFiles)
+                if (File.Exists(Path.Combine(gamePath, path)))
+                    return true;
 
             if (DTAFileExists(path))
                 return true;
@@ -170,12 +172,14 @@ namespace MafiaUnity
         {
             path = FixPath(path, true);
 
-            foreach (var mod in paths)
-                if (File.Exists(Path.Combine(mod, path)))
-                    return Path.Combine(mod, path);
+            if (GameAPI.instance.blockMods)
+                foreach (var mod in paths)
+                    if (File.Exists(Path.Combine(mod, path)))
+                        return Path.Combine(mod, path);
 
-            if (File.Exists(Path.Combine(gamePath, path)))
-                return Path.Combine(gamePath, path);
+            if (GameAPI.instance.avoidLooseFiles)
+                if (File.Exists(Path.Combine(gamePath, path)))
+                    return Path.Combine(gamePath, path);
 
             return path;
         }
@@ -191,14 +195,16 @@ namespace MafiaUnity
             path = FixPath(path, true);
 
             //Check files in normal file system
-            foreach (var mod in paths)
-                if (File.Exists(Path.Combine(mod, path)))
-                    return new FileStream(Path.Combine(mod, path), FileMode.Open);
+            if (GameAPI.instance.blockMods)
+                foreach (var mod in paths)
+                    if (File.Exists(Path.Combine(mod, path)))
+                        return new FileStream(Path.Combine(mod, path), FileMode.Open);
 
-            if (File.Exists(Path.Combine(gamePath, path)))
-                return new FileStream(Path.Combine(gamePath, path), FileMode.Open);
+            if (GameAPI.instance.avoidLooseFiles)
+                if (File.Exists(Path.Combine(gamePath, path)))
+                    return new FileStream(Path.Combine(gamePath, path), FileMode.Open);
 
-            //If we didn't found eny file let's search in DTA File system
+            //If we didn't found any file let's search in DTA File system
             if (DTAFileExists(path))
                 return DTAGetFileContent(path);
 

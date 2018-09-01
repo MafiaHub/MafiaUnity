@@ -50,7 +50,20 @@ namespace MafiaUnity
         /// Specifies whether to skip loading the main base game (main menu, Mafia game modes, etc).
         /// This is useful for mods that override the startup sequence with their own scripts.
         /// </summary>
-        public bool skipLoadingMainGame = false;
+        public bool skipLoadingMainGame { get; set; }
+
+        /// <summary>
+        /// Blocks out the rest of the mods on the load list from loading.
+        /// Useful when a major mod requires the game to be kept vanilla (ex. multiplayer mods, total conversions, ...)
+        /// </summary>
+        public bool blockMods { get; set; }
+
+        /// <summary>
+        /// Avoids loading loose files from the disk.
+        /// This ensures data is loaded only from DTA archives.
+        /// Data from mods can also be loaded if `blockMods` is disabled.
+        /// </summary>
+        public bool avoidLooseFiles { get; set; }
 
         #region Public Fields
         public FileSystem fileSystem = new FileSystem();
@@ -93,7 +106,7 @@ namespace MafiaUnity
         {
             modHadErrors = true;
         }
-
+        
         /// <summary>
         /// Wrapper method which sets the game path as well as initializes the CvarManager object.
         /// </summary>

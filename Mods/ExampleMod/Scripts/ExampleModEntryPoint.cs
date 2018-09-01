@@ -11,6 +11,8 @@ class ScriptMain : IModScript
     {
         Debug.Log("ExampleMod was initialized! Version: " + mod.version);
         GameAPI.instance.skipLoadingMainGame = true; /* avoids loading base game, effectively overriding the startup sequence. */
+        GameAPI.instance.blockMods = true; /* prevents other mods from loading. This is example mod after all, we don't want any aliens here, do we? */
+        GameAPI.instance.avoidLooseFiles = true; /* avoid loading any loose files in the game directory. We want a vanilla experience. */
 
         var cam = Camera.main;
 
