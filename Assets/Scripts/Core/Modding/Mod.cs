@@ -13,6 +13,7 @@ namespace MafiaUnity
     {
         string modPath, modName;
         public string name;
+        public string description;
         public string author;
         public string version;
         public string gameVersion;
