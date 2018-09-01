@@ -2,7 +2,7 @@ Shader "Mafia/Cutout" {
 	
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
-        _Cutout ("Cutout", float) = 0.5
+        _Cutoff ("Cutoff", float) = 0.5
 		_MainTex ("Diffuse", 2D) = "white" {}
 		_LightTex ("Lightmap", 2D) = "white" {}
 	}
@@ -17,14 +17,14 @@ Shader "Mafia/Cutout" {
         Cull Off
 
 		CGPROGRAM
-        #pragma surface surf Lambert fullforwardshadows
+        #pragma surface surf Lambert
 	
 		struct Input {
 			float2 uv_MainTex;
 		};
 	
 		float4 _Color;
-        float _Cutout;
+        float _Cutoff;
 		sampler2D _MainTex;
 		sampler2D _LightTex;
 	
@@ -34,11 +34,11 @@ Shader "Mafia/Cutout" {
 			o.Albedo *= tex2D(_LightTex, IN.uv_MainTex).rgb;
 			o.Albedo *= _Color.rgb;
             o.Alpha = _Color.a*col.a;
-            clip(_Color.a*col.a - _Cutout);
+            clip(_Color.a*col.a - _Cutoff);
 		}
 		ENDCG
 
 	} 
-    Fallback "Transparent/Cutout/Diffuse"
+    Fallback "Legacy Shaders/Transparent/Cutout/Diffuse"
 
 }

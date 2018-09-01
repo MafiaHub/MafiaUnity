@@ -371,8 +371,9 @@ namespace MafiaUnity
 
                     if (mafiaMat.flags.HasFlag(MafiaFormats.MaterialFlag.Colorkey))
                     {
+                        //mat = new Material(Shader.Find("Legacy Shaders/Transparent/Cutout/Diffuse"));
                         mat = new Material(Shader.Find("Mafia/Cutout"));
-                        mat.SetFloat("_Cutout", 0.9f);
+                        mat.SetFloat("_Cutoff", 0.9f);
                     }
                     else if (mafiaMat.transparency < 1f)
                     {
