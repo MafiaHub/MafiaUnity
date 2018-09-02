@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace MafiaUnity
@@ -106,4 +107,24 @@ namespace MafiaUnity
 			audioSource.Play();
 		}
     }
+
+#if UNITY_EDITOR
+
+    [CustomEditor(typeof(Door))]
+    class DoorEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            if (GUILayout.Button("Handle door"))
+            {
+                var door = target as Door;
+
+                door.Use(Camera.main.gameObject);
+            }
+        }
+    }
+
+#endif
 }

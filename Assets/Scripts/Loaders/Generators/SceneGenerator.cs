@@ -103,10 +103,16 @@ namespace MafiaUnity
                                     redefObject.transform.parent = parent.transform;
                             }
 
-                            redefObject.transform.localPosition = obj.Value.pos;
+                            if (obj.Value.isPositionPatched)
+                                redefObject.transform.localPosition = obj.Value.pos;
 
-                            if (obj.Value.scale.sqrMagnitude != 0f)
+                            if (obj.Value.isRotationPatched)
+                                redefObject.transform.localRotation = obj.Value.rot;
+
+                            if (obj.Value.isScalePatched)
                                 redefObject.transform.localScale = obj.Value.scale;
+                            
+                            redefObject.SetActive(!obj.Value.isHidden);
 
                             GameObject.DestroyImmediate(newObject, true);
                             continue;

@@ -45,6 +45,7 @@ namespace MafiaUnity
                 Position2 = 0x002C,
                 Scale = 0x002D,
                 Parent = 0x4020,
+                Hidden = 0x4033,
                 Name = 0x0010,
                 Name_Special = 0xAE23,
                 Model = 0x2012,
@@ -148,12 +149,16 @@ namespace MafiaUnity
             public class Object
             {
                 public bool isPatch=true;
+                public bool isHidden=false;
                 public ObjectType type;
                 public SpecialObjectType specialType;
                 public Vector3 pos;
+                public bool isPositionPatched = false;
                 public Quaternion rot;
+                public bool isRotationPatched = false;
                 public Vector3 pos2; // precomputed final world transform position
                 public Vector3 scale;
+                public bool isScalePatched = false;
                 public string name;
                 public string modelName;
                 public string parentName;
@@ -235,51 +240,51 @@ namespace MafiaUnity
 
                     case HeaderType.SpecialObject:
                     case HeaderType.Object:
-                        {
-                            uint position = offset;
-                            Object newObject = new Object();
+                    {
+                        uint position = offset;
+                        Object newObject = new Object();
 
-                            while (position + 6 < offset + header.size)
-                            {
-                                reader.BaseStream.Seek(position, SeekOrigin.Begin);
-                                var nextHeader = ReadHeader(reader);
-                                ReadObject(reader, ref nextHeader, ref newObject, position + 6);
-                                position += nextHeader.size;
-                            }
+                        while (position + 6 < offset + header.size)
+                        {
+                            reader.BaseStream.Seek(position, SeekOrigin.Begin);
+                            var nextHeader = ReadHeader(reader);
+                            ReadObject(reader, ref nextHeader, ref newObject, position + 6);
+                            position += nextHeader.size;
+                        }
  
-                            if (header.type == HeaderType.Object)
+                        if (header.type == HeaderType.Object)
+                        {
+                            objects.Add(newObject.name, newObject);
+                        }
+                        else
+                        {
+                            if (objects.ContainsKey(newObject.name))
                             {
-                                objects.Add(newObject.name, newObject);
+                                var targetObject = objects[newObject.name];
+                                targetObject.specialType = newObject.specialType;
+                                targetObject.physicalObject = newObject.physicalObject;
+                                targetObject.doorObject = newObject.doorObject;
                             }
                             else
                             {
-                                if (objects.ContainsKey(newObject.name))
+                                var go = BaseGenerator.FetchCacheReference(GameAPI.instance.missionManager.mission, newObject.name)?.gameObject;
+
+                                if (go != null)
                                 {
-                                    var targetObject = objects[newObject.name];
-                                    targetObject.specialType = newObject.specialType;
-                                    targetObject.physicalObject = newObject.physicalObject;
-                                    targetObject.doorObject = newObject.doorObject;
+                                    var objDef = go.GetComponent<ObjectDefinition>();
+
+                                    if (objDef == null)
+                                        objDef = go.AddComponent<ObjectDefinition>();
+
+                                    objDef.data = newObject;
+
+                                    objDef.Init();
                                 }
-                                else
-                                {
-                                    var go = BaseGenerator.FetchCacheReference(GameAPI.instance.missionManager.mission, newObject.name)?.gameObject;
-
-                                    if (go != null)
-                                    {
-                                        var objDef = go.GetComponent<ObjectDefinition>();
-
-                                        if (objDef == null)
-                                            objDef = go.AddComponent<ObjectDefinition>();
-
-                                        objDef.data = newObject;
-
-                                        objDef.Init();
-                                    }
-                                    else objects.Add(newObject.name, newObject);
-                                }
+                                else objects.Add(newObject.name, newObject);
                             }
                         }
-                        break;
+                    }
+                    break;
                 }
             }
             
@@ -308,101 +313,110 @@ namespace MafiaUnity
                     break;
 
                     case ObjectProperty.SpecialData:
+                    {
+                        switch (newObject.specialType)
                         {
-                            switch (newObject.specialType)
+                            case SpecialObjectType.Physical:
                             {
-                                case SpecialObjectType.Physical:
-                                {
-                                    reader.BaseStream.Seek(2, SeekOrigin.Current);
-                                    var newSpecialObject = new PhysicalProp();
-                                    newSpecialObject.movVal1 = reader.ReadSingle();
-                                    newSpecialObject.movVal2 = reader.ReadSingle();
-                                    newSpecialObject.weight = reader.ReadSingle();
-                                    newSpecialObject.friction = reader.ReadSingle();
-                                    newSpecialObject.movVal4 = reader.ReadSingle();
-                                    newSpecialObject.sound = reader.ReadInt32();
-                                    reader.BaseStream.Seek(1, SeekOrigin.Current);
-                                    newSpecialObject.movVal5 = reader.ReadInt32();
-                                    newObject.physicalObject = newSpecialObject;
-                                }
-                                break;
-
-                                case SpecialObjectType.Door:
-                                {
-                                    reader.BaseStream.Seek(5, SeekOrigin.Current);
-                                    var newSpecialObject = new DoorProp();
-                                    newSpecialObject.open1 = reader.ReadByte();
-                                    newSpecialObject.open2 = reader.ReadByte();
-                                    newSpecialObject.moveAngle = reader.ReadSingle();
-                                    newSpecialObject.open = reader.ReadByte();
-                                    newSpecialObject.locked = reader.ReadByte();
-                                    newSpecialObject.closeSpeed = reader.ReadSingle();
-                                    newSpecialObject.openSpeed = reader.ReadSingle();
-                                    newSpecialObject.openSound = reader.ReadString();
-                                    reader.BaseStream.Seek((16 - newSpecialObject.openSound.Length - 1), SeekOrigin.Current);
-                                    newSpecialObject.closeSound = reader.ReadString();
-                                    reader.BaseStream.Seek((16 - newSpecialObject.closeSound.Length - 1), SeekOrigin.Current);
-                                    newSpecialObject.lockedSound = reader.ReadString();
-                                    reader.BaseStream.Seek((16 - newSpecialObject.lockedSound.Length - 1), SeekOrigin.Current);
-                                    newSpecialObject.flag = reader.ReadByte();
-                                    newObject.doorObject = newSpecialObject;
-                                }
-                                break;
+                                reader.BaseStream.Seek(2, SeekOrigin.Current);
+                                var newSpecialObject = new PhysicalProp();
+                                newSpecialObject.movVal1 = reader.ReadSingle();
+                                newSpecialObject.movVal2 = reader.ReadSingle();
+                                newSpecialObject.weight = reader.ReadSingle();
+                                newSpecialObject.friction = reader.ReadSingle();
+                                newSpecialObject.movVal4 = reader.ReadSingle();
+                                newSpecialObject.sound = reader.ReadInt32();
+                                reader.BaseStream.Seek(1, SeekOrigin.Current);
+                                newSpecialObject.movVal5 = reader.ReadInt32();
+                                newObject.physicalObject = newSpecialObject;
                             }
+                            break;
+
+                            case SpecialObjectType.Door:
+                            {
+                                reader.BaseStream.Seek(5, SeekOrigin.Current);
+                                var newSpecialObject = new DoorProp();
+                                newSpecialObject.open1 = reader.ReadByte();
+                                newSpecialObject.open2 = reader.ReadByte();
+                                newSpecialObject.moveAngle = reader.ReadSingle();
+                                newSpecialObject.open = reader.ReadByte();
+                                newSpecialObject.locked = reader.ReadByte();
+                                newSpecialObject.closeSpeed = reader.ReadSingle();
+                                newSpecialObject.openSpeed = reader.ReadSingle();
+                                newSpecialObject.openSound = reader.ReadString();
+                                reader.BaseStream.Seek((16 - newSpecialObject.openSound.Length - 1), SeekOrigin.Current);
+                                newSpecialObject.closeSound = reader.ReadString();
+                                reader.BaseStream.Seek((16 - newSpecialObject.closeSound.Length - 1), SeekOrigin.Current);
+                                newSpecialObject.lockedSound = reader.ReadString();
+                                reader.BaseStream.Seek((16 - newSpecialObject.lockedSound.Length - 1), SeekOrigin.Current);
+                                newSpecialObject.flag = reader.ReadByte();
+                                newObject.doorObject = newSpecialObject;
+                            }
+                            break;
                         }
-                        break;
+                    }
+                    break;
 
                     case ObjectProperty.Model:
-                        {
-                            newObject.modelName = ReadTerminatedString(reader).ToLower().Replace(".i3d", ".4ds");
-                        }
-                        break;
+                    {
+                        newObject.modelName = ReadTerminatedString(reader).ToLower().Replace(".i3d", ".4ds");
+                    }
+                    break;
+
+                    case ObjectProperty.Hidden:
+                    {
+                        newObject.isHidden = true;
+                    }
+                    break;
 
                     case ObjectProperty.Position:
-                        {
-                            newObject.pos = ReadVector3(reader);
-                        }
-                        break;
+                    {
+                        newObject.pos = ReadVector3(reader);
+                        newObject.isPositionPatched = true;
+                    }
+                    break;
 
                     case ObjectProperty.Rotation:
-                        {
-                            var rot = ReadQuat(reader);
-                            newObject.rot = new Quaternion(rot.y, rot.z, rot.w, -1 * rot.x);
-                        }
-                        break;
+                    {
+                        var rot = ReadQuat(reader);
+                        newObject.rot = new Quaternion(rot.y, rot.z, rot.w, -1 * rot.x);
+                        newObject.isRotationPatched = true;
+                    }
+                    break;
 
                     case ObjectProperty.Position2:
-                        {
-                            newObject.pos2 = ReadVector3(reader);
-                        }
-                        break;
+                    {
+                        newObject.pos2 = ReadVector3(reader);
+                    }
+                    break;
 
                     case ObjectProperty.Scale:
-                        {
-                            newObject.scale = ReadVector3(reader);
-                        }
-                        break;
+                    {
+                        newObject.scale = ReadVector3(reader);
+                        newObject.isScalePatched = true;
+                    }
+                    break;
 
                     case ObjectProperty.Light_Main:
+                    {
+                        uint position = offset;
+                        while (position + 6 < offset + header.size)
                         {
-                            uint position = offset;
-                            while (position + 6 < offset + header.size)
-                            {
-                                var lightHeader = ReadHeader(reader);
-                                ReadLight(reader, ref lightHeader, ref newObject);
-                                position += lightHeader.size;
-                            }
+                            var lightHeader = ReadHeader(reader);
+                            ReadLight(reader, ref lightHeader, ref newObject);
+                            position += lightHeader.size;
                         }
-                        break;
+                    }
+                    break;
 
                     case ObjectProperty.Parent:
-                        {
-                            var parentHeader = ReadHeader(reader);
-                            Object parentObject = new Object();
-                            ReadObject(reader, ref parentHeader, ref parentObject, offset + 6);
-                            newObject.parentName = parentObject.name;
-                        }
-                        break;
+                    {
+                        var parentHeader = ReadHeader(reader);
+                        Object parentObject = new Object();
+                        ReadObject(reader, ref parentHeader, ref parentObject, offset + 6);
+                        newObject.parentName = parentObject.name;
+                    }
+                    break;
                 }
             }
 
@@ -411,48 +425,48 @@ namespace MafiaUnity
                 switch ((ObjectProperty)header.type)
                 {
                     case ObjectProperty.Light_Type:
-                        {
-                            newObject.lightType = (LightType)reader.ReadInt32();
-                        }
-                        break;
+                    {
+                        newObject.lightType = (LightType)reader.ReadInt32();
+                    }
+                    break;
 
                     case ObjectProperty.Light_Color:
-                        {
-                            newObject.lightColour = ReadVector3(reader);
-                        }
-                        break;
+                    {
+                        newObject.lightColour = ReadVector3(reader);
+                    }
+                    break;
 
                     case ObjectProperty.Light_Power:
-                        {
-                            newObject.lightPower = reader.ReadSingle();
-                        }
-                        break;
+                    {
+                        newObject.lightPower = reader.ReadSingle();
+                    }
+                    break;
 
                     case ObjectProperty.Light_Range:
-                        {
-                            newObject.lightNear = reader.ReadSingle();
-                            newObject.lightFar = reader.ReadSingle();
-                        }
-                        break;
+                    {
+                        newObject.lightNear = reader.ReadSingle();
+                        newObject.lightFar = reader.ReadSingle();
+                    }
+                    break;
 
                     case ObjectProperty.Light_Sector:
-                        {
-                            newObject.lightSectors = ReadTerminatedString(reader);
-                        }
-                        break;
+                    {
+                        newObject.lightSectors = ReadTerminatedString(reader);
+                    }
+                    break;
 
                     case ObjectProperty.Light_Flags:
-                        {
-                            newObject.lightFlags = (LightFlags)reader.ReadInt32();
-                        }
-                        break;
+                    {
+                        newObject.lightFlags = (LightFlags)reader.ReadInt32();
+                    }
+                    break;
 
                     case ObjectProperty.Light_Unknown:
-                        {
-                            newObject.lightUnk0 = reader.ReadSingle();
-                            newObject.lightAngle = reader.ReadSingle();
-                        }
-                        break;
+                    {
+                        newObject.lightUnk0 = reader.ReadSingle();
+                        newObject.lightAngle = reader.ReadSingle();
+                    }
+                    break;
                 }
             }
         }
