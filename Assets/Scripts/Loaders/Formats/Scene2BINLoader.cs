@@ -71,7 +71,8 @@ namespace MafiaUnity
                 Occluder = 0x0C,
                 Sector = 0x99,
                 Lightmap = 0x9A,
-                Script = 0x9B
+                Script = 0x9B,
+                LastType
             }
 
             [Serializable]
@@ -157,11 +158,13 @@ namespace MafiaUnity
                 public Quaternion rot;
                 public bool isRotationPatched = false;
                 public Vector3 pos2; // precomputed final world transform position
+                public bool isPosition2Patched = false;
                 public Vector3 scale;
                 public bool isScalePatched = false;
                 public string name;
                 public string modelName;
                 public string parentName;
+                public bool isParentPatched = false;
 
                 // Light properties
                 public LightType lightType;
@@ -301,7 +304,9 @@ namespace MafiaUnity
                     case ObjectProperty.TypeNormal:
                     {
                         newObject.type = (ObjectType)reader.ReadUInt32();
-                        newObject.isPatch = false;
+
+                        if (newObject.type > 0 && newObject.type < ObjectType.LastType)
+                            newObject.isPatch = false;
                     }
                     break;
 
@@ -387,6 +392,7 @@ namespace MafiaUnity
                     case ObjectProperty.Position2:
                     {
                         newObject.pos2 = ReadVector3(reader);
+                        newObject.isPosition2Patched = true;
                     }
                     break;
 
@@ -415,6 +421,7 @@ namespace MafiaUnity
                         Object parentObject = new Object();
                         ReadObject(reader, ref parentHeader, ref parentObject, offset + 6);
                         newObject.parentName = parentObject.name;
+                        newObject.isParentPatched = true;
                     }
                     break;
                 }

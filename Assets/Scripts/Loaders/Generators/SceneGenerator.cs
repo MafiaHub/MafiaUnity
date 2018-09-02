@@ -83,19 +83,12 @@ namespace MafiaUnity
 
                     if (obj.Value.isPatch)
                     {
-                        var sumMag = obj.Value.pos.magnitude+obj.Value.rot.eulerAngles.magnitude+obj.Value.pos.magnitude;
-
-                        if (sumMag == 0f)
-                        {
-                            GameObject.DestroyImmediate(newObject, true);
-                            continue;
-                        }
-
-                        var redefObject = FetchReference(mission, newObject.name);
+                        var searchName = obj.Value.name.Replace(".", "/");
+                        var redefObject = GameObject.Find(searchName);
 
                         if (redefObject != null)
                         {
-                            if (obj.Value.parentName != null)
+                            if (obj.Value.isParentPatched && obj.Value.parentName != null)
                             {
                                 var parent = FindParent(mission, obj.Value.parentName);
 
@@ -105,6 +98,9 @@ namespace MafiaUnity
 
                             if (obj.Value.isPositionPatched)
                                 redefObject.transform.localPosition = obj.Value.pos;
+
+                            /* if (obj.Value.isPosition2Patched)
+                                redefObject.transform.position = obj.Value.pos2; */
 
                             if (obj.Value.isRotationPatched)
                                 redefObject.transform.localRotation = obj.Value.rot;
@@ -147,7 +143,24 @@ namespace MafiaUnity
         {
             if (name != null)
             {
-                var parentObject = FetchReference(mission, name);
+                var path = name.Split('.');
+                GameObject parentObject = FetchReference(mission, path[0]);
+
+                if (parentObject != null)
+                    for (int i = 1; i < path.Length; i++)
+                    {
+                        var parent = parentObject.transform.Find(path[i]);
+
+                        if (parent != null)
+                        {
+                            parentObject = parent.gameObject;
+
+                            if (i == path.Length)
+                                break;
+                        }
+                        else break;
+                    }
+
 
                 if (parentObject != null)
                     return parentObject;
