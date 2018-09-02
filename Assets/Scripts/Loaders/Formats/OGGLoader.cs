@@ -34,6 +34,8 @@ namespace MafiaUnity
 
                 clip.SetData(totalBuffer, 0);
 
+                vorbis.Dispose();
+
                 return clip;
             }
         }
