@@ -104,8 +104,9 @@ namespace MafiaUnity
                             }
 
                             redefObject.transform.localPosition = obj.Value.pos;
-                            redefObject.transform.localRotation = obj.Value.rot;
-                            //redefObject.transform.localScale = obj.Value.scale;
+
+                            if (obj.Value.scale.magnitude != 0f)
+                                redefObject.transform.localScale = obj.Value.scale;
 
                             GameObject.DestroyImmediate(newObject, true);
                             continue;
