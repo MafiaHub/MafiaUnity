@@ -77,14 +77,16 @@ namespace MafiaUnity
                 objDef.data = dummySectorData;
                 primary.transform.parent = rootObject.transform;
 
+                objects = objects.OrderByDescending(x => x.Value.isPatch).ToList();
+
                 foreach (var obj in objects)
                 {
                     var newObject = obj.Key;
 
                     if (obj.Value.isPatch)
                     {
-                        var searchName = obj.Value.name.Replace(".", "/");
-                        var redefObject = GameObject.Find(searchName);
+                        var searchName = obj.Value.name;
+                        var redefObject = FindParent(mission, searchName, null);
 
                         if (redefObject != null)
                         {
@@ -146,20 +148,15 @@ namespace MafiaUnity
                 var path = name.Split('.');
                 GameObject parentObject = FetchReference(mission, path[0]);
 
-                if (parentObject != null)
-                    for (int i = 1; i < path.Length; i++)
+                if (parentObject != null && path.Length == 2)
+                {
+                    var parent = parentObject.transform.FindDeepChild(path[1]);
+
+                    if (parent != null)
                     {
-                        var parent = parentObject.transform.Find(path[i]);
-
-                        if (parent != null)
-                        {
-                            parentObject = parent.gameObject;
-
-                            if (i == path.Length)
-                                break;
-                        }
-                        else break;
+                        parentObject = parent.gameObject;
                     }
+                }
 
 
                 if (parentObject != null)
