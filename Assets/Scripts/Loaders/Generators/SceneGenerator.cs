@@ -123,20 +123,11 @@ namespace MafiaUnity
                     newObject.transform.localRotation = obj.Value.rot;
                     newObject.transform.localScale = obj.Value.scale;
 
+                    newObject.SetActive(!obj.Value.isHidden);
+
                     var specObject = newObject.AddComponent<ObjectDefinition>();
                     specObject.data = obj.Value;
                     specObject.Init();
-                }
-
-                // Check for "removed" objects
-                foreach (var x in objects)
-                {
-                    if (x.Key == null) continue;
-
-                    var tr = x.Key.transform;
-
-                    if (tr.localScale.sqrMagnitude == 0f && tr.childCount == 0)
-                        GameObject.DestroyImmediate(x.Key, true);
                 }
             }
 
