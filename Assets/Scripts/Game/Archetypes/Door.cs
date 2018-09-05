@@ -13,7 +13,7 @@ namespace MafiaUnity
 		float delta = 0f;
 		bool isMoving = false;
 
-		AudioClip openSound, closeSound, lockedSound;
+		AudioClip openSound=null, closeSound=null, lockedSound=null;
 
 		AudioSource audioSource;
 
