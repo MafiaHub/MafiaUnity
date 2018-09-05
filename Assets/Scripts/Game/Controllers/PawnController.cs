@@ -43,7 +43,10 @@ public class PawnController
     private Vector3 oldMovementDirection;
     private float movementAngle;
 	private int lastRotationState;
+    private Transform neckTransform;
     public bool isRolling = false;
+
+    public const float USE_ITEM_DISTANCE = 5f;
     
     private MafiaAnimationSet[] animationSets;
 
@@ -60,6 +63,7 @@ public class PawnController
         pawn.isPlaying = true;
         pawn.playbackMode = ModelAnimationPlayer.AnimationPlaybackMode.Repeat;
         pawn.BlendAnimation(animationSets[(int)stanceMode].idleAnimations[0]);
+        neckTransform = rootObject.FindDeepChild("neck");
     }
 
     /// <summary>
@@ -331,6 +335,32 @@ public class PawnController
 		rootObject.transform.localRotation = Quaternion.Slerp(rootObject.transform.localRotation, rotToInterpolate, Time.deltaTime * 10f);
 			
         movementAngle = 0f;
+    }
+
+    private void UseItem()
+    {
+        var def = GetUsableObject();
+
+        if (def != null)
+            def.Use(rootObject.gameObject);
+    }
+
+    public IUsable GetUsableObject()
+    {
+        var fwd = neckTransform.forward;
+        var pos = neckTransform.position;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(pos, fwd, out hit, USE_ITEM_DISTANCE))
+        {
+            var obj = hit.transform.gameObject;
+            var def = obj.GetComponent<IUsable>();
+
+            return def;
+        }
+
+        return null;
     }
 
     enum AnimationSlots : int

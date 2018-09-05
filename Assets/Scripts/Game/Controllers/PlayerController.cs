@@ -23,8 +23,6 @@ public class PlayerController : MonoBehaviour
     bool test_aim = false;
     public float test_offset = -0.82f;
 
-    public const float USE_ITEM_DISTANCE = 30f;
-
     public void Start()
     {
         characterController = new PawnController(playerPawn.GetComponent<ModelAnimationPlayer>(), transform);
@@ -223,19 +221,6 @@ public class PlayerController : MonoBehaviour
 
     public IUsable GetUsableObject()
     {
-        var fwd = neckTransform.forward;
-        var pos = neckTransform.position;
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(pos, fwd, out hit, USE_ITEM_DISTANCE))
-        {
-            var obj = hit.transform.gameObject;
-            var def = obj.GetComponent<IUsable>();
-
-            return def;
-        }
-
-        return null;
+        return characterController.GetUsableObject();
     }
 }
