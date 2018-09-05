@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     bool test_aim = false;
     public float test_offset = -0.82f;
 
+    public const float USE_ITEM_DISTANCE = 30f;
+
     public void Start()
     {
         characterController = new PawnController(playerPawn.GetComponent<ModelAnimationPlayer>(), transform);
@@ -141,11 +143,16 @@ public class PlayerController : MonoBehaviour
         var z = Input.GetAxisRaw("Vertical");
         var isRunning = !Input.GetButton("Run");
         var isCrouching = Input.GetButton("Crouch");
+        var isUsing = Input.GetButtonDown("Use");
+
         isStrafing = false;
 
         // TEST ONLY
         if (Input.GetKeyDown(KeyCode.P))
             test_aim = !test_aim;
+
+        if (isUsing)
+            UseItem();
 
         if(!characterController.isRolling)
         {
@@ -204,5 +211,31 @@ public class PlayerController : MonoBehaviour
             back1.Rotate(new Vector3(0f,180f,0f), Space.Self);
             characterController.stanceMode = AnimationStanceMode.Pistol;
         }
+    }
+
+    private void UseItem()
+    {
+        var def = GetUsableObject();
+
+        if (def != null)
+            def.Use(playerPawn);
+    }
+
+    public IUsable GetUsableObject()
+    {
+        var fwd = neckTransform.forward;
+        var pos = neckTransform.position;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(pos, fwd, out hit, USE_ITEM_DISTANCE))
+        {
+            var obj = hit.transform.gameObject;
+            var def = obj.GetComponent<IUsable>();
+
+            return def;
+        }
+
+        return null;
     }
 }

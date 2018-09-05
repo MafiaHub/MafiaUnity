@@ -21,12 +21,12 @@ namespace MafiaUnity
 		{
 			audioSource = gameObject.AddComponent<AudioSource>();
 
+			/* 
             openSound = MafiaFormats.WAVLoader.ToAudioClip(door.openSound.Replace(".wav", ""));
             closeSound = MafiaFormats.WAVLoader.ToAudioClip(door.closeSound.Replace(".wav", ""));
             lockedSound = MafiaFormats.WAVLoader.ToAudioClip(door.lockedSound.Replace(".wav", ""));
-
-            // TODO Use WAVLoader to load audio clips
-
+ 			*/
+			 
             startRotation = transform.localRotation;
 
 			if (door.open > 0)

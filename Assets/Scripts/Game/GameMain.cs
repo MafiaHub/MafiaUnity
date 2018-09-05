@@ -79,6 +79,7 @@ class MenuHub
 class PlayMenuState : MenuState
 {
 	MenuHub hub;
+	PlayerController player;
 
 	public PlayMenuState(MenuHub menuHub)
 	{
@@ -105,6 +106,11 @@ class PlayMenuState : MenuState
 		{
 			hub.SwitchToPauseMenu();
 		}
+
+		if (player == null)
+		{
+			player = GameObject.Find("Main Player")?.GetComponent<PlayerController>();
+		}
 	}
 
     public override void OnStateGUI()
@@ -115,7 +121,9 @@ class PlayMenuState : MenuState
 		HUDManager.instance.DrawNumber(100, HUDAnchorMode.Bottom, new Vector2(25, 22));
 
         HUDManager.instance.DrawSprite("radar", HUDAnchorMode.None, new Vector2(20, 20));
-        HUDManager.instance.DrawSprite("abButton", HUDAnchorMode.Bottom, new Vector2(20, HUDManager.instance.GetSprite("hpTommy").height*scaling + 20));
+
+		if (player != null && player.GetUsableObject() != null)
+        	HUDManager.instance.DrawSprite("abButton", HUDAnchorMode.Bottom, new Vector2(20, HUDManager.instance.GetSprite("hpTommy").height*scaling + 20));
     }
 }
 
