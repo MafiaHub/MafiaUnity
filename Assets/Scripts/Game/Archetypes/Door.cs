@@ -21,11 +21,15 @@ namespace MafiaUnity
 		{
 			audioSource = gameObject.AddComponent<AudioSource>();
 
-			/* 
-            openSound = MafiaFormats.WAVLoader.ToAudioClip(door.openSound.Replace(".wav", ""));
-            closeSound = MafiaFormats.WAVLoader.ToAudioClip(door.closeSound.Replace(".wav", ""));
-            lockedSound = MafiaFormats.WAVLoader.ToAudioClip(door.lockedSound.Replace(".wav", ""));
- 			*/
+			try
+			{
+                openSound = MafiaFormats.WAVLoader.ToAudioClip(door.openSound.Replace(".wav", ""));
+                closeSound = MafiaFormats.WAVLoader.ToAudioClip(door.closeSound.Replace(".wav", ""));
+                lockedSound = MafiaFormats.WAVLoader.ToAudioClip(door.lockedSound.Replace(".wav", ""));	
+			}
+			catch {}
+            
+ 			audioSource.spatialBlend = 1f;
 			 
             startRotation = transform.localRotation;
 

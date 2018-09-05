@@ -348,11 +348,11 @@ namespace MafiaUnity
                                 newSpecialObject.locked = reader.ReadByte();
                                 newSpecialObject.closeSpeed = reader.ReadSingle();
                                 newSpecialObject.openSpeed = reader.ReadSingle();
-                                newSpecialObject.openSound = reader.ReadString();
+                                newSpecialObject.openSound = ReadTerminatedString(reader);
                                 reader.BaseStream.Seek((16 - newSpecialObject.openSound.Length - 1), SeekOrigin.Current);
-                                newSpecialObject.closeSound = reader.ReadString();
+                                newSpecialObject.closeSound = ReadTerminatedString(reader);
                                 reader.BaseStream.Seek((16 - newSpecialObject.closeSound.Length - 1), SeekOrigin.Current);
-                                newSpecialObject.lockedSound = reader.ReadString();
+                                newSpecialObject.lockedSound = ReadTerminatedString(reader);
                                 reader.BaseStream.Seek((16 - newSpecialObject.lockedSound.Length - 1), SeekOrigin.Current);
                                 newSpecialObject.flag = reader.ReadByte();
                                 newObject.doorObject = newSpecialObject;
