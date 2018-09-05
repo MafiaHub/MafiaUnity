@@ -10,7 +10,6 @@ public class SetupGUI : MonoBehaviour {
     public GameObject pathSelection;
     public GameObject modManager;
     public GameObject mainMenu;
-    public GameObject startupLight;
     public Text gameVersion;
     public Text buildTime;
     public GameObject buildBadge;
@@ -32,7 +31,6 @@ public class SetupGUI : MonoBehaviour {
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
         bgMusic.Stop();
 
-        GameObject.Destroy(startupLight);
         mainMenu.SetActive(false);
         buildBadge.SetActive(false);
         copyrightDisclaimer.SetActive(false);
