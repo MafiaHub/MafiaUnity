@@ -486,8 +486,11 @@ namespace MafiaUnity
 
             var modMapName = GameAPI.instance.fileSystem.GetPath(Path.Combine("maps", name));
 
-            if (cachedTextures.ContainsKey(modMapName) && ignoreCachedTexture == false)
+            if (cachedTextures.ContainsKey(modMapName) && ignoreCachedTexture == false
+                && cachedTextures[modMapName] != null)
+            {
                 tex = cachedTextures[modMapName];
+            }
             else
             {
                 BMPImage image = null;
@@ -524,10 +527,13 @@ namespace MafiaUnity
                     }
                 }
 
-                // NOTE !IMPORTANT: We cache null textures as well, to avoid loading the same missing texture multiple times.
-                // this way, we always retrieve the cached, null object and re-use it.
                 if (ignoreCachedTexture == false)
+                {
+                    if (cachedTextures.ContainsKey(modMapName))
+                        cachedTextures.Remove(modMapName);
+                        
                     cachedTextures.Add(modMapName, tex);
+                }
 
                 bmp.useTransparencyKey = false;
             }
