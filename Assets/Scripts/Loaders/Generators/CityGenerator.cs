@@ -39,6 +39,8 @@ namespace MafiaUnity
                     var parentObject = new GameObject(obj.objectName);
                     parentObject.transform.parent = rootObject.transform;
 
+                    int i=0;
+
                     foreach (var instance in obj.instances)
                     {
                         var model = GameAPI.instance.modelGenerator.LoadObject(Path.Combine("models", instance.modelName), null);
@@ -46,7 +48,7 @@ namespace MafiaUnity
                         if (model == null)
                             continue;
 
-                        model.name = obj.objectName;
+                        model.name = "Instance " + i++;
                         model.transform.parent = parentObject.transform;
                         model.transform.localPosition = instance.pos;
                         model.transform.localRotation = instance.rot;
@@ -54,9 +56,12 @@ namespace MafiaUnity
                         
                     }
                 }
+
+                var def = rootObject.AddComponent<CityDefinition>();
+                def.data = cacheBINLoader;
             }
 
-            StoreChachedObject(path, rootObject);
+            //StoreChachedObject(path, rootObject);
 
             return rootObject;
         }

@@ -71,6 +71,10 @@ namespace MafiaUnity
                 }
 
                 var primary = FetchReference(mission, "Primary sector");
+
+                if (primary == null)
+                    primary = new GameObject("Primary Sector");
+                    
                 var objDef = primary.AddComponent<ObjectDefinition>();
                 var dummySectorData = new MafiaFormats.Scene2BINLoader.Object();
                 dummySectorData.type = MafiaFormats.Scene2BINLoader.ObjectType.Sector;
@@ -137,7 +141,7 @@ namespace MafiaUnity
             if (primarySector != null)
                 primarySector.transform.localScale = new Vector3(1,1,1);
 
-            StoreChachedObject(path, rootObject);
+            //StoreChachedObject(path, rootObject);
 
             return rootObject;
         }

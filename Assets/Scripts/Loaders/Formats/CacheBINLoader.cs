@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace MafiaUnity
@@ -40,6 +41,7 @@ namespace MafiaUnity
             }
 
             public List<Object> objects;
+            public Chunk chunk;
             
             Header ReadHeader(BinaryReader reader)
             {
@@ -49,29 +51,86 @@ namespace MafiaUnity
                 return newHeader;
             }
 
+            void WriteHeader(BinaryWriter writer, Header header)
+            {
+                writer.Write(header.type);
+                writer.Write(header.size);
+            }
+
+            void WriteChunk(BinaryWriter writer, Chunk chunk)
+            {
+                writer.Write(chunk.version);
+            }
+
+            void WriteObject(BinaryWriter writer, Object obj)
+            {
+                WriteHeader(writer, obj.header);
+
+                writer.Write((int)obj.objectName.Length);
+                writer.Write(obj.objectName);
+                writer.Write(obj.bounds);
+                
+            }
+
+            public void WriteCache(string path)
+            {
+                path = GameAPI.instance.fileSystem.GetPath(path);
+
+                var fs = new FileStream(path, FileMode.Create);
+
+                using (var writer = new BinaryWriter(fs))
+                {
+                    Header newHeader = new Header();
+                    newHeader.size = (uint)objects.Sum(x => x.header.size);
+
+                    WriteHeader(writer, newHeader);
+                    WriteChunk(writer, chunk);
+
+                    foreach (var obj in objects)
+                    {
+                        WriteHeader(writer, obj.header);
+
+                        WriteStringUInt32(writer, obj.objectName);
+                        writer.Write(obj.bounds);
+
+                        foreach (var inst in obj.instances)
+                        {
+                            WriteHeader(writer, inst.header);
+                            WriteStringUInt32(writer, inst.modelName.Replace(".4ds", ".i3d"));
+                            WriteVector3(writer, inst.pos);
+                            WriteQuat(writer, new Quaternion(-1 * inst.rot.w, inst.rot.x, inst.rot.y, inst.rot.z));
+                            WriteVector3(writer, inst.scale);
+                            writer.Write(inst.unk0);
+                            WriteVector3(writer, inst.scale2);
+                        }
+                    }
+                }
+
+                fs.Close();
+            }
+
             public void ReadCache(BinaryReader reader)
             {
                 if (objects == null)
                     objects = new List<Object>();
                 
                 Header newHeader = ReadHeader(reader);
-                Chunk newChunk = new Chunk();
-                newChunk.version = reader.ReadUInt32();
+                chunk = new Chunk();
+                chunk.version = reader.ReadUInt32();
 
                 while (reader.BaseStream.Position < newHeader.size - sizeof(uint))
                 {
                     Object newObject = new Object();
                     newObject.header = ReadHeader(reader);
 
-                    var objectNameLength = reader.ReadUInt32();
-                    newObject.objectName = new string(reader.ReadChars((int)objectNameLength));
+                    newObject.objectName = ReadStringUInt32(reader);
 
                     newObject.bounds = new byte[0x4C];
                     for (var i = 0; i < 0x4C; i++)
                         newObject.bounds[i] = reader.ReadByte();
 
                     var currentPos = reader.BaseStream.Position;
-                    var headerSize = sizeof(ushort) + sizeof(uint) + sizeof(uint) + objectNameLength + 0x4C;
+                    var headerSize = sizeof(ushort) + sizeof(uint)*2 + newObject.objectName.Length + 0x4C;
 
                     newObject.instances = new List<Instance>();
 
@@ -80,9 +139,7 @@ namespace MafiaUnity
                         Instance newInstance = new Instance();
                         newInstance.header = ReadHeader(reader);
 
-                        //NOTE(DavoSK): renaming .i3ds to 4ds
-                        var modelNameLength = reader.ReadUInt32();
-                        newInstance.modelName = new string(reader.ReadChars((int)modelNameLength)).ToLower().Replace(".i3d", ".4ds");
+                        newInstance.modelName = ReadStringUInt32(reader).ToLower().Replace(".i3d", ".4ds");
 
                         newInstance.pos = ReadVector3(reader);
                         newInstance.rot = ReadQuat(reader);

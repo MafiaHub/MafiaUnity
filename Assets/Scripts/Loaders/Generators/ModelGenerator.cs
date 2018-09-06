@@ -232,6 +232,8 @@ namespace MafiaUnity
 
                         default: continue;
                     }
+
+                    def.modelName = Path.GetFileName(path);
                     
                     meshId++;
                 }
@@ -531,7 +533,7 @@ namespace MafiaUnity
                 {
                     if (cachedTextures.ContainsKey(modMapName))
                         cachedTextures.Remove(modMapName);
-                        
+
                     cachedTextures.Add(modMapName, tex);
                 }
 
