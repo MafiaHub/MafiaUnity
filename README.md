@@ -10,7 +10,7 @@
 
 <br />
 <div align="center">
-  Open-source Mafia game engine re-implementation
+  Open-source Mafia game framework
 </div>
 
 <div align="center">
