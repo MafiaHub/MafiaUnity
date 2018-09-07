@@ -31,7 +31,7 @@ As a tribute to our favorite game, we've decided to bring the soul a new skeleto
 
 ## Description
 
-We aim to create open-source tools for the game [Mafia](https://en.wikipedia.org/wiki/Mafia_(video_game)). The ultimate goal is to recreate the original game engine using Unity, to build up our framework thanks to which we can enjoy playing Mafia once more and also simplify modding process.
+We aim to create open-source tools for the game [Mafia](https://en.wikipedia.org/wiki/Mafia_(video_game)). The ultimate goal is to recreate the original game engine using Unity, to build up our framework and also simplify modding process.
 
 ## Development
 
