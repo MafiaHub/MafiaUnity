@@ -1,4 +1,7 @@
-﻿using B83.Image.BMP;
+﻿#if UNITY_EDITOR
+#undef MAFIAUNITY_RELEASE
+#endif
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,6 +41,7 @@ namespace MafiaUnity
         /// when framework's API radically changes.
         /// </summary>
 
+		
 #if MAFIAUNITY_RELEASE
         public const string GAME_VERSION = "v1.0.0";
 #else
