@@ -2,8 +2,6 @@
   "dependencies": {
     "com.unity.package-manager-ui": "1.9.11",
     "com.unity.postprocessing": "2.0.11-preview",
-    "com.unity.probuilder": "3.0.9",
-    "com.unity.progrids": "3.0.3-preview.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
