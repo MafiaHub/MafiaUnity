@@ -56,10 +56,10 @@ namespace MafiaUnity
                     
                     children.Add(new KeyValuePair<int, Transform>(mafiaMesh.parentID, child.transform));
 
-                    if (mafiaMesh.meshType == MafiaFormats.MeshType.Bone)
+                    if (mafiaMesh.meshType == MafiaFormats.MeshType.Joint)
                     {
                         var bone = child.AddComponent<Bone>();
-                        bone.data = mafiaMesh.bone;
+                        bone.data = mafiaMesh.joint;
                         continue;
                     }
                     else if (mafiaMesh.meshType == MafiaFormats.MeshType.Collision)
@@ -285,29 +285,29 @@ namespace MafiaUnity
 
                         skinnedMesh.bones = boneArray;
                         
-                        int skipVertices = (int)boneData.nonWeightedVertCount;
+                        int skipVertices = 0;//(int)boneData.nonWeightedVertCount;
                         
-                        for (int i = 0; i < boneData.joints.Count; i++)
+                        for (int i = 0; i < boneData.bones.Count; i++)
                         {
-                            bindPoses[i] = boneData.joints[i].transform;
+                            bindPoses[i] = boneData.bones[i].transform;
 
-                            for (int j = 0; j < boneData.joints[i].oneWeightedVertCount; j++)
+                            for (int j = 0; j < boneData.bones[i].oneWeightedVertCount; j++)
                             {
                                 boneWeights[skipVertices + j].boneIndex0 = i;
                                 boneWeights[skipVertices + j].weight0 = 1f;
                             }
 
-                            skipVertices += (int)boneData.joints[i].oneWeightedVertCount;
+                            skipVertices += (int)boneData.bones[i].oneWeightedVertCount;
 
-                            for (int j = 0; j < boneData.joints[i].weights.Count; j++)
+                            for (int j = 0; j < boneData.bones[i].weights.Count; j++)
                             {
                                 boneWeights[skipVertices + j].boneIndex0 = i;
-                                boneWeights[skipVertices + j].weight0 = boneData.joints[i].weights[j];
-                                boneWeights[skipVertices + j].boneIndex1 = (int)boneData.joints[i].boneID;
-                                boneWeights[skipVertices + j].weight1 = 1f - boneData.joints[i].weights[j]; 
+                                boneWeights[skipVertices + j].weight0 = boneData.bones[i].weights[j];
+                                boneWeights[skipVertices + j].boneIndex1 = (int)boneData.bones[i].boneID;
+                                boneWeights[skipVertices + j].weight1 = 1f - boneData.bones[i].weights[j]; 
                             }
 
-                            skipVertices += boneData.joints[i].weights.Count;
+                            skipVertices += boneData.bones[i].weights.Count;
 
                         }
 

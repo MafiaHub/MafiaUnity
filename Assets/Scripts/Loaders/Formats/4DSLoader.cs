@@ -37,7 +37,7 @@ namespace MafiaUnity
             Sector = 0x05,             // part of space, used for culling, effective lighting etc.
             Dummy = 0x06,              // invisible bounding box
             Target = 0x07,             // used in human models (as a shooting target?)
-            Bone = 0x0a                // for skeletal animation
+            Joint = 0x0a                // for skeletal animation
         }
 
         public enum VisualMeshType : uint  // subtype of mesh, when MeshType == MESHTYPE_STANDARD
@@ -133,7 +133,7 @@ namespace MafiaUnity
             public List<ushort> targets;
         }
 
-        public struct Bone
+        public struct Joint
         {
             public Matrix4x4 transform;
             public uint boneID;
@@ -219,7 +219,7 @@ namespace MafiaUnity
             public float[] unk1; //4
         }
 
-        public struct SingleMeshLODJoint
+        public struct SingleMeshLODBone
         {
             public Matrix4x4 transform;
             public uint oneWeightedVertCount; // amount of vertices that should have a weight of 1.0f
@@ -234,7 +234,7 @@ namespace MafiaUnity
             public uint nonWeightedVertCount;
             public Vector3 minBox;
             public Vector3 maxBox;
-            public List<SingleMeshLODJoint> joints;
+            public List<SingleMeshLODBone> bones;
         }
 
         public struct SingleMesh
@@ -269,7 +269,7 @@ namespace MafiaUnity
             public Billboard billboard;
             public Sector sector;
             public Target target;
-            public Bone bone;
+            public Joint joint;
             public Morph morph;
             public SingleMesh singleMesh;
             public SingleMorph singleMorph;
@@ -587,22 +587,22 @@ namespace MafiaUnity
                 return newMorph;
             }
 
-            SingleMeshLODJoint readSingleMeshLodJoint(BinaryReader reader)
+            SingleMeshLODBone readSingleMeshLodBone(BinaryReader reader)
             {
-                SingleMeshLODJoint newSingleMeshJoint = new SingleMeshLODJoint();
-                newSingleMeshJoint.transform = ReadMatrix(reader);
-                newSingleMeshJoint.oneWeightedVertCount = reader.ReadUInt32();
+                SingleMeshLODBone newSingleMeshBone = new SingleMeshLODBone();
+                newSingleMeshBone.transform = ReadMatrix(reader);
+                newSingleMeshBone.oneWeightedVertCount = reader.ReadUInt32();
                 var weightCount = reader.ReadUInt32();
-                newSingleMeshJoint.boneID = reader.ReadUInt32();
-                newSingleMeshJoint.minBox = ReadVector3(reader);
-                newSingleMeshJoint.maxBox = ReadVector3(reader);
+                newSingleMeshBone.boneID = reader.ReadUInt32();
+                newSingleMeshBone.minBox = ReadVector3(reader);
+                newSingleMeshBone.maxBox = ReadVector3(reader);
 
-                newSingleMeshJoint.weights = new List<float>();
+                newSingleMeshBone.weights = new List<float>();
 
                 for (var i = 0; i < weightCount; i++)
-                    newSingleMeshJoint.weights.Add(reader.ReadSingle());
+                    newSingleMeshBone.weights.Add(reader.ReadSingle());
 
-                return newSingleMeshJoint;
+                return newSingleMeshBone;
             }
 
             SingleMeshLOD readSingleMeshLOD(BinaryReader reader)
@@ -616,15 +616,15 @@ namespace MafiaUnity
                 // - BONE1's fully-weighted vertices (1.0f weight)
                 // - BONE1's weighted vertices
                 // and so on
-                var jointCount = reader.ReadByte();
+                var boneCount = reader.ReadByte();
                 newLOD.nonWeightedVertCount = reader.ReadUInt32();
                 newLOD.minBox = ReadVector3(reader);
                 newLOD.maxBox = ReadVector3(reader);
 
-                newLOD.joints = new List<SingleMeshLODJoint>();
+                newLOD.bones = new List<SingleMeshLODBone>();
 
-                for (var i = 0; i < jointCount; i++)
-                    newLOD.joints.Add(readSingleMeshLodJoint(reader));
+                for (var i = 0; i < boneCount; i++)
+                    newLOD.bones.Add(readSingleMeshLodBone(reader));
 
                 return newLOD;
             }
@@ -763,12 +763,12 @@ namespace MafiaUnity
                             }
                             break;
 
-                        case MeshType.Bone:
+                        case MeshType.Joint:
                             {
-                                Bone newBone = new Bone();
-                                newBone.transform = ReadMatrix(reader);
-                                newBone.boneID = reader.ReadUInt32();
-                                newMesh.bone = newBone;
+                                Joint newJoint = new Joint();
+                                newJoint.transform = ReadMatrix(reader);
+                                newJoint.boneID = reader.ReadUInt32();
+                                newMesh.joint = newJoint;
                             }
                             break;
 

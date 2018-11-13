@@ -7,7 +7,7 @@ namespace MafiaUnity
     public class Bone : MonoBehaviour {
 
         private const float drawRadius = .05f;
-        public MafiaFormats.Bone data;
+        public MafiaFormats.Joint data;
         public bool drawBones = false;
 
         private void OnDrawGizmos()
