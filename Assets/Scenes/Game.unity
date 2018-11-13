@@ -2616,10 +2616,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 775876705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a4e54a845a90845a0248942ee84aa8, type: 3}
+  m_Script: {fileID: 11500000, guid: d7edde5b84bc6cb46862b60a069f61cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHeight: 1
+  MaxHeight: 0.7
   SmallTerminalRatio: 0.33
   ToggleSpeed: 360
   ToggleHotkey: '`'
