@@ -447,8 +447,7 @@ namespace MafiaUnity
                     {
                         case BlockType.Uncompressed:
                         {
-                            for (uint j = 0; j < blockSize - 1; ++j) // just copy the data
-                                decompressed.Add(block[1 + j]);
+                            decompressed.AddRange(block.Skip(1));
                         }
                         break;
 

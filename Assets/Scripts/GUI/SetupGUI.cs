@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using MafiaUnity;
 using System.Globalization;
+using System.Threading.Tasks;
 
 public class SetupGUI : MonoBehaviour {
 
@@ -29,7 +30,9 @@ public class SetupGUI : MonoBehaviour {
         // Revert settings back to default.
         RenderSettings.ambientLight = new Color32(54, 58, 66, 1);
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
-        bgMusic.Stop();
+
+        if (bgMusic != null)
+            bgMusic.Stop();
 
         mainMenu.SetActive(false);
         buildBadge.SetActive(false);
@@ -70,8 +73,11 @@ public class SetupGUI : MonoBehaviour {
         modManager.SetActive(true);
     }
 
-    void Start() 
+    bool lateStart = false;
+
+    async Task LateStart() 
     {
+        await Task.Delay(5000);
         GameAPI.ResetGameAPI();
 
         bgMusic = GetComponent<AudioSource>();
@@ -115,8 +121,14 @@ public class SetupGUI : MonoBehaviour {
         pointsOfInterest.Shuffle();
     }
 
-    private void Update()
+    async private void FixedUpdate()
     {
+        if (!lateStart)
+        {
+            await LateStart();
+            lateStart = true;
+        }
+
         if (GameAPI.instance.GetModErrorStatus())
             modErrorWarning.SetActive(true);
 
@@ -143,7 +155,7 @@ public class SetupGUI : MonoBehaviour {
             }
         }
 
-        if (bgMusic.isPlaying)
+        if (bgMusic != null && bgMusic.isPlaying)
         {
             float volume = float.Parse(GameAPI.instance.cvarManager.Get("musicVolume", "0.35"), CultureInfo.InvariantCulture);
 
