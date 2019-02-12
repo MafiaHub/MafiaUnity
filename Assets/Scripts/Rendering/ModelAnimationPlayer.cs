@@ -6,11 +6,13 @@ using MafiaUnity;
 using System.IO;
 using System;
 using UnityEditor;
+using System.Text.RegularExpressions;
 
 namespace MafiaUnity
 {
     public class MafiaAnimation
     {
+        public List<Vector3> positionOffsets;
         public List<AnimationSequence> animationSequences;
 
         /// <summary>
@@ -61,6 +63,8 @@ namespace MafiaUnity
         private float frameTime;
         private float blendTime;
 
+        private Vector3 objectInitialPosition;      // starting GameObject position, applies when .tck is used
+
         public MafiaAnimation LoadAndSetAnimation(string animName, int startFrame = 0, int endFrame = 0)
         {
             mafiaAnimation = LoadAnimation(animName, startFrame, endFrame);
@@ -71,6 +75,28 @@ namespace MafiaUnity
         {
             var animation = new MafiaAnimation(startFrame, endFrame, blendDuration);
             animation.animationSequences = new List<AnimationSequence>();
+            animation.positionOffsets = new List<Vector3>();
+
+            Stream tckfs;
+
+            try
+            {
+                Regex rgx = new Regex("5ds");
+                string tckFileName = rgx.Replace(animName, "tck");
+                tckfs = GameAPI.instance.fileSystem.GetStreamFromPath(tckFileName);
+                // if .tck exists, load it
+                MafiaFormats.TckLoader tckFile = new MafiaFormats.TckLoader();
+                using (var reader = new BinaryReader(tckfs))
+                {
+                    tckFile.load(reader);
+                    foreach (var chunk in tckFile.transforms)
+                    {
+                        animation.positionOffsets.Prepend(chunk.position);
+                    }
+                }
+            }
+            catch
+            {}
 
             Stream fs;
 
@@ -111,6 +137,9 @@ namespace MafiaUnity
             mafiaAnimation = anim;
             mafiaAnimation.startFrame = startFrame;
             mafiaAnimation.endFrame = endFrame;
+
+            // save the positon of object at the beggining of animation
+            this.objectInitialPosition = gameObject.transform.parent.position;
         }
         
         public void OnAnimationFinish(Action finishAction)
