@@ -50,7 +50,7 @@ namespace MafiaUnity
                     output.AppendLine(cvarManager.Get(cmd, ""));
             }
 
-            string outputString = output.ToString();
+            string outputString = output.ToString().Trim();
             Debug.Log(outputString);
 
             return outputString;
@@ -67,9 +67,11 @@ namespace MafiaUnity
 
             if (File.Exists(filePath))
             {
-                var content = File.ReadAllText(filePath);
+                var content = File.ReadAllLines(filePath);
 
-                ExecuteString(content.Trim());
+                // We will handle each config line separately so that we get proper output in the console.
+                foreach (var line in content)
+                    ExecuteString(line);
 
                 Debug.Log("Config file " + fileName + " has been executed!");
             }

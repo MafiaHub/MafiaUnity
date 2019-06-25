@@ -67,7 +67,7 @@ namespace MafiaUnity
         }
 
         /// <summary>
-        /// Reads mod info, but doens't make it active nor loaded. Useful when you want to read about mod itself.
+        /// Reads mod info, but doesn't make it active nor loaded. Useful when you want to read about mod itself.
         /// </summary>
         /// <param name="modName"></param>
         /// <returns></returns>
