@@ -114,7 +114,7 @@ namespace MafiaUnity
 
             try
             {
-                fs = new FileStream(gamePath + dtaFileName, FileMode.Open);
+                fs = new FileStream(Path.Combine(gamePath, dtaFileName), FileMode.Open);
             }
             catch
             {
@@ -207,7 +207,7 @@ namespace MafiaUnity
                 if (File.Exists(Path.Combine(gamePath, path)))
                     return new FileStream(Path.Combine(gamePath, path), FileMode.Open);
 
-            //If we didn't found any file let's search in DTA File system
+            //If we didn't find any file, let's search in DTA File system
             if (DTAFileExists(path))
                 return DTAGetFileContent(path);
 
