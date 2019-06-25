@@ -77,26 +77,26 @@ namespace MafiaUnity
             animation.animationSequences = new List<AnimationSequence>();
             animation.positionOffsets = new List<Vector3>();
 
-            Stream tckfs;
+            //Stream tckfs;
 
-            try
-            {
-                Regex rgx = new Regex("5ds");
-                string tckFileName = animName.Replace("5ds", "tck");
-                tckfs = GameAPI.instance.fileSystem.GetStreamFromPath(tckFileName);
-                // if .tck exists, load it
-                MafiaFormats.TckLoader tckFile = new MafiaFormats.TckLoader();
-                using (var reader = new BinaryReader(tckfs))
-                {
-                    tckFile.load(reader);
-                    foreach (var chunk in tckFile.transforms)
-                    {
-                        animation.positionOffsets.Prepend(chunk.position);
-                    }
-                }
-            }
-            catch
-            {}
+            //try
+            //{
+            //    Regex rgx = new Regex("5ds");
+            //    string tckFileName = animName.Replace("5ds", "tck");
+            //    tckfs = GameAPI.instance.fileSystem.GetStreamFromPath(tckFileName);
+            //    // if .tck exists, load it
+            //    MafiaFormats.TckLoader tckFile = new MafiaFormats.TckLoader();
+            //    using (var reader = new BinaryReader(tckfs))
+            //    {
+            //        tckFile.load(reader);
+            //        foreach (var chunk in tckFile.transforms)
+            //        {
+            //            animation.positionOffsets.Prepend(chunk.position);
+            //        }
+            //    }
+            //}
+            //catch
+            //{}
 
             Stream fs;
 

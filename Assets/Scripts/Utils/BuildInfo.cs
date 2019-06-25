@@ -11,10 +11,11 @@ namespace MafiaUnity
 #if UNITY_EDITOR
             buildTime = System.DateTime.Now;
 #else
-            buildTime = System.DateTime.Parse(BuildtimeInfo.DateTimeString());
+            return System.DateTime.Now;
+            //buildTime = System.DateTime.Parse(BuildtimeInfo.DateTimeString());
 #endif
 
-            
+
             return buildTime;
         }
     }
