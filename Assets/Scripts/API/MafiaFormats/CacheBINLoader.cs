@@ -48,64 +48,6 @@ namespace MafiaFormats
             return newHeader;
         }
 
-        //void WriteHeader(BinaryWriter writer, Header header)
-        //{
-        //    writer.Write(header.type);
-        //    writer.Write(header.size);
-        //}
-
-        //void WriteChunk(BinaryWriter writer, Chunk chunk)
-        //{
-        //    writer.Write(chunk.version);
-        //}
-
-        //void WriteObject(BinaryWriter writer, Object obj)
-        //{
-        //    WriteHeader(writer, obj.header);
-
-        //    writer.Write((int)obj.objectName.Length);
-        //    writer.Write(obj.objectName);
-        //    writer.Write(obj.bounds);
-                
-        //}
-
-        //public void WriteCache(string path)
-        //{
-        //    path = GameAPI.instance.fileSystem.GetPath(path);
-
-        //    var fs = new FileStream(path, FileMode.Create);
-
-        //    using (var writer = new BinaryWriter(fs))
-        //    {
-        //        Header newHeader = new Header();
-        //        newHeader.size = (uint)objects.Sum(x => x.header.size);
-
-        //        WriteHeader(writer, newHeader);
-        //        WriteChunk(writer, chunk);
-
-        //        foreach (var obj in objects)
-        //        {
-        //            WriteHeader(writer, obj.header);
-
-        //            WriteStringUInt32(writer, obj.objectName);
-        //            writer.Write(obj.bounds);
-
-        //            foreach (var inst in obj.instances)
-        //            {
-        //                WriteHeader(writer, inst.header);
-        //                WriteStringUInt32(writer, inst.modelName.Replace(".4ds", ".i3d"));
-        //                WriteVector3(writer, inst.pos);
-        //                WriteQuat(writer, new Quaternion(-1 * inst.rot.w, inst.rot.x, inst.rot.y, inst.rot.z));
-        //                WriteVector3(writer, inst.scale);
-        //                writer.Write(inst.unk0);
-        //                WriteVector3(writer, inst.scale2);
-        //            }
-        //        }
-        //    }
-
-        //    fs.Close();
-        //}
-
         public void ReadCache(BinaryReader reader)
         {
             if (objects == null)
@@ -140,10 +82,6 @@ namespace MafiaFormats
 
                     newInstance.pos = ReadVector3(reader);
                     newInstance.rot = ReadQuat(reader);
-
-                    var rot = newInstance.rot;
-                    var tmpRot = new Quaternion(rot.y, rot.z, rot.w, -1 * rot.x);
-                    newInstance.rot = tmpRot;
 
                     newInstance.scale = ReadVector3(reader);
                     newInstance.unk0 = reader.ReadUInt32();

@@ -668,10 +668,6 @@ namespace MafiaFormats
                 newMesh.scale = ReadVector3(reader);
                 newMesh.rot = ReadQuat(reader);
 
-                var rot = newMesh.rot;
-                var tmpRot = new Quaternion(rot.y, rot.z, rot.w, -1 * rot.x);
-                newMesh.rot = tmpRot;
-
                 newMesh.cullingFlags = (MeshOccludingFlag)reader.ReadByte();
 
                 newMesh.meshName = ReadString(reader);

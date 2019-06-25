@@ -15,7 +15,7 @@ namespace MafiaFormats
 
     public partial struct Quaternion
     {
-        public static implicit operator UnityEngine.Quaternion(Quaternion rhs) => new UnityEngine.Quaternion(rhs.x, rhs.y, rhs.z, rhs.w);
+        public static implicit operator UnityEngine.Quaternion(Quaternion rhs) => new UnityEngine.Quaternion(rhs.x, rhs.y, rhs.z, -1 * rhs.w);
     }
 
     public partial class Matrix4x4

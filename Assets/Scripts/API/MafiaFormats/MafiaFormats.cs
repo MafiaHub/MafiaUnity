@@ -41,13 +41,13 @@ namespace MafiaFormats
 
     public partial struct Quaternion
     {
-        public Quaternion(float x, float y, float z, float w)
+        public Quaternion(float w, float x, float y, float z)
         {
+            this.w = w;
             this.x = x;
             this.y = y;
             this.z = z;
-            this.w = w;
         }
-        public float x, y, z, w;
+        public float w, x, y, z;
     }
 }

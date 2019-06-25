@@ -391,15 +391,8 @@ namespace MafiaUnity
 
             if (loaderSequence.hasRotation() && loaderSequence.rotations.Count > rotationKeyFrameId + 1)
             {
-                motion.currentRotation = new Quaternion(loaderSequence.rotations[rotationKeyFrameId].y,
-                        loaderSequence.rotations[rotationKeyFrameId].z,
-                        loaderSequence.rotations[rotationKeyFrameId].w,
-                        -1 * loaderSequence.rotations[rotationKeyFrameId].x);
-
-                motion.nextRotation = new Quaternion(loaderSequence.rotations[rotationKeyFrameId + 1].y,
-                    loaderSequence.rotations[rotationKeyFrameId + 1].z,
-                    loaderSequence.rotations[rotationKeyFrameId + 1].w,
-                    -1 * loaderSequence.rotations[rotationKeyFrameId + 1].x);
+                motion.currentRotation = loaderSequence.rotations[rotationKeyFrameId];
+                motion.nextRotation = loaderSequence.rotations[rotationKeyFrameId + 1];
             }
 
             if (loaderSequence.hasScale() && loaderSequence.scales.Count > scaleKeyFrameId + 1)

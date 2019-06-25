@@ -374,8 +374,7 @@ namespace MafiaFormats
 
                 case ObjectProperty.Rotation:
                 {
-                    var rot = ReadQuat(reader);
-                    newObject.rot = new Quaternion(rot.y, rot.z, rot.w, -1 * rot.x);
+                    newObject.rot = ReadQuat(reader);
                     newObject.isRotationPatched = true;
                 }
                 break;

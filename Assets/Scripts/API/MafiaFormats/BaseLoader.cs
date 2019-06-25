@@ -9,11 +9,11 @@ namespace MafiaFormats
     {
         public static Quaternion ReadQuat(BinaryReader reader)
         {
+            float w = reader.ReadSingle();
             float x = reader.ReadSingle();
             float y = reader.ReadSingle();
             float z = reader.ReadSingle();
-            float w = reader.ReadSingle();
-            return new Quaternion(x, y, z, w);
+            return new Quaternion(w, x, y, z);
         }
 
         public static void WriteQuat(BinaryWriter writer, Quaternion quat)
