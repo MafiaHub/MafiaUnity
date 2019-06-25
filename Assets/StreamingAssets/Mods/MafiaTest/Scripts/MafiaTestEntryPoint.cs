@@ -26,6 +26,7 @@ class MafiaTestGameMode : IGameMode
 	// on game mode switch -- being primary
 	void IGameMode.Start()
 	{
+        Debug.Log("Let's do stuff!");
         var go = ObjectFactory.CreatePlayer("models/Tommy.4ds");
         go.transform.position = new Vector3(40.39561f, 20.25f, -1.018f);
 /* 

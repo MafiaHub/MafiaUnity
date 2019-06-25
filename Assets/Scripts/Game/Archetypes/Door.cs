@@ -23,9 +23,9 @@ namespace MafiaUnity
 
 			try
 			{
-                openSound = MafiaFormats.WAVLoader.ToAudioClip(door.openSound.Replace(".wav", ""));
-                closeSound = MafiaFormats.WAVLoader.ToAudioClip(door.closeSound.Replace(".wav", ""));
-                lockedSound = MafiaFormats.WAVLoader.ToAudioClip(door.lockedSound.Replace(".wav", ""));	
+                openSound = WAVLoader.ToAudioClip(door.openSound.Replace(".wav", ""));
+                closeSound = WAVLoader.ToAudioClip(door.closeSound.Replace(".wav", ""));
+                lockedSound = WAVLoader.ToAudioClip(door.lockedSound.Replace(".wav", ""));	
 			}
 			catch {}
             

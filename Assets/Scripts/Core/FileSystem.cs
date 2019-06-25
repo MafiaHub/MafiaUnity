@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using MafiaUnity.MafiaFormats;
+using MafiaFormats;
 
 namespace MafiaUnity
 {

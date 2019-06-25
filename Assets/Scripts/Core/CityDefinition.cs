@@ -8,7 +8,7 @@ namespace MafiaUnity
 {
 	public class CityDefinition : MonoBehaviour
 	{
-		public MafiaUnity.MafiaFormats.CacheBINLoader data;
+		public MafiaFormats.CacheBINLoader data;
 	}
 
 #if UNITY_EDITOR
@@ -39,73 +39,73 @@ namespace MafiaUnity
                 GUILayout.Label("Objects are not in a sync, perform update!");
 			}
 
-			if (GUILayout.Button("Update object list"))
-			{
-				UpdateObjectList(def, data);
-			}
+			//if (GUILayout.Button("Update object list"))
+			//{
+			//	UpdateObjectList(def, data);
+			//}
 
 			GUILayout.BeginHorizontal();
 
 
-			if (GUILayout.Button("Save cache.bin"))
-			{
-                UpdateObjectList(def, data);
-				data.WriteCache(exportPath);
-			}
+			//if (GUILayout.Button("Save cache.bin"))
+			//{
+   //             UpdateObjectList(def, data);
+			//	data.WriteCache(exportPath);
+			//}
 
             GUILayout.EndHorizontal();
 		}
 
-		void UpdateObjectList(CityDefinition def, MafiaFormats.CacheBINLoader data)
-		{
-			def.data.objects.Clear();
+		//void UpdateObjectList(CityDefinition def, MafiaFormats.CacheBINLoader data)
+		//{
+		//	def.data.objects.Clear();
 
-            foreach (Transform child in def.transform)
-            {
-                var newObject = new MafiaFormats.CacheBINLoader.Object();
-                newObject.objectName = child.name;
-                newObject.bounds = new byte[0x4C];
-                newObject.header = new MafiaFormats.CacheBINLoader.Header();
+  //          foreach (Transform child in def.transform)
+  //          {
+  //              var newObject = new MafiaFormats.CacheBINLoader.Object();
+  //              newObject.objectName = child.name;
+  //              newObject.bounds = new byte[0x4C];
+  //              newObject.header = new MafiaFormats.CacheBINLoader.Header();
 
-                var instances = new List<MafiaFormats.CacheBINLoader.Instance>();
+  //              var instances = new List<MafiaFormats.CacheBINLoader.Instance>();
 
-                foreach (Transform inst in child)
-                {
+  //              foreach (Transform inst in child)
+  //              {
 					
-                    var newInstance = new MafiaFormats.CacheBINLoader.Instance();
-                    newInstance.header = new MafiaFormats.CacheBINLoader.Header();
+  //                  var newInstance = new MafiaFormats.CacheBINLoader.Instance();
+  //                  newInstance.header = new MafiaFormats.CacheBINLoader.Header();
                     
-					var modelDef = inst.GetComponentInChildren<ModelDefinition>();
+		//			var modelDef = inst.GetComponentInChildren<ModelDefinition>();
 
-					if (modelDef != null)
-						newInstance.modelName = modelDef.modelName;
+		//			if (modelDef != null)
+		//				newInstance.modelName = modelDef.modelName;
 
-                    newInstance.pos = inst.position;
-                    newInstance.rot = inst.rotation;
+  //                  newInstance.pos = inst.position;
+  //                  newInstance.rot = inst.rotation;
 
-                    newInstance.scale = inst.localScale;
-                    newInstance.scale2 = inst.localScale;
-                    newInstance.unk0 = 0;
+  //                  newInstance.scale = inst.localScale;
+  //                  newInstance.scale2 = inst.localScale;
+  //                  newInstance.unk0 = 0;
 
-					newInstance.header.size = (uint)(6 /* header */ 
-													+ 24 /* scale+scale2 */ 
-													+ 16 /* rot */
-													+ 12 /* pos */
-													+ 4 /* unk0 */
-													+ 4 /* modelName.Length */
-													+ newInstance.modelName.Length);
+		//			newInstance.header.size = (uint)(6 /* header */ 
+		//											+ 24 /* scale+scale2 */ 
+		//											+ 16 /* rot */
+		//											+ 12 /* pos */
+		//											+ 4 /* unk0 */
+		//											+ 4 /* modelName.Length */
+		//											+ newInstance.modelName.Length);
 
-                    instances.Add(newInstance);
-                }
+  //                  instances.Add(newInstance);
+  //              }
 
-				newObject.header.size = (uint)(sizeof(ushort) + sizeof(uint)*2 + newObject.objectName.Length + 0x4C 
-					+ instances.Sum(x => x.header.size));
+		//		newObject.header.size = (uint)(sizeof(ushort) + sizeof(uint)*2 + newObject.objectName.Length + 0x4C 
+		//			+ instances.Sum(x => x.header.size));
 
-                newObject.instances = instances;
+  //              newObject.instances = instances;
 
-				data.objects.Add(newObject);
-            }
-		}
+		//		data.objects.Add(newObject);
+  //          }
+		//}
 	}
 #endif
 }

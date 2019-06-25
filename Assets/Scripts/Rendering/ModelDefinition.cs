@@ -7,7 +7,7 @@ namespace MafiaUnity
     public class ModelDefinition : MonoBehaviour
     {
         public string modelName;
-        public MafiaUnity.MafiaFormats.Model model;
-        public MafiaUnity.MafiaFormats.Mesh mesh;
+        public MafiaFormats.Model model;
+        public MafiaFormats.Mesh mesh;
     }
 }

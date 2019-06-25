@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 
-namespace MafiaUnity
+namespace MafiaFormats
 {
     public class LoadingScreen
     {
@@ -12,7 +11,7 @@ namespace MafiaUnity
         public uint textId;
     }
 
-    public class LoadDEFLoader : BaseLoader
+    public partial class LoadDEFLoader : BaseLoader
     {
         public List<LoadingScreen> load(BinaryReader reader)
         {

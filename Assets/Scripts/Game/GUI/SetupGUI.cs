@@ -179,7 +179,7 @@ public class SetupGUI : MonoBehaviour {
 
             SetupPOIs();
 
-            bgMusic.clip = MafiaUnity.MafiaFormats.OGGLoader.ToAudioClip("music/Lake of Fire");
+            bgMusic.clip = OGGLoader.ToAudioClip("music/Lake of Fire");
             bgMusic.Play();
         }
     }

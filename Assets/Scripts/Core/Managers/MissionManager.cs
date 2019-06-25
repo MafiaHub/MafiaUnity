@@ -76,14 +76,15 @@ namespace MafiaUnity
         {
             if (mission != null)
             {
+                Debug.LogFormat("Releasing resources from an older mission: {0}", mission.missionName);
                 GameObject.DestroyImmediate(mission.rootObject, true);
 
                 ObjectDefinition.ResetLightCache();
 
-                mission = null;
-
                 if (onMissionDestroyed != null)
                     onMissionDestroyed.Invoke(mission.missionName);
+
+                mission = null;
             }
 
             Resources.UnloadUnusedAssets();

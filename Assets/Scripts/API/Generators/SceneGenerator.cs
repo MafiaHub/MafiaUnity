@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,25 +50,27 @@ namespace MafiaUnity
 
                 foreach (var obj in sceneLoader.objects)
                 {
-                    GameObject newObject;
+                    AddNewObject(objects, mission, obj);
+                }
 
-                    if (obj.Value.modelName == null || (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model && obj.Value.specialType == 0))
-                        newObject = new GameObject();
-                    else
-                        newObject = GameAPI.instance.modelGenerator.LoadObject(Path.Combine("models", obj.Value.modelName), null);
-                    
-                    if (newObject == null)
-                        continue;
-                        
-                    newObject.name = obj.Value.name;
+                // Handle special cases of objects loaded by external source
+                foreach (var obj in sceneLoader.externalObjects)
+                {
+                    var go = BaseGenerator.FetchCacheReference(mission, obj.Value.name)?.gameObject;
 
-                    StoreReference(mission, newObject.name, newObject);
+                    if (go != null)
+                    {
+                        var specialObjDef = go.GetComponent<ObjectDefinition>();
 
-                    newObject.transform.localPosition = obj.Value.pos;
-                    newObject.transform.localRotation = obj.Value.rot;
-                    newObject.transform.localScale = obj.Value.scale;
-                    
-                    objects.Add(new KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>(newObject, obj.Value));
+                        if (specialObjDef == null)
+                            specialObjDef = go.AddComponent<ObjectDefinition>();
+
+                        specialObjDef.data = obj.Value;
+
+                        specialObjDef.Init();
+                    }
+                    // Seems like object acts on its own, add it anyway
+                    else AddNewObject(objects, mission, obj);
                 }
 
                 var primary = FetchReference(mission, "Primary sector");
@@ -144,6 +147,29 @@ namespace MafiaUnity
             //StoreChachedObject(path, rootObject);
 
             return rootObject;
+        }
+
+        private void AddNewObject(List<KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>> objects, Mission mission, KeyValuePair<string, MafiaFormats.Scene2BINLoader.Object> obj)
+        {
+            GameObject newObject;
+
+            if (obj.Value.modelName == null || (obj.Value.type != MafiaFormats.Scene2BINLoader.ObjectType.Model && obj.Value.specialType == 0))
+                newObject = new GameObject();
+            else
+                newObject = GameAPI.instance.modelGenerator.LoadObject(Path.Combine("models", obj.Value.modelName), null);
+
+            if (newObject == null)
+                return;
+
+            newObject.name = obj.Value.name;
+
+            StoreReference(mission, newObject.name, newObject);
+
+            newObject.transform.localPosition = obj.Value.pos;
+            newObject.transform.localRotation = obj.Value.rot;
+            newObject.transform.localScale = obj.Value.scale;
+
+            objects.Add(new KeyValuePair<GameObject, MafiaFormats.Scene2BINLoader.Object>(newObject, obj.Value));
         }
 
         GameObject FindParent(Mission mission, string name, GameObject defaultObject=null)
