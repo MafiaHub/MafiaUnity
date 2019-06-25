@@ -17,11 +17,13 @@ public class ModelViewer : MonoBehaviour
     
     private void Start()
     {
-        if (PlayerPrefs.HasKey("gamePath"))
+        var cvars = GameAPI.instance.cvarManager;
+        if (cvars.Contains("gamePath"))
         {
-            Debug.Log("Game path was detected: " + PlayerPrefs.GetString("gamePath"));
+            var path = cvars.Get("gamePath", "C:/Games/Mafia");
+            Debug.Log("Game path was detected: " + path);
 
-            gamePath = PlayerPrefs.GetString("gamePath");
+            gamePath = path;
             GameAPI.instance.SetGamePath(gamePath);
         }
 
@@ -76,7 +78,7 @@ public class ModelViewer : MonoBehaviour
             return false;
         }
 
-        PlayerPrefs.SetString("gamePath", gamePath);
+        GameAPI.instance.cvarManager.ForceSet("gamePath", gamePath, CvarManager.CvarMode.Archived);
         return true;
     }
 
