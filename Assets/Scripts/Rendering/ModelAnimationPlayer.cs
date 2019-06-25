@@ -82,7 +82,7 @@ namespace MafiaUnity
             try
             {
                 Regex rgx = new Regex("5ds");
-                string tckFileName = rgx.Replace(animName, "tck");
+                string tckFileName = animName.Replace("5ds", "tck");
                 tckfs = GameAPI.instance.fileSystem.GetStreamFromPath(tckFileName);
                 // if .tck exists, load it
                 MafiaFormats.TckLoader tckFile = new MafiaFormats.TckLoader();
