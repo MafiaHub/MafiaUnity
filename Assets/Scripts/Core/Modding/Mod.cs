@@ -23,7 +23,7 @@ namespace MafiaUnity
         public Mod(string name)
         {
             modName = name;
-            modPath = Path.Combine("Mods", name);
+            modPath = Path.Combine(GameAPI.instance.modManager.modsPath, name);
         }
         
         public void Init()

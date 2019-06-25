@@ -211,6 +211,7 @@ namespace MafiaUnity
             if (DTAFileExists(path))
                 return DTAGetFileContent(path);
 
+            Debug.LogWarningFormat("Asset {0} could not be found!", path);
             throw new FileNotFoundException(path);
         }
 

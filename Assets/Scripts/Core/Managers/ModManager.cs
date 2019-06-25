@@ -13,7 +13,7 @@ namespace MafiaUnity
     /// </summary>
     public class ModManager
     {
-        private string modsPath = Path.Combine(Application.streamingAssetsPath, "Mods/");
+        public string modsPath;
 
         Dictionary<string, Mod> mods = new Dictionary<string, Mod>();
         public Dictionary<string, Mod> loadableMods = new Dictionary<string, Mod>();
@@ -135,7 +135,7 @@ namespace MafiaUnity
 
             for (int i = 0; i < mods.Length; i++)
             {
-                mods[i] = mods[i].Substring(modsPath.Length);
+                mods[i] = mods[i].Substring(modsPath.Length+1);
             }
 
             return mods;

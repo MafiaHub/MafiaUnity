@@ -46,8 +46,15 @@ public class HUDManager
             return;
 
         var atlas = new UIAtlas();
+        var stream = GameAPI.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", name + ".tga"));
 
-        atlas.atlas = TGALoader.LoadTGA(GameAPI.instance.fileSystem.GetStreamFromPath(Path.Combine("maps", name+".tga")), blackIsTransparency);
+        if (stream == null)
+        {
+            Debug.LogWarning(string.Format("Atlas {0} was not found!", name));
+            return;
+        }
+
+        atlas.atlas = TGALoader.LoadTGA(stream, blackIsTransparency);
 
         atlases.Add(name, atlas);
     }
@@ -100,6 +107,7 @@ public class HUDManager
     public Rect ProcessRelativePosition(HUDAnchorMode mode, Vector2 offset, Texture2D sprite)
     {
         var region = new Rect();
+        if (sprite == null) return region;
 
         if (mode.HasFlag(HUDAnchorMode.Right))
         {

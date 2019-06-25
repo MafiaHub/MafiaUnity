@@ -25,7 +25,7 @@ namespace MafiaUnity
                 if (instanceObject == null)
                 {
                     instanceObject = new GameAPI();
-                    instanceObject.cvarManager.Init();
+                    instanceObject.InitInternals();
                 }
                 
                 return instanceObject;
@@ -35,7 +35,13 @@ namespace MafiaUnity
         public static void ResetGameAPI()
         {
             instanceObject = new GameAPI();
-            instanceObject.cvarManager.Init();
+            instanceObject.InitInternals();
+        }
+
+        private void InitInternals()
+        {
+            cvarManager.Init();
+            modManager.modsPath = Path.Combine(Application.streamingAssetsPath, "Mods");
         }
         #endregion
         
