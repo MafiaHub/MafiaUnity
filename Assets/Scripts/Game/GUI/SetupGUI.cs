@@ -77,18 +77,19 @@ public class SetupGUI : MonoBehaviour {
 
     async Task LateStart() 
     {
-        await Task.Delay(5000);
+        await Task.Delay(1000);
         GameAPI.ResetGameAPI();
 
         bgMusic = GetComponent<AudioSource>();
 
         mainCamera = GameObject.Find("Main Camera")?.transform;
-
-        if (PlayerPrefs.HasKey("gamePath"))
+        
+        if (GameAPI.instance.cvarManager.Contains("gamePath"))
         {
-            Debug.Log("Game path was detected: " + PlayerPrefs.GetString("gamePath"));
+            var storedPath = GameAPI.instance.cvarManager.Get("gamePath", "C:/Games/Mafia");
+            Debug.Log("Game path was detected: " + storedPath);
 
-            if (!GameAPI.instance.SetGamePath(PlayerPrefs.GetString("gamePath")))
+            if (!GameAPI.instance.SetGamePath(storedPath))
                 PathSelectionMenu();
             else
                 SetupDefaultBackground();
@@ -103,7 +104,7 @@ public class SetupGUI : MonoBehaviour {
         }, 0, 0, "Resets the game path in PlayerPrefs");
 
         gameVersion.text = GameAPI.GAME_VERSION;
-        buildTime.text = string.Format("Build Time: {0}", BuildInfo.BuildTime());
+        buildTime.text = string.Format("Build Time: {0}", MafiaUnity.Build.Info.Instance.BuildTime);
     }
 
     void SetupPOIs()

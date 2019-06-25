@@ -38,11 +38,7 @@ sysinfo.txt
 /Assets/External Assets/*
 /Assets/ProBuilder Data/*
 !/Assets/External Assets/.gitkeep
-/[Mm]ods/*
-/[Mm]ods/*/Temp
-!/[Mm]ods/MafiaTest
-!/[Mm]ods/ExampleMod
-!/[Mm]ods/AnotherExampleMod
+!/Assets/StreamingAssets/.gitignore
 Assets/ProBuilder Data/ProBuilderPreferences.asset
 Assets/ProBuilder Data/ProBuilderPreferences.asset
 Assets/ProBuilder Data.meta

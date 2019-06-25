@@ -23,7 +23,10 @@ namespace MafiaUnity
             get
             {
                 if (instanceObject == null)
+                {
                     instanceObject = new GameAPI();
+                    instanceObject.cvarManager.Init();
+                }
                 
                 return instanceObject;
             }
@@ -32,9 +35,10 @@ namespace MafiaUnity
         public static void ResetGameAPI()
         {
             instanceObject = new GameAPI();
+            instanceObject.cvarManager.Init();
         }
         #endregion
-
+        
         /// <summary>
         /// This constant is a version string we bump up each time we ship a new build.
         /// Minor part gets incremented each shipped update, while Major part has to be incremented only
@@ -128,9 +132,6 @@ namespace MafiaUnity
 
             if (fileSystem.SetGamePath(path))
             {
-                cvarManager.configPath = fileSystem.gamePath;
-                cvarManager.Init();
-
                 isInitialized = true;
 
                 return true;

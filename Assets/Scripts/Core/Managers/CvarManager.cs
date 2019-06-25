@@ -41,6 +41,8 @@ namespace MafiaUnity
 
             if (values == null)
                 values = new Dictionary<string, Cvar>();
+
+            configPath = Application.persistentDataPath;
             
             LoadConfig("openmf.cfg");
             InitDefaultValues();
@@ -82,7 +84,7 @@ namespace MafiaUnity
 
             try
             {
-                File.WriteAllText(configPath + path, data.ToString());
+                File.WriteAllText(Path.Combine(configPath, path), data.ToString());
             }
             catch (Exception ex)
             {
@@ -120,6 +122,19 @@ namespace MafiaUnity
                 return values[key].tempValue;
             else
                 return values[key].value;
+        }
+
+        /// <summary>
+        /// Checks for whether the cvar is defined.
+        /// </summary>
+        /// <param name="key">Cvar name</param>
+        /// <returns></returns>
+        public bool Contains(string key)
+        {
+            if (values == null) return false;
+            if (!values.ContainsKey(key))
+                return false;
+            return true;
         }
 
         /// <summary>

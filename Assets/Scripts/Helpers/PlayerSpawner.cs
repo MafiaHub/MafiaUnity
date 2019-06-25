@@ -22,11 +22,7 @@ namespace MafiaUnity
             playerController.playerCamera = GameObject.Find("Main Camera");
             playerController.playerPawn = tommy;
 
-            var rigidBody = gameObject.AddComponent<Rigidbody>();
-            rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            var collider = gameObject.AddComponent<CapsuleCollider>();
-            collider.center = new Vector3(0, 1f, 0);
-            collider.height = 2f;
+            ObjectFactory.SetUpPawnPhysics(tommy);
 
             GameObject.DestroyImmediate(this);
         }

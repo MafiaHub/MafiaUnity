@@ -38,8 +38,8 @@ public class StartupGUI : MonoBehaviour {
         var finalTextComponent = finalPath.GetComponent<InputField>();
         if(GameAPI.instance.SetGamePath(finalTextComponent.text))
         {
-            PlayerPrefs.SetString("gamePath", finalTextComponent.text);
-            PlayerPrefs.Save();
+            GameAPI.instance.cvarManager.ForceSet("gamePath", finalTextComponent.text, CvarManager.CvarMode.Archived);
+            GameAPI.instance.cvarManager.SaveMainConfig();
 
             canvas.mainMenu.SetActive(true);
             gameObject.SetActive(false);

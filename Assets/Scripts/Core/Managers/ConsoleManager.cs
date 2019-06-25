@@ -63,11 +63,11 @@ namespace MafiaUnity
         /// <returns></returns>
         public string ExecuteConfig(string fileName)
         {
-            var fileSystem = GameAPI.instance.fileSystem;
+            var filePath = Path.Combine(GameAPI.instance.cvarManager.configPath, fileName);
 
-            if (fileSystem.Exists(fileName))
+            if (File.Exists(filePath))
             {
-                var content = File.ReadAllText(fileSystem.GetPath(fileName, true));
+                var content = File.ReadAllText(filePath);
 
                 ExecuteString(content.Trim());
 

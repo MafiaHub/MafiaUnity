@@ -13,7 +13,7 @@ namespace MafiaUnity
     /// </summary>
     public class ModManager
     {
-        private const string MODS_PATH = "Mods/";
+        private string modsPath = Path.Combine(Application.streamingAssetsPath, "Mods/");
 
         Dictionary<string, Mod> mods = new Dictionary<string, Mod>();
         public Dictionary<string, Mod> loadableMods = new Dictionary<string, Mod>();
@@ -76,10 +76,10 @@ namespace MafiaUnity
             if (mods.ContainsKey(modName))
                 return mods[modName];
 
-            if (!Directory.Exists(Path.Combine(MODS_PATH, modName)))
+            if (!Directory.Exists(Path.Combine(modsPath, modName)))
                 return null;
 
-            var packagePath = Path.Combine(MODS_PATH, modName, "mod.json");
+            var packagePath = Path.Combine(modsPath, modName, "mod.json");
 
             if (!File.Exists(packagePath))
                 return null;
@@ -128,14 +128,14 @@ namespace MafiaUnity
 
         public string[] GetAllModNames()
         {
-            if (!Directory.Exists(MODS_PATH))
+            if (!Directory.Exists(modsPath))
                 return new string[] { };
 
-            var mods = Directory.GetDirectories(MODS_PATH);
+            var mods = Directory.GetDirectories(modsPath);
 
             for (int i = 0; i < mods.Length; i++)
             {
-                mods[i] = mods[i].Substring(MODS_PATH.Length);
+                mods[i] = mods[i].Substring(modsPath.Length);
             }
 
             return mods;
@@ -145,13 +145,13 @@ namespace MafiaUnity
         {
             var loadableMods = new List<KeyValuePair<string, string>>();
 
-            if (!Directory.Exists("Mods"))
-                Directory.CreateDirectory("Mods");
+            if (!Directory.Exists(modsPath))
+                Directory.CreateDirectory(modsPath);
 
-            if (!File.Exists(Path.Combine(MODS_PATH, "loadorder.txt")))
+            if (!File.Exists(Path.Combine(modsPath, "loadorder.txt")))
                 return loadableMods.ToArray();
 
-            var contents = File.ReadAllLines(Path.Combine(MODS_PATH, "loadorder.txt"));
+            var contents = File.ReadAllLines(Path.Combine(modsPath, "loadorder.txt"));
 
             foreach (var line in contents)
             {
@@ -174,7 +174,7 @@ namespace MafiaUnity
 
             try
             {
-                File.WriteAllText(Path.Combine(MODS_PATH, "loadorder.txt"), data.ToString());
+                File.WriteAllText(Path.Combine(modsPath, "loadorder.txt"), data.ToString());
             }
             catch (Exception ex)
             {

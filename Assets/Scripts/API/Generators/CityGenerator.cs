@@ -228,7 +228,7 @@ namespace MafiaUnity
                     }
                 }
 
-                StoreChachedObject(path, rootObject);
+                StoreCachedObject(path, rootObject);
 
                 return rootObject;
             }

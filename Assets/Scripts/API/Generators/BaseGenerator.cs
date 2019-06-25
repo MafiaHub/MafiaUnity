@@ -24,7 +24,7 @@ namespace MafiaUnity
                 return null;
         }
 
-        protected GameObject StoreChachedObject(string path, GameObject obj)
+        protected GameObject StoreCachedObject(string path, GameObject obj)
         {
             if (models.ContainsKey(path))
                 return obj;
