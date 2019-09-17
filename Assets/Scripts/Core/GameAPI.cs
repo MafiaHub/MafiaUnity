@@ -27,7 +27,7 @@ namespace MafiaUnity
                     instanceObject = new GameAPI();
                     instanceObject.InitInternals();
                 }
-                
+
                 return instanceObject;
             }
         }
@@ -44,14 +44,14 @@ namespace MafiaUnity
             modManager.modsPath = Path.Combine(Application.streamingAssetsPath, "Mods");
         }
         #endregion
-        
+
         /// <summary>
         /// This constant is a version string we bump up each time we ship a new build.
         /// Minor part gets incremented each shipped update, while Major part has to be incremented only
         /// when framework's API radically changes.
         /// </summary>
 
-		
+
 #if MAFIAUNITY_RELEASE
         public const string GAME_VERSION = "v1.0.0";
 #else
@@ -125,7 +125,7 @@ namespace MafiaUnity
         {
             modHadErrors = true;
         }
-        
+
         /// <summary>
         /// Wrapper method which sets the game path as well as initializes the CvarManager object.
         /// </summary>

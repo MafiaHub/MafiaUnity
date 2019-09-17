@@ -78,6 +78,13 @@ namespace MafiaUnity
                             var s = photoFrame.transform.localScale;
                             photoFrame.transform.localScale = new Vector3(2.304092f, s.y, s.z);
                         }
+
+                        var light9 = GameObject.Find("light9");
+
+                        if (light9 != null)
+                        {
+                            light9.GetComponent<Light>().shadowNearPlane = 0.015f;
+                        }
     /* 
                         var menugl = GameObject.Find("menugl/Rectangle04");
 

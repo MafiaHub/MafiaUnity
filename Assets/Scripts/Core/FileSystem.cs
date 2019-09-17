@@ -230,7 +230,7 @@ namespace MafiaUnity
                 ClearOptionalPaths();
 
                 //Mount dta files after correct path is set
-                DTAMountFiles();
+                //DTAMountFiles();
 
                 return true;
             }

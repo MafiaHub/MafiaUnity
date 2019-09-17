@@ -20,7 +20,7 @@ namespace MafiaUnity
     public class MissionManager
     {
         [SerializeField] public Mission mission { get; private set; }
-        
+
         public delegate void OnMissionLoading(string missionName);
         public OnMissionLoading onMissionLoading;
 
