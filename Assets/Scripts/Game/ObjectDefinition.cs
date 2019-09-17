@@ -119,7 +119,9 @@ namespace MafiaUnity
                     //var idlePawn = gameObject.AddComponent<FunnySpinPawnController>();
                     idlePawn.pawn = gameObject;
 
+                    // rework this
                     ObjectFactory.SetUpPawnPhysics(gameObject);
+                    ObjectFactory.SetUpHuman(gameObject);
                 }
                 break;
 

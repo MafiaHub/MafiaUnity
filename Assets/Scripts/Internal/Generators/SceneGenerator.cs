@@ -77,7 +77,7 @@ namespace MafiaUnity
 
                 if (primary == null)
                     primary = new GameObject("Primary Sector");
-                    
+
                 var objDef = primary.AddComponent<ObjectDefinition>();
                 var dummySectorData = new MafiaFormats.Scene2BINLoader.Object();
                 dummySectorData.type = MafiaFormats.Scene2BINLoader.ObjectType.Sector;
@@ -116,7 +116,7 @@ namespace MafiaUnity
 
                             if (obj.Value.isScalePatched)
                                 redefObject.transform.localScale = obj.Value.scale;
-                            
+
                             redefObject.SetActive(!obj.Value.isHidden);
 
                             GameObject.DestroyImmediate(newObject, true);
@@ -140,7 +140,7 @@ namespace MafiaUnity
 
             // NOTE(zaklaus): Hardcode 'Primary sector' scale to (1,1,1)
             var primarySector = GameObject.Find("Primary sector");
-            
+
             if (primarySector != null)
                 primarySector.transform.localScale = new Vector3(1,1,1);
 

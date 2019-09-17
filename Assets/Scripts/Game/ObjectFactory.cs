@@ -15,6 +15,12 @@ namespace MafiaUnity
             collider.height = 2f;
         }
 
+        public static void SetUpHuman(GameObject go)
+        {
+            go.AddComponent<Human>();
+            go.AddComponent<Health>();
+        }
+
         public static GameObject CreatePlayer(string modelName)
         {
             var go = new GameObject("Main Player");
@@ -27,6 +33,7 @@ namespace MafiaUnity
             playerController.playerPawn = tommy;
 
             SetUpPawnPhysics(go);
+            SetUpHuman(go);
 
             return go;
         }
@@ -42,6 +49,7 @@ namespace MafiaUnity
             idlePawnController.pawn = pawn;
 
             SetUpPawnPhysics(go);
+            SetUpHuman(go);
 
             return go;
         }
