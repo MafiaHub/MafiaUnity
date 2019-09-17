@@ -394,6 +394,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 146451608}
+  - component: {fileID: 146451611}
   - component: {fileID: 146451607}
   - component: {fileID: 146451606}
   - component: {fileID: 146451605}
@@ -421,7 +422,7 @@ Behaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146451604}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &146451607
 Camera:
   m_ObjectHideFlags: 0
@@ -554,6 +555,20 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
+--- !u!114 &146451611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146451604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02dd368a5522b9345a513ab8374c0bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameFX: {fileID: 11400000, guid: d1cfcc35882c298458a12cf44707a518, type: 2}
+  backdropFX: {fileID: 11400000, guid: b4a20b78667322b48b9bb0a11baf2dda, type: 2}
 --- !u!1 &148980080
 GameObject:
   m_ObjectHideFlags: 0

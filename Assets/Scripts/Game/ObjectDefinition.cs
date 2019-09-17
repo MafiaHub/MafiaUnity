@@ -25,13 +25,13 @@ namespace MafiaUnity
             {
                 case MafiaFormats.Scene2BINLoader.ObjectType.Model:
                 {
-                    
+
                 }
                 break;
 
                 case MafiaFormats.Scene2BINLoader.ObjectType.Sector:
                 {
-                    
+
                 }
                 break;
 
@@ -88,7 +88,7 @@ namespace MafiaUnity
                     {
                         light.type = LightType.Directional;
                         //Debug.Log(gameObject.name + ": " + (int)data.lightFlags);
-                        
+
                         // TODO
                         if ((int)data.lightFlags != 107)
                         {
@@ -122,7 +122,7 @@ namespace MafiaUnity
                     ObjectFactory.SetUpPawnPhysics(gameObject);
                 }
                 break;
-                
+
                 case MafiaFormats.Scene2BINLoader.SpecialObjectType.Door:
                 {
                     var meshFilter = GetComponent<MeshFilter>();
@@ -159,29 +159,18 @@ namespace MafiaUnity
                             fogLights.Add(this);
                         }
                         break;
-                        
+
                         case MafiaFormats.Scene2BINLoader.LightType.Ambient:
                         {
                             ambientLights.Add(this);
                         }
                         break;
-                        
+
                     }
                 }
                 break;
             }
         }
-
-        /* public void FixedUpdate()
-        {
-            if (mainPlayer == null)
-                mainPlayer = GameObject.Find("Main Player");
-
-            switch (data.type)
-            {
-
-            }
-        } */
 
         Bounds GetMaxBounds()
         {

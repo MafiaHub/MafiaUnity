@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.PostProcessing;
 
 namespace MafiaUnity
 {
@@ -207,9 +208,8 @@ namespace MafiaUnity
 
         private void Start()
         {
-            /* mainCamera = GameObject.Find("Main Camera").transform;
-            skyboxCamera = GameObject.Instantiate(mainCamera);
-            skyboxCamera.name = "Backdrop Camera";
+            mainCamera = GameObject.Find("Main Camera").transform;
+            skyboxCamera = new GameObject("Backdrop Camera").transform;
 
             skyboxCamera.parent = mainCamera;
 
@@ -221,7 +221,15 @@ namespace MafiaUnity
             cam.farClipPlane = 5000f;
             cam.cullingMask = (1 << LayerMask.NameToLayer("Backdrop"));
             cam.depth = 1 + mainCamera.GetComponent<Camera>().depth;
-            cam.clearFlags = CameraClearFlags.Nothing; */
+            cam.clearFlags = CameraClearFlags.Nothing;
+
+            /*var postFXSetup = mainCamera.GetComponent<PostFXSetup>();
+
+            if (postFXSetup != null)
+            {
+                skyboxCamera.gameObject.AddComponent<PostProcessVolume>().profile = postFXSetup.backdropFX;
+                skyboxCamera.gameObject.AddComponent<PostProcessLayer>();
+            }*/
 
             gameObject.layer = LayerMask.NameToLayer("Backdrop");
         }

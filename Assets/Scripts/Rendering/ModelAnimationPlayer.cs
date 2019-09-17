@@ -54,7 +54,7 @@ namespace MafiaUnity
         public bool isPlaying = false;
         public AnimationPlaybackMode playbackMode;
         public float playbackCompletion;
-        
+
         private Action onAnimationFinished = null;
         [SerializeField] public MafiaAnimation mafiaAnimation;
 
@@ -141,7 +141,7 @@ namespace MafiaUnity
             // save the positon of object at the beggining of animation
             this.objectInitialPosition = gameObject.transform.parent.position;
         }
-        
+
         public void OnAnimationFinish(Action finishAction)
         {
             if (finishAction != null)
@@ -167,7 +167,7 @@ namespace MafiaUnity
             mafiaAnimation.Reset();
         }
 
-        public void BlendAnimation(MafiaAnimation anim, int startFrame = 0, int endFrame = 0, float blendDuration = 0.25f)
+        public void BlendAnimation(MafiaAnimation anim, int startFrame = 0, int endFrame = 0, float blendDuration = 0.15f)
         {
             if (anim == null)
                 return;
@@ -206,7 +206,7 @@ namespace MafiaUnity
         {
             if (GameAPI.instance.isPaused)
                 return;
-                
+
             if (!isPlaying)
                 return;
 
@@ -287,7 +287,7 @@ namespace MafiaUnity
                 if (frameTime > frameStep)
                     animationSeq.NextFrame();
             }
-            
+
             if(frameTime > frameStep)
                 frameTime = 0f;
 
@@ -295,7 +295,7 @@ namespace MafiaUnity
 
             var currentFrameId = mafiaAnimation.animationSequences.Max(x => Mathf.Max(x.positionKeyFrameId, x.rotationKeyFrameId, x.scaleKeyFrameId));
             var lastFrameId = mafiaAnimation.animationSequences.Max(x => Mathf.Max(x.loaderSequence.positionFrames.Count, x.loaderSequence.rotationFrames.Count, x.loaderSequence.scaleFrames.Count));
-            
+
             playbackCompletion = currentFrameId / (float)lastFrameId;
         }
 

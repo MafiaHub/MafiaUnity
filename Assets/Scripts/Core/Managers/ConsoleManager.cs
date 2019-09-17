@@ -77,7 +77,7 @@ namespace MafiaUnity
             }
             else
             {
-                Debug.LogWarning("Config file was not found! " + fileName);
+                Debug.Log("Config file was not found! " + fileName);
             }
 
             return "ok";

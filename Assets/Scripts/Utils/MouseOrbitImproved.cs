@@ -18,7 +18,7 @@ public class MouseOrbitImproved : MonoBehaviour
 
     public KeyCode rotateModifier = KeyCode.LeftControl;
 
-    private Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
 
     float x = 0.0f;
     float y = 0.0f;

@@ -25,6 +25,6 @@ namespace MafiaUnity
             {
                 Gizmos.DrawLine(transform.position, child.position);
             }
-        }   
+        }
     }
 }

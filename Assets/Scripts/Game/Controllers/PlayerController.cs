@@ -40,7 +40,6 @@ public class PlayerController : MonoBehaviour
     {
         var dir = transform.forward * -CAMERA_DISTANCE;
         var pos = transform.position + dir;
-        //pos += characterController.GetMovementDirection() * characterController.GetSpeed() * Time.deltaTime;
         pos.y += cameraUpAndDown;
 
         if (characterController.IsCrouched())
@@ -81,62 +80,16 @@ public class PlayerController : MonoBehaviour
         characterController.TurnByAngle(x);
     }
 
-    public class CustomButton
-    {
-        private bool reset;
-        private bool firstButtonPressed;
-        private string buttonName;
-        private float timeOfFirstButton;
-
-        public CustomButton(string name)
-        {
-            buttonName = name;
-        }
-
-        public bool Button()
-        {
-            return Input.GetButton(buttonName);
-        }
-
-        public bool IsDoublePressed()
-        {
-            bool returnVal = false;
-            //TODO(DavoSK): replace with get button with simillar behaviour
-            if(Input.GetKeyDown(buttonName) && firstButtonPressed) 
-            {
-                if(Time.time - timeOfFirstButton < 1f) 
-                {
-                    returnVal = true;
-                } 
-                reset = true;
-             }
-                
-            if(Input.GetKeyDown(buttonName) && !firstButtonPressed) 
-            {
-                firstButtonPressed = true;
-                timeOfFirstButton = Time.time;
-            }
-     
-            if(reset)
-            {
-                firstButtonPressed = false;
-                reset = false;
-            }
-
-            return returnVal;
-        }
-    }
-
     public void FixedUpdate()
     {
         if (GameAPI.instance.isPaused)
             return;
 
         playerCamera.transform.UpdateRenderSettings();
-            
+
         if (characterController == null)
             return;
-            
+
         var x = Input.GetAxisRaw("Horizontal");
         var z = Input.GetAxisRaw("Vertical");
         var isRunning = !Input.GetButton("Run");
@@ -158,7 +111,7 @@ public class PlayerController : MonoBehaviour
                 characterController.ToggleCrouch(true);
             else
                 characterController.ToggleCrouch(false);
-            
+
             if (isRunning && !isCrouching)
                 characterController.movementMode = MovementMode.Run;
             else if (!isCrouching)
@@ -195,7 +148,7 @@ public class PlayerController : MonoBehaviour
         }
 
         characterController.Update();
-        
+
         UpdateCameraMovement();
 
         // TEST ONLY

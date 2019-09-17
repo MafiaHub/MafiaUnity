@@ -38,7 +38,7 @@ public class SetupGUI : MonoBehaviour {
         buildBadge.SetActive(false);
         copyrightDisclaimer.SetActive(false);
         GameAPI.instance.missionManager.DestroyMission();
-        
+
         var modManager = GameAPI.instance.modManager;
         var mods = GetComponent<ModManagerGUI>();
 
@@ -75,15 +75,15 @@ public class SetupGUI : MonoBehaviour {
 
     bool lateStart = false;
 
-    async Task LateStart() 
+    void LateStart()
     {
-        await Task.Delay(1000);
+        //await Task.Delay(1000);
         GameAPI.ResetGameAPI();
 
         bgMusic = GetComponent<AudioSource>();
 
         mainCamera = GameObject.Find("Main Camera")?.transform;
-        
+
         if (GameAPI.instance.cvarManager.Contains("gamePath"))
         {
             var storedPath = GameAPI.instance.cvarManager.Get("gamePath", "C:/Games/Mafia");
@@ -104,7 +104,7 @@ public class SetupGUI : MonoBehaviour {
         }, 0, 0, "Resets the game path in PlayerPrefs");
 
         gameVersion.text = GameAPI.GAME_VERSION;
-        buildTime.text = string.Format("Build Time: {0}", MafiaUnity.Build.Info.Instance.BuildTime);
+        buildTime.text = "";//string.Format("Build Time: {0}", MafiaUnity.Build.Info.Instance.BuildTime);
     }
 
     void SetupPOIs()
@@ -122,11 +122,11 @@ public class SetupGUI : MonoBehaviour {
         pointsOfInterest.Shuffle();
     }
 
-    async private void FixedUpdate()
+    private void FixedUpdate()
     {
         if (!lateStart)
         {
-            await LateStart();
+            LateStart();
             lateStart = true;
         }
 
@@ -139,7 +139,7 @@ public class SetupGUI : MonoBehaviour {
         if (pointsOfInterest.Count > 0 && mainCamera != null)
         {
             var poi = pointsOfInterest[currentPOI];
-            
+
             if (poi == null)
             {
                 currentPOI = (currentPOI == pointsOfInterest.Count-1) ? 0 : currentPOI + 1;
@@ -152,7 +152,7 @@ public class SetupGUI : MonoBehaviour {
                 if (Quaternion.Angle(mainCamera.rotation, rot) < 35f)
                 {
                     currentPOI = (currentPOI == pointsOfInterest.Count-1) ? 0 : currentPOI+1;
-                }   
+                }
             }
         }
 
