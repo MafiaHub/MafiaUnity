@@ -18,7 +18,6 @@ public class Health : MonoBehaviour
 #region Public Fields
     public float MaxHealth = 100.0f;
     public float CurrentHealth;
-    public Human Killer;
 
     public float PAIN_DEBOUNCE_DURATION = 3.0f;
 #endregion
@@ -32,6 +31,11 @@ public class Health : MonoBehaviour
         }
     }
     public BodyPart PainPart
+    {
+        get;
+        private set;
+    }
+    public Human Killer
     {
         get;
         private set;
