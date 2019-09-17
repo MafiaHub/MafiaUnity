@@ -87,6 +87,12 @@ public class Health : MonoBehaviour
         CurrentHealth = MaxHealth;
         painDebounceTime = 0.0f;
     }
+
+    public void HealUp(float points)
+    {
+        CurrentHealth += points;
+        Mathf.Clamp(CurrentHealth, 0.0f, MaxHealth);
+    }
 #endregion
 
 #region Private Methods
