@@ -15,7 +15,7 @@ namespace MafiaUnity
         public override GameObject LoadObject(string path, Mission mission)
         {
             GameObject rootObject = LoadCachedObject(path);
-            
+
             if (rootObject == null)
                 rootObject = new GameObject(path);
             else
@@ -53,7 +53,7 @@ namespace MafiaUnity
                     var meshFilter = child.GetComponent<MeshFilter>();
 
                     StoreReference(mission, child.name, child);
-                    
+
                     children.Add(new KeyValuePair<int, Transform>(mafiaMesh.parentID, child.transform));
 
                     if (mafiaMesh.meshType == MafiaFormats.MeshType.Joint)
@@ -88,7 +88,7 @@ namespace MafiaUnity
                     var def = child.AddComponent<ModelDefinition>();
                     def.model = model;
                     def.mesh = mafiaMesh;
-                    
+
                     Material[] materials;
 
                     switch (mafiaMesh.visualMeshType)
@@ -114,7 +114,7 @@ namespace MafiaUnity
 
                                         m.shader = Shader.Find("Unlit/Transparent");
                                         m.SetTexture("_MainTex", glowTexture);
-                                        
+
                                         break;
                                     }
                                 }
@@ -148,7 +148,7 @@ namespace MafiaUnity
                         {
                             // TODO build up more lods
                             var standard = mafiaMesh.billboard.standard;
-                            
+
                             if (standard.lods.Count > 0)
                             {
                                 //NOTE: (DavoSK) Add our custom billboard here
@@ -234,10 +234,10 @@ namespace MafiaUnity
                     }
 
                     def.modelName = Path.GetFileName(path);
-                    
+
                     meshId++;
                 }
-                
+
                 for (int i = 0; i < children.Count; i++)
                 {
                     var parentId = children[i].Key;
@@ -273,20 +273,20 @@ namespace MafiaUnity
                         var boneData = data.LODs[0];
                         var bones = new List<Bone>(skinnedMesh.GetComponentsInChildren<Bone>());
                         var boneArray = new Transform[bones.Count];
-                        
+
                         foreach (var b in bones)
                         {
                             boneArray[b.data.boneID] = b.transform;
                         }
-                        
+
                         /* TODO: var boneTransforms = new List<Transform>(boneArray); */
                         var bindPoses = new Matrix4x4[bones.Count];
                         var boneWeights = new BoneWeight[skinnedMesh.sharedMesh.vertexCount];
 
                         skinnedMesh.bones = boneArray;
-                        
+
                         int skipVertices = 0;//(int)boneData.nonWeightedVertCount;
-                        
+
                         for (int i = 0; i < boneData.bones.Count; i++)
                         {
                             bindPoses[i] = boneData.bones[i].transform;
@@ -295,6 +295,8 @@ namespace MafiaUnity
                             {
                                 boneWeights[skipVertices + j].boneIndex0 = i;
                                 boneWeights[skipVertices + j].weight0 = 1f;
+                                boneWeights[skipVertices + j].boneIndex1 = (int)boneData.bones[i].boneID;
+                                boneWeights[skipVertices + j].weight1 = 0f;
                             }
 
                             skipVertices += (int)boneData.bones[i].oneWeightedVertCount;
@@ -304,7 +306,7 @@ namespace MafiaUnity
                                 boneWeights[skipVertices + j].boneIndex0 = i;
                                 boneWeights[skipVertices + j].weight0 = boneData.bones[i].weights[j];
                                 boneWeights[skipVertices + j].boneIndex1 = (int)boneData.bones[i].boneID;
-                                boneWeights[skipVertices + j].weight1 = 1f - boneData.bones[i].weights[j]; 
+                                boneWeights[skipVertices + j].weight1 = 1f - boneData.bones[i].weights[j];
                             }
 
                             skipVertices += boneData.bones[i].weights.Count;
@@ -318,7 +320,7 @@ namespace MafiaUnity
 
                 children.Clear();
             }
-            
+
             StoreCachedObject(path, rootObject);
 
             return rootObject;
@@ -327,7 +329,7 @@ namespace MafiaUnity
         Mesh GenerateMesh(MafiaFormats.Mesh mafiaMesh, GameObject ent, MafiaFormats.LOD firstMafiaLOD, MafiaFormats.Model model, out Material[] materials)
         {
             var mesh = new Mesh();
-            
+
             List<Material> mats = new List<Material>();
 
             List<Vector3> unityVerts = new List<Vector3>();
@@ -340,7 +342,7 @@ namespace MafiaUnity
                 unityNormals.Add(vert.normal);
                 unityUV.Add(new Vector2(vert.uv.x, -1 * vert.uv.y));
             }
-            
+
             mesh.name = mafiaMesh.meshName;
 
             mesh.SetVertices(unityVerts);
@@ -402,7 +404,7 @@ namespace MafiaUnity
 
                         Texture2D tex = LoadTexture(mafiaMat.diffuseMapName, useColorKey, mafiaMat.transparency < 1f);
                         Texture2D alphaTex = LoadTexture(mafiaMat.alphaMapName, useColorKey, true);
-                        
+
                         if (tex != null)
                         {
                             mat.SetTexture("_MainTex", tex);
@@ -467,7 +469,7 @@ namespace MafiaUnity
                             bmp.useTransparencyKey = false;
                         }
                     }
-                    
+
                     mats.Add(mat);
                 }
 
@@ -559,7 +561,7 @@ namespace MafiaUnity
             if (flarePrefab == null)
             {
                 Debug.LogWarningFormat("Flare {0} couldn't be found! Using 00GLOW instead!", glowName);
-                
+
                 flarePrefab = (Flare)Resources.Load("Flares/00GLOW_FLARE");
             }
 

@@ -110,6 +110,12 @@ namespace MafiaUnity
 
             audioSource.Play();
         }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = door.locked == 1 ? Color.red : Color.white;
+            Gizmos.DrawWireSphere(transform.position, 0.25f);
+        }
     }
 
 #if UNITY_EDITOR
@@ -120,6 +126,13 @@ namespace MafiaUnity
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+
+            if (GUILayout.Button("Toggle lock"))
+            {
+                var door = target as Door;
+
+                door.door.locked = (byte)(1 - door.door.locked);
+            }
 
             if (GUILayout.Button("Handle door"))
             {

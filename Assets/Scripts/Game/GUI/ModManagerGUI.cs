@@ -55,7 +55,7 @@ public class ModManagerGUI : MonoBehaviour {
                 {
                     if (load.Value == "1")
                         mod.status = ModEntryStatus.Active;
-                    
+
                     modEntries.Add(mod);
                     newMods.Remove(mod);
                 }

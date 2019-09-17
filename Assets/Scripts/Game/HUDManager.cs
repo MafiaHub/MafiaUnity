@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using MafiaUnity;
 
-public class HUDManager 
+public class HUDManager
 {
     #region Singleton
 
@@ -92,7 +92,7 @@ public class HUDManager
             return;
 
         LoadAtlas("1numbers");
-        
+
         LoadSprite("num/", "1numbers", new Rect(110, 0, 11, 16));
 
         for (int i = 0; i < 10; i++)

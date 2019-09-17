@@ -109,6 +109,7 @@ public class SetupGUI : MonoBehaviour {
 
     void SetupPOIs()
     {
+        pointsOfInterest.Clear();
         pointsOfInterest.Add(GameObject.Find("Group01")?.transform);
         pointsOfInterest.Add(GameObject.Find("fg")?.transform);
         pointsOfInterest.Add(GameObject.Find("Line03cv")?.transform);

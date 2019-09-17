@@ -108,7 +108,16 @@ namespace MafiaUnity
             {
                 case MafiaFormats.Scene2BINLoader.SpecialObjectType.Physical:
                 {
+                    // todo: add proper scripts
+                    var meshFilter = gameObject.GetComponent<MeshFilter>();
 
+                    if (meshFilter != null)
+                    {
+                        var collider = gameObject.AddComponent<MeshCollider>();
+
+                        collider.sharedMesh = meshFilter.sharedMesh;
+                        gameObject.AddComponent<Rigidbody>();
+                    }
                 }
                 break;
 

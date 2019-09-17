@@ -12,7 +12,7 @@ public class GameModeManager
         {
             if (instanceObject == null)
                 instanceObject = new GameModeManager();
-            
+
             return instanceObject;
         }
     }
@@ -40,7 +40,7 @@ public class GameModeManager
         if (!modes.ContainsKey(name))
             return;
 
-            
+
         if (currentMode != null)
         {
             currentMode.End();

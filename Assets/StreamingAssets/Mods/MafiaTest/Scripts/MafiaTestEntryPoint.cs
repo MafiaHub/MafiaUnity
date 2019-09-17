@@ -27,7 +27,7 @@ class MafiaTestGameMode : IGameMode
     void IGameMode.Start()
     {
         Debug.Log("Let's do stuff!");
-        var go = ObjectFactory.CreatePlayer("models/Luigi.4ds");
+        var go = ObjectFactory.CreatePlayer("models/Paulie.4ds");
         go.transform.position = new Vector3(40.39561f, 20.25f, -1.018f);
 /*
         var sun = new GameObject("Sun");
