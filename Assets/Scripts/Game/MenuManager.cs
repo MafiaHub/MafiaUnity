@@ -31,7 +31,7 @@ class MenuManager : MonoBehaviour
     {
         if (state == null)
             return;
-        
+
         state.OnStateGUI();
     }
 }
