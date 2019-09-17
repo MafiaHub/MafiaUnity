@@ -28,7 +28,7 @@ public class Health : MonoBehaviour
     public bool InPain
     {
         get {
-            return (Time.time - painDebounceTime) > PAIN_DEBOUNCE_DURATION;
+            return (Time.time - painDebounceTime) <= PAIN_DEBOUNCE_DURATION;
         }
     }
     public BodyPart PainPart
@@ -44,10 +44,14 @@ public class Health : MonoBehaviour
 #endregion
 
 #region Unity
+    void Awake()
+    {
+        self = GetComponent<Human>();
+    }
+
     void Start()
     {
-        CurrentHealth = MaxHealth;
-        self = GetComponent<Human>();
+        Revive();
     }
 #endregion
 
@@ -68,6 +72,12 @@ public class Health : MonoBehaviour
         }
 
         return InPain;
+    }
+
+    public void Revive()
+    {
+        CurrentHealth = MaxHealth;
+        painDebounceTime = 0.0f;
     }
 #endregion
 
