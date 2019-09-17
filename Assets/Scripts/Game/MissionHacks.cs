@@ -6,7 +6,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace MafiaUnity
 {
-    /* 
+    /*
         This file consists of hacks used to modify game's scene depending on the mission loaded.
     */
     public class MissionHacks
@@ -86,23 +86,6 @@ namespace MafiaUnity
                         {
                             light9.GetComponent<Light>().shadowNearPlane = 0.015f;
                         }
-    /* 
-                        var menugl = GameObject.Find("menugl/Rectangle04");
-
-                        if (menugl != null)
-                        {
-                            var meshRenderer = menugl.GetComponent<MeshRenderer>();
-                            var mat = meshRenderer.sharedMaterial;
-
-                            mat.shader = Shader.Find("Mafia/Unlit Transparent");
-                            mat.SetColor("_Color", new Color(1f, 252 / 255f, 218 / 255f, 2 / 255f));
-                        } */
-                    }
-                    break;
-
-                    case "tutorial":
-                    {
-                        
                     }
                     break;
 
