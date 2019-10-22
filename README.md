@@ -52,6 +52,10 @@ We respect copyrights and intelectual property and you need to own the original 
 
 If you'd like to join us and contribute, feel free to connect to [our Discord server](https://discord.gg/eBQ4QHX).
 
+## Sponsorship
+
+You can also sponsor us by donating money now! Check out the **Sponsor** button to see how to do that, your support will be very appreciated and will accelerate the development progress!
+
 ## Media
 ![](https://i.imgur.com/7b1ln6z.jpg)
 ![](https://i.imgur.com/A92V7mh.jpg)
