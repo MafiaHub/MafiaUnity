@@ -38,7 +38,7 @@ class MafiaTestGameMode : IGameMode
         sunLight.type = LightType.Directional;
         sunLight.shadows = LightShadows.Soft;
  */
-        GameAPI.instance.missionManager.LoadMission("tutorial");
+        GameAPI.instance.missionManager.LoadMission("freeride");
     }
 
     // on game mode switch -- leaving primary
