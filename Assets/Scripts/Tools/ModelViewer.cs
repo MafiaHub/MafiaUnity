@@ -119,7 +119,7 @@ public class ModelViewer : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            animIndex--;
+            animIndex++;
 
             if (animIndex == anims.Count)
                 animIndex = 0;
@@ -133,7 +133,7 @@ public class ModelViewer : MonoBehaviour
     {
         GUILayout.BeginVertical();
         GUILayout.Label("Model Viewer by ZaKlaus");
-        GUILayout.Label("Hold Left Control to orbit the camera, use your mouse wheel to zoom.");
+        GUILayout.Label("Hold RMB to orbit the camera, use your mouse wheel to zoom.");
         GUILayout.Label("Use left and right arrow keys to switch models.");
         GUILayout.Label("Use up and down arrow keys to switch anims.");
         GUILayout.Label("Game path");
@@ -236,6 +236,7 @@ public class ModelViewer : MonoBehaviour
 
         GameAPI.instance.cvarManager.ForceSet("gamePath", gamePath, CvarManager.CvarMode.Archived);
         PopulateLists();
+        GameAPI.instance.cvarManager.SaveMainConfig();
         return true;
     }
 
@@ -262,6 +263,8 @@ public class ModelViewer : MonoBehaviour
             return;
         }
 
+        modelIndex = models.FindIndex(x => x == modelName);
+
         loadedModel.transform.parent = transform;
         orbitCam.target = loadedModel.transform;
     }
@@ -282,6 +285,8 @@ public class ModelViewer : MonoBehaviour
             errorString = string.Format("Animation name: {0} is incorrect, animation not found!", animName);
             return;
         }
+
+        animIndex = anims.FindIndex(x => x == animName);
 
         animPlayer.isPlaying = true;
     }

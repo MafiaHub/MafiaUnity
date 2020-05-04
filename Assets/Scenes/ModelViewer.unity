@@ -273,8 +273,8 @@ MonoBehaviour:
   yMinLimit: -20
   yMaxLimit: 80
   distanceMin: 0.5
-  distanceMax: 15
-  rotateModifier: 306
+  distanceMax: 150
+  rotateModifier: 324
 --- !u!1 &1297195616
 GameObject:
   m_ObjectHideFlags: 0
