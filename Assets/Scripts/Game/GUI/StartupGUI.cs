@@ -41,6 +41,8 @@ public class StartupGUI : MonoBehaviour {
             GameAPI.instance.cvarManager.ForceSet("gamePath", finalTextComponent.text, CvarManager.CvarMode.Archived);
             GameAPI.instance.cvarManager.SaveMainConfig();
 
+            Debug.Log("Success");
+
             canvas.mainMenu.SetActive(true);
             gameObject.SetActive(false);
             canvas.SetupDefaultBackground();
