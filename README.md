@@ -35,7 +35,9 @@ We aim to create open-source tools for the game [Mafia](https://en.wikipedia.org
 
 ## Development
 
-We are currently using Unity version: **2018.3.9f1**.
+We are currently using Unity version: **2019.3.9f1**.
+
+To get the project up and running, you will need Mafia: The City of Lost Heaven installed. This is because the project uses original game assets and these cannot be provided with the project by law. The game's .dta files must then be unpacked so that the raw assets are exposed.
 
 Actual development takes place in **develop** branch and therefore is covering more features and possible fixes. We highly recommend to use **develop** branch until we reach the time once our project gets more stable
 (and starts using versioning semantics). **master** branch is considered stable but less developed and might also lack certain features which might introduce importing bugs or issues.
